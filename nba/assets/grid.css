@@ -1,0 +1,9 @@
+.recharts-cartesian-grid-horizontal line {
+	stroke-dasharray: 0;
+	stroke-opacity: 0.7 !important;
+	stroke: var(--gray-6);
+}
+
+.recharts-cartesian-grid-vertical line {
+	stroke-opacity: 0 !important;
+}
