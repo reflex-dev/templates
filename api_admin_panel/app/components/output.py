@@ -18,12 +18,7 @@ def create_query_rows(data: dict[str, str]):
 
     return rx.table.row(
         rx.foreach(data, fill_rows_with_data),
-        _hover={
-            "bg": rx.color_mode_cond(
-                "rgba(46, 46, 46, 0.11)",
-                "rgba(46, 46, 46, 0.91)",
-            )
-        },
+        _hover={"bg": rx.color(color="gray", shade=4)},
     )
 
 

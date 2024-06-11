@@ -75,6 +75,7 @@ def form_item(
         ),
         allow_toggle=True,
         width="100%",
+        border="transparent",
     )
 
 
@@ -119,6 +120,7 @@ def form_body_param_item(
         ),
         allow_toggle=True,
         width="100%",
+        border="transparent",
     )
 
 
@@ -146,6 +148,7 @@ def form_request_item():
         ),
         allow_toggle=True,
         width="100%",
+        border="transparent",
     )
 
 
