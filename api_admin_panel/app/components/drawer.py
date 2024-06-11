@@ -52,9 +52,9 @@ def render_drawer():
                 left="auto",
                 height="100%",
                 width="25em",
+                on_interact_outside=QueryAPI.delta_drawer(),
             ),
         ),
         direction="right",
         open=QueryAPI.is_open,
-        modal=True,
     )
