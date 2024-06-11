@@ -56,4 +56,5 @@ def render_drawer():
         ),
         direction="right",
         open=QueryAPI.is_open,
+        modal=True,
     )

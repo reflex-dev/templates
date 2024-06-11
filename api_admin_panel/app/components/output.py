@@ -12,11 +12,19 @@ def create_query_rows(data: dict[str, str]):
     def fill_rows_with_data(data_):
         return rx.table.cell(
             f"{data_[1]}",
-            on_double_click=QueryAPI.display_selected_row(data),
+            on_click=QueryAPI.display_selected_row(data),
             cursor="pointer",
         )
 
-    return rx.table.row(rx.foreach(data, fill_rows_with_data))
+    return rx.table.row(
+        rx.foreach(data, fill_rows_with_data),
+        _hover={
+            "bg": rx.color_mode_cond(
+                "rgba(46, 46, 46, 0.11)",
+                "rgba(46, 46, 46, 0.91)",
+            )
+        },
+    )
 
 
 def create_pagination():
@@ -65,23 +73,26 @@ def render_output():
                     rx.table.body(
                         rx.foreach(QueryAPI.paginated_data, create_query_rows)
                     ),
-                    border_radius="10px",
                     width="100%",
                     variant="surface",
+                    size="1",
+                ),
+                rx.text(
+                    "* Click a row to edit its contents.",
+                    weight="bold",
                     size="1",
                 ),
                 width="100%",
                 overflow="auto",
                 padding="2em 2em",
             ),
-            rx.text(),
+            rx.spacer(),
         ),
         flex="60%",
         bg=rx.color_mode_cond(
             "#faf9fb",
             "#1a181a",
         ),
-        box_shadow="0px 10px 20px 0px rgba(0, 0, 0, 0.31)",
         border_radius="10px",
         overflow="auto",
     )

@@ -6,24 +6,23 @@ from app.styles import text
 
 
 def item_title(title: str):
-    return (
-        rx.hstack(
-            rx.chakra.text(title, font_size="var(--chakra-fontSizes-md)", **text),
-            rx.chakra.accordion_icon(),
-            width="100%",
-            justify_content="space-between",
-        ),
+    return rx.hstack(
+        rx.text(title, font_size="var(--chakra-fontSizes-sm)", **text),
+        rx.chakra.accordion_icon(),
+        width="100%",
+        justify_content="space-between",
     )
 
 
 def item_add_event(event_trigger: callable):
-    return rx.badge(
+    return rx.button(
         rx.hstack(
             rx.text("+"),
             rx.text("add", weight="bold"),
             width="100%",
             justify_content="space-between",
         ),
+        size="1",
         on_click=event_trigger,
         padding="0.35em 0.75em",
         cursor="pointer",
@@ -152,8 +151,7 @@ def form_request_item():
 
 def render_query_form():
     return rx.vstack(
-        form_request_item(),
-        # form_item("URL Parameters"),
+        # form_request_item(),
         form_item(
             "Headers", QueryState.headers, form_item_entry, QueryState.add_header
         ),
@@ -162,17 +160,37 @@ def render_query_form():
             "Cookies", QueryState.cookies, form_item_entry, QueryState.add_cookies
         ),
         width="100%",
-        spacing="0",
-        padding="0.5em 0.75em",
+        spacing="2",
+        padding="0em 0.75em",
     )
 
 
 def render_query_header():
     return rx.hstack(
-        rx.button("Run", size="2", on_click=QueryAPI.run_get_request),
+        rx.hstack(
+            rx.select(
+                QueryState.req_methods,
+                width="100px",
+                default_value="GET",
+                on_change=QueryState.get_request,
+            ),
+            rx.input(
+                value=QueryState.req_url,
+                width="100%",
+                on_change=QueryState.set_req_url,
+                placeholder="https://example_site.com/api/v2/endpoint.json",
+            ),
+            width="100%",
+            spacing="1",
+        ),
+        rx.button(
+            "Send", size="2", on_click=QueryAPI.run_get_request, cursor="pointer"
+        ),
         width="100%",
-        border_bottom="1px solid rgba(41, 41, 41, 0.51)",
-        padding="1em 1em",
+        border_bottom=rx.color_mode_cond(
+            "1px solid rgba(45, 45, 45, 0.05)", "1px solid rgba(45, 45, 45, 0.51)"
+        ),
+        padding="1em 0.75em",
         justify_content="end",
     )
 
@@ -183,11 +201,10 @@ def render_query_component():
         render_query_form(),
         flex=["100%", "100%", "100%", "100%", "30%"],
         display=BaseState.query_component_toggle,
-        box_shadow="0px 10px 20px 0px rgba(0, 0, 0, 0.31)",
         padding_bottom="0.75em",
         border_radius="10px",
         bg=rx.color_mode_cond(
-            "faf9fb",
+            "#faf9fb",
             "#1a181a",
         ),
     )

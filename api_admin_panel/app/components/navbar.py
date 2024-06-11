@@ -20,7 +20,7 @@ def render_navbar():
     return rx.hstack(
         rx.hstack(
             rx.box(
-                rx.chakra.text(
+                rx.text(
                     "REST API Admin Panel",
                     font_size="var(--chakra-fontSizes-lg)",
                     **text,
@@ -30,8 +30,11 @@ def render_navbar():
             align_items="center",
         ),
         rx.hstack(
-            rx.color_mode.switch(),
-            rx.icon(tag="code", on_click=BaseState.toggle_query, cursor="pointer"),
+            rx.button(
+                BaseState.is_request, on_click=BaseState.toggle_query, cursor="pointer"
+            ),
+            rx.color_mode.button(),
+            align_items="center",
         ),
         **navbar,
     )
