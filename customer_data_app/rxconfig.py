@@ -1,3 +1,9 @@
 import reflex as rx
+import os
 
-config = rx.Config(app_name="customer_data_app")
+database_url = os.getenv("DATABASE_URL", "sqlite:///reflex.db")
+
+config = rx.Config(
+    app_name="customer_data_app",
+    db_url=database_url,
+    )
