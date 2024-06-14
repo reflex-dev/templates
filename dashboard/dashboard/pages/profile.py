@@ -17,7 +17,7 @@ class ProfileState(rx.State):
 
     def handle_submit(self, form_data: dict):
         self.profile = Profile(**form_data)
-        return rx._x.toast.success(
+        return rx.toast.success(
             "Profile updated successfully", position="top-center"
         )
 
