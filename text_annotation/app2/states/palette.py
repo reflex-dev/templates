@@ -62,3 +62,4 @@ class Palette(Base):
         ]
 
         self.selected_category = data["color"]
+        self.current_label = data["name"]

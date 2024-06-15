@@ -61,3 +61,4 @@ class Base(rx.State):
     category_name: str
     categories: list[dict[str, str]]
     selected_category: str
+    current_label: str
