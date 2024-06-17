@@ -3,7 +3,7 @@ from ..backend.table_state import TableState, Item
 from ..components.status_badge import status_badge
 
 
-def _create_dialog(icon_name: str, color_scheme: str, dialog_title: str) -> rx.Component:
+def _create_dialog(item: Item, icon_name: str, color_scheme: str, dialog_title: str) -> rx.Component:
     return rx.dialog.root(
         rx.dialog.trigger(
             rx.icon_button(
@@ -14,30 +14,36 @@ def _create_dialog(icon_name: str, color_scheme: str, dialog_title: str) -> rx.C
             rx.vstack(
                 rx.dialog.title(dialog_title),
                 rx.dialog.description(
-                    "This is a dialog component. You can render anything you want in here.",
+                    rx.vstack(
+                        rx.text(item.pipeline),
+                        rx.text(item.workflow),
+                        status_badge(item.status),
+                        rx.text(item.timestamp),
+                        rx.text(item.duration),
+                    )
                 ),
                 rx.dialog.close(
-                    rx.button("Close Dialog", size="2"),
+                    rx.button("Close Dialog", size="2", color_scheme=color_scheme),
                 ),
             ),
         ),
     )
 
-def _delete_dialog() -> rx.Component:
-    return _create_dialog("trash-2", "tomato", "Delete Dialog")
+def _delete_dialog(item: Item) -> rx.Component:
+    return _create_dialog(item, "trash-2", "tomato", "Delete Dialog")
 
-def _approve_dialog() -> rx.Component:
-    return _create_dialog("check", "grass", "Approve Dialog")
+def _approve_dialog(item: Item) -> rx.Component:
+    return _create_dialog(item, "check", "grass", "Approve Dialog")
 
-def _edit_dialog() -> rx.Component:
-    return _create_dialog("square-pen", "blue", "Edit Dialog")
+def _edit_dialog(item: Item) -> rx.Component:
+    return _create_dialog(item, "square-pen", "blue", "Edit Dialog")
 
 
-def _dialog_group() -> rx.Component:
+def _dialog_group(item: Item) -> rx.Component:
     return rx.hstack(
-        _approve_dialog(),
-        _edit_dialog(),
-        _delete_dialog(),
+        _approve_dialog(item),
+        _edit_dialog(item),
+        _delete_dialog(item),
         align="center",
         spacing="2",
         width="100%",
@@ -72,7 +78,7 @@ def _show_item(item: Item, index: int) -> rx.Component:
         rx.table.cell(status_badge(item.status)),
         rx.table.cell(item.timestamp),
         rx.table.cell(item.duration),
-        rx.table.cell(_dialog_group()),
+        rx.table.cell(_dialog_group(item)),
         style={"_hover": {"bg": hover_color}, "bg": bg_color},
         align="center",
     )
