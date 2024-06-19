@@ -71,6 +71,7 @@ def display_categories():
                 variant=data["type"],
                 color_scheme=data["color"],
                 size="3",
+                cursor="pointer",
                 on_click=Palette.select_category(data),
             ),
         ),
