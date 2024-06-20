@@ -12,7 +12,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set up GitHub CLI
+        run: |
+          echo "${{ github.token }}" | gh auth login --with-token
+
       - name: Create zip files for each subfolder and upload as artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           for dir in $(find . -mindepth 1 -maxdepth 1 -type d); do
             zip_file="${dir##*/}.zip"
