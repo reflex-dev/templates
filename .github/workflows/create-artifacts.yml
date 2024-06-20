@@ -18,11 +18,31 @@ jobs:
           for dir in */ ; do
             zip -r "${dir%/}.zip" "$dir"
           done
+          ls *.zip > zipfiles.txt
 
-      - name: Upload artifacts
+      - name: Prepare artifact list
+        id: prepare
         run: |
-          for file in *.zip; do
-            name=$(basename "$file" .zip)
-            echo "Uploading $file as $name"
-            gh run upload-artifact --name "$name" "$file"
-          done
+          files=$(cat zipfiles.txt)
+          echo "files=$files" >> $GITHUB_ENV
+
+  upload-individual:
+    needs: zip-and-upload
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        file: ${{ fromJson(env.files.split('\n')) }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.file }}
+          path: ${{ matrix.file }}
+          if-no-files-found: "warn"
+          retention-days: 90
+          compression-level: 6
+          overwrite: true
