@@ -13,11 +13,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.x"
-
       - name: Zip subfolders
         run: |
           for dir in */ ; do
@@ -25,8 +20,9 @@ jobs:
           done
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: Zipped Subfolders
-          path: |
-            *.zip
+        run: |
+          for file in *.zip; do
+            name=$(basename "$file" .zip)
+            echo "Uploading $file as $name"
+            gh run upload-artifact --name "$name" "$file"
+          done
