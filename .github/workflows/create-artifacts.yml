@@ -10,10 +10,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: List subfolders for debugging
+        run: ls -d */
+
       - name: Zip subfolders
         run: |
           for d in */ ; do
-            zip -r "${d%/}.zip" "$d"
+            if [ -d "$d" ]; then
+              zip -r "${d%/}.zip" "$d"
+            fi
           done
 
       - name: Create Release
@@ -30,7 +35,7 @@ jobs:
       - name: Upload Release Assets
         run: |
           for file in *.zip; do
-            asset_name="${file}_${{ github.ref }}.zip"
+            asset_name="${file%.zip}_${{ github.ref }}.zip"
             echo "Uploading $file as $asset_name"
             curl \
               -X POST \
