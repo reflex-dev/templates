@@ -12,36 +12,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Create zip files for each subfolder
+      - name: Create zip files for each subfolder and upload as artifacts
         run: |
           for dir in $(find . -mindepth 1 -maxdepth 1 -type d); do
-            zip -r "${dir##*/}.zip" "$dir"
+            zip_file="${dir##*/}.zip"
+            zip -r "$zip_file" "$dir"
+            echo "Uploading $zip_file"
+            gh api \
+              -X POST \
+              -H "Accept: application/vnd.github+json" \
+              /repos/${{ github.repository }}/actions/artifacts \
+              -F name="${dir##*/}" \
+              -F file=@"$zip_file"
           done
-
-      - name: List zip files
-        id: list_zip_files
-        run: |
-          files=$(ls *.zip | jq -R . | jq -s -c .)
-          echo "files=$files" >> $GITHUB_ENV
-        shell: bash
-
-      - name: Print output (in zip-and-publish)
-        run: echo "Output files ${{ env.files }}"
-        shell: bash
-
-  upload-artifacts:
-    needs: zip-and-publish
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        file: ${{ fromJson(env.files) }}
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ matrix.file }}
-          path: ${{ matrix.file }}
