@@ -6,39 +6,33 @@ on:
       - alek/artifacts # Specify the branches you want to trigger this action on
 
 jobs:
-  create-artifacts:
+  zip-and-publish:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.x"
+      - name: Setup zip utility
+        run: sudo apt-get install -y zip
 
-      - name: Create artifacts
+      - name: List subfolders and zip them
         run: |
-          for dir in $(ls -d */); do
-            zip_name="${dir%/}.zip"
-            echo "Creating zip $zip_name"
-            zip -r "$zip_name" "$dir"
+          for dir in */ ; do
+            zip -r "${dir%/}.zip" "$dir"
           done
-        shell: /bin/bash
 
-      - name: Upload artifacts
+      - name: Upload zips as artifacts
         run: |
-          for zip_file in *.zip; do
-            echo "Uploading $zip_file"
-            gh_path="$zip_file"
-            echo "::set-output name=artifact_name::$zip_file"
-            echo "::set-output name=artifact_path::$zip_file"
+          for dir in */ ; do
+            artifact_name="${dir%/}"
+            artifact_path="${artifact_name}.zip"
+            echo "Uploading ${artifact_name} as ${artifact_path}"
+            echo "${artifact_name}=${artifact_path}" >> $GITHUB_ENV
           done
-        shell: /bin/bash
 
-      - name: Upload artifacts
+      - name: Upload each artifact
         uses: actions/upload-artifact@v3
         with:
-          name: subfolder-artifacts
-          path: "*.zip"
+          name: ${{ env.artifact_name }}
+          path: ${{ env.artifact_path }}
