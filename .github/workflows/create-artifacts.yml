@@ -23,7 +23,7 @@ jobs:
       - name: List zip files
         id: list_zip_files
         run: |
-          files=$(ls *.zip | jq -R . | jq -s .)
+          files=$(ls *.zip | jq -R . | jq -s . | tr -d '\n' | tr -d ' ')
           echo "files=$files" >> $GITHUB_OUTPUT
         shell: bash
 
