@@ -21,40 +21,22 @@ jobs:
       - name: List zip files
         id: list_zip_files
         run: |
-          files=$(ls *.zip)
-          files_json=$(jq -n --arg files "$files" '{"files": $files | split(" ")}')
-          echo "$files_json" > files.json
-          echo "files=$files" >> $GITHUB_ENV
-
-      - name: Upload files.json
-        uses: actions/upload-artifact@v3
-        with:
-          name: files-json
-          path: files.json
+          files=$(ls *.zip | jq -R . | jq -s .)
+          echo "::set-output name=files::$files"
+        shell: bash
 
   upload-artifacts:
     needs: zip-and-publish
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        file: ${{ fromJson(needs.zip-and-publish.outputs.files-json) }}
+        file: ${{ fromJson(needs.zip-and-publish.outputs.files) }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Download files.json
-        uses: actions/download-artifact@v3
-        with:
-          name: files-json
-
-      - name: Read files.json
-        id: read_json
-        run: |
-          files=$(jq -r '.files[]' files.json)
-          echo "::set-output name=files::$files"
-
-      - name: Upload each artifact
+      - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.file }}
