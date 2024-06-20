@@ -21,7 +21,7 @@ jobs:
       - name: List zip files
         id: list_zip_files
         run: |
-          files=$(ls *.zip | jq -R . | jq -s .)
+          files=$(ls *.zip | jq -R . | jq -s -c .)
           echo "files=$files" >> $GITHUB_ENV
         shell: bash
 
@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        file: ${{ fromJson(needs.zip-and-publish.outputs.files) }}
+        file: ${{ fromJson(env.files) }}
 
     steps:
       - name: Checkout code
