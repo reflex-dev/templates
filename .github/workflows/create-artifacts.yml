@@ -22,30 +22,39 @@ jobs:
         id: list_zip_files
         run: |
           files=$(ls *.zip)
+          files_json=$(jq -n --arg files "$files" '{"files": $files | split(" ")}')
+          echo "$files_json" > files.json
           echo "files=$files" >> $GITHUB_ENV
 
-      - name: Generate matrix configuration
-        id: generate-matrix
-        run: |
-          files=($files)
-          matrix="{\"include\":["
-          for file in "${files[@]}"; do
-            matrix+="{\"file\":\"$file\"},"
-          done
-          matrix="${matrix%,}]}"
-          echo "matrix=$matrix" >> $GITHUB_ENV
+      - name: Upload files.json
+        uses: actions/upload-artifact@v3
+        with:
+          name: files-json
+          path: files.json
 
   upload-artifacts:
     needs: zip-and-publish
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{ fromJson(env.matrix) }}
+      matrix:
+        file: ${{ fromJson(needs.zip-and-publish.outputs.files-json) }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Upload artifact
+      - name: Download files.json
+        uses: actions/download-artifact@v3
+        with:
+          name: files-json
+
+      - name: Read files.json
+        id: read_json
+        run: |
+          files=$(jq -r '.files[]' files.json)
+          echo "::set-output name=files::$files"
+
+      - name: Upload each artifact
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.file }}
