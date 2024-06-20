@@ -7,6 +7,8 @@ on:
 jobs:
   zip-and-publish:
     runs-on: ubuntu-latest
+    outputs:
+      files: ${{ steps.list_zip_files.outputs.files }}
 
     steps:
       - name: Checkout code
@@ -22,7 +24,7 @@ jobs:
         id: list_zip_files
         run: |
           files=$(ls *.zip | jq -R . | jq -s .)
-          echo "::set-output name=files::$files"
+          echo "files=$files" >> $GITHUB_OUTPUT
         shell: bash
 
       - name: Debug output
