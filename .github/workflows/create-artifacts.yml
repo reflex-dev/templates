@@ -22,11 +22,11 @@ jobs:
         id: list_zip_files
         run: |
           files=$(ls *.zip | jq -R . | jq -s .)
-          echo "::set-output name=files::$files"
+          echo "files=$files" >> $GITHUB_ENV
         shell: bash
 
       - name: Print output (in zip-and-publish)
-        run: echo "Output files ${{ steps.list_zip_files.outputs.files }}"
+        run: echo "Output files ${{ env.files }}"
         shell: bash
 
   upload-artifacts:
