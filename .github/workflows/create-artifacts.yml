@@ -18,19 +18,35 @@ jobs:
             zip -r "${dir##*/}.zip" "$dir"
           done
 
-      - name: Find zip files
-        id: find_zip_files
+      - name: List zip files
+        id: list_zip_files
         run: |
-          echo "files=$(find . -name '*.zip' | tr '\n' ',')" >> $GITHUB_ENV
+          files=$(ls *.zip)
+          echo "files=$files" >> $GITHUB_ENV
 
-      - name: Upload each zip as a separate artifact
+      - name: Generate matrix configuration
+        id: generate-matrix
         run: |
-          IFS=',' read -r -a files <<< "$files"
+          files=($files)
+          matrix="{\"include\":["
           for file in "${files[@]}"; do
-            filename=$(basename "$file" .zip)
-            echo "Uploading $file as $filename"
-            gh actions upload-artifact --name "$filename" --path "$file"
+            matrix+="{\"file\":\"$file\"},"
           done
-        env:
-          files: ${{ env.files }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          matrix="${matrix%,}]}"
+          echo "matrix=$matrix" >> $GITHUB_ENV
+
+  upload-artifacts:
+    needs: zip-and-publish
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{ fromJson(env.matrix) }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.file }}
+          path: ${{ matrix.file }}
