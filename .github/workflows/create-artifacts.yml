@@ -18,25 +18,27 @@ jobs:
         with:
           python-version: "3.x"
 
-      - name: Create and upload artifacts
+      - name: Create artifacts
         run: |
           for dir in $(ls -d */); do
             zip_name="${dir%/}.zip"
             echo "Creating zip $zip_name"
             zip -r "$zip_name" "$dir"
-            echo "Uploading $zip_name"
-            gh_path="$zip_name"
-            gh name="upload-artifact"
-            uses: actions/upload-artifact@v3
-            with:
-              name: "${zip_name}"
-              path: "${zip_name}"
           done
-        shell: /usr/bin/bash -e {0}
-        env:
-          pythonLocation: /opt/hostedtoolcache/Python/3.12.4/x64
-          PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.4/x64/lib/pkgconfig
-          Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.4/x64
-          Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.4/x64
-          Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.4/x64
-          LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.4/x64/lib
+        shell: /bin/bash
+
+      - name: Upload artifacts
+        run: |
+          for zip_file in *.zip; do
+            echo "Uploading $zip_file"
+            gh_path="$zip_file"
+            echo "::set-output name=artifact_name::$zip_file"
+            echo "::set-output name=artifact_path::$zip_file"
+          done
+        shell: /bin/bash
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: subfolder-artifacts
+          path: "*.zip"
