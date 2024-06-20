@@ -20,9 +20,17 @@ jobs:
         id: prepare_matrix
         run: |
           folders=$(find . -maxdepth 1 -mindepth 1 -type d -exec basename {} \;)
+          if [ -z "$folders" ]; then
+            echo "No subfolders found."
+            exit 1
+          fi
           echo "Found folders: $folders"
           folders_json=$(echo "$folders" | jq -cR 'split(" ")')
+          echo "JSON folders: $folders_json"
           echo "::set-output name=matrix::$folders_json"
+
+      - name: Print matrix output
+        run: echo "Matrix: ${{ steps.prepare_matrix.outputs.matrix }}"
 
   upload-artifacts:
     needs: zip-and-publish
