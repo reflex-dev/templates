@@ -12,21 +12,35 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up GitHub CLI
-        run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
-
       - name: Create zip files for each subfolder
         run: |
           for dir in $(find . -mindepth 1 -maxdepth 1 -type d); do
-            zip_file="${dir##*/}.zip"
-            zip -r "$zip_file" "$dir"
-            echo "Created $zip_file"
+            zip -r "${dir##*/}.zip" "$dir"
           done
 
-      - name: Upload zip files to release
+      - name: List zip files
+        id: list_zip_files
         run: |
-          for zip_file in *.zip; do
-            echo "Uploading $zip_file"
-            gh release upload "${{ github.event.release.tag_name }}" "$zip_file"
-          done
+          files=$(ls *.zip | jq -R . | jq -s .)
+          echo "::set-output name=files::$files"
+        shell: bash
+
+      - name: Debug output
+        run: echo "Files $files"
+
+  upload-artifacts:
+    needs: zip-and-publish
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        file: ${{ fromJson(needs.zip-and-publish.outputs.files) }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.file }}
+          path: ${{ matrix.file }}
