@@ -25,6 +25,9 @@ jobs:
           echo "::set-output name=files::$files"
         shell: bash
 
+      - name: Debug output
+        run: echo "$files"
+
   upload-artifacts:
     needs: zip-and-publish
     runs-on: ubuntu-latest
