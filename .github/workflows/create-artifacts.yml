@@ -1,9 +1,9 @@
-name: Create Template Artifacts on Release
+name: Create Artifacts on Push
 
 on:
   push:
     branches:
-      - alek/artifacts
+      - alek/artifacts # Specify the branches you want to trigger this action on
 
 jobs:
   create-artifacts:
@@ -21,19 +21,22 @@ jobs:
       - name: Create and upload artifacts
         run: |
           for dir in $(ls -d */); do
-            zip -r "${dir%/}.zip" "$dir"
-            echo "::set-output name=artifact_name::${dir%/}.zip"
-            echo "::set-output name=artifact_path::${dir%/}.zip"
-          done
-        id: create_artifacts
-
-      - name: Upload artifacts
-        run: |
-          for dir in $(ls -d */); do
             zip_name="${dir%/}.zip"
+            echo "Creating zip $zip_name"
+            zip -r "$zip_name" "$dir"
             echo "Uploading $zip_name"
             gh_path="$zip_name"
             gh name="upload-artifact"
+            uses: actions/upload-artifact@v3
             with:
               name: "${zip_name}"
               path: "${zip_name}"
+          done
+        shell: /usr/bin/bash -e {0}
+        env:
+          pythonLocation: /opt/hostedtoolcache/Python/3.12.4/x64
+          PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.4/x64/lib/pkgconfig
+          Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.4/x64
+          Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.4/x64
+          Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.4/x64
+          LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.4/x64/lib
