@@ -12,20 +12,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.x"
-
       - name: Create zip files for each subfolder
         run: |
           for dir in $(find . -mindepth 1 -maxdepth 1 -type d); do
             zip -r "${dir##*/}.zip" "$dir"
           done
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ runner.os }}-subfolders
-          path: |
-            *.zip
+      - name: Find zip files
+        id: find_zip_files
+        run: |
+          echo "files=$(find . -name '*.zip' | tr '\n' ',')" >> $GITHUB_ENV
+
+      - name: Upload each zip as a separate artifact
+        run: |
+          IFS=',' read -r -a files <<< "$files"
+          for file in "${files[@]}"; do
+            filename=$(basename "$file" .zip)
+            echo "Uploading $file as $filename"
+            gh actions upload-artifact --name "$filename" --path "$file"
+          done
+        env:
+          files: ${{ env.files }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
