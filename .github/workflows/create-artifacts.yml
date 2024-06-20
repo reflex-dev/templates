@@ -25,8 +25,9 @@ jobs:
           echo "::set-output name=files::$files"
         shell: bash
 
-      - name: Debug output
-        run: echo "$files"
+      - name: Print output (in zip-and-publish)
+        run: echo "Output files ${{ steps.list_zip_files.outputs.files }}"
+        shell: bash
 
   upload-artifacts:
     needs: zip-and-publish
