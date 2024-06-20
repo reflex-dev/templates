@@ -20,7 +20,8 @@ jobs:
         id: prepare_matrix
         run: |
           folders=$(find . -maxdepth 1 -mindepth 1 -type d -exec basename {} \;)
-          folders_json=$(echo $folders | jq -cR 'split(" ")')
+          echo "Found folders: $folders"
+          folders_json=$(echo "$folders" | jq -cR 'split(" ")')
           echo "::set-output name=matrix::$folders_json"
 
   upload-artifacts:
