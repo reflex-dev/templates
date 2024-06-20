@@ -1,46 +1,31 @@
-name: Release
+name: Zip and Publish Subfolders
 
 on:
-  push:
-    tags:
-      - "v*" # This triggers the workflow on tags matching the pattern v*.*.*
+  release:
+    types: [published]
 
 jobs:
-  build:
+  zip-and-publish:
     runs-on: ubuntu-latest
 
     steps:
-      - name: List subfolders for debugging
-        run: ls -d */
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Zip subfolders
-        run: |
-          for d in */ ; do
-            if [ -d "$d" ]; then
-              zip -r "${d%/}.zip" "$d"
-            fi
-          done
-
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
+          python-version: "3.x"
 
-      - name: Upload Release Assets
+      - name: Create zip files for each subfolder
         run: |
-          for file in *.zip; do
-            asset_name="${file%.zip}_${{ github.ref }}.zip"
-            echo "Uploading $file as $asset_name"
-            curl \
-              -X POST \
-              -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-              -H "Content-Type: application/zip" \
-              --data-binary @"$file" \
-              "${{ steps.create_release.outputs.upload_url }}?name=$asset_name"
+          for dir in $(find . -mindepth 1 -maxdepth 1 -type d); do
+            zip -r "${dir##*/}.zip" "$dir"
           done
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ runner.os }}-subfolders
+          path: |
+            *.zip
