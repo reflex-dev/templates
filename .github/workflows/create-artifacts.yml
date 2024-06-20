@@ -19,9 +19,9 @@ jobs:
       - name: List subfolders and prepare for matrix
         id: prepare_matrix
         run: |
-          folders=$(ls -d */ | sed 's#/##')
-          echo "folders=$folders" >> $GITHUB_ENV
-          echo "::set-output name=matrix::$(echo $folders | jq -c -R 'split(" ")')"
+          folders=$(find . -maxdepth 1 -mindepth 1 -type d -exec basename {} \;)
+          folders_json=$(echo $folders | jq -cR 'split(" ")')
+          echo "::set-output name=matrix::$folders_json"
 
   upload-artifacts:
     needs: zip-and-publish
