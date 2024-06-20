@@ -1,48 +1,41 @@
-name: Create Artifacts on Push
+name: Release
 
 on:
   push:
-    branches:
-      - alek/artifacts # Specify the branches you want to trigger this action on
+    tags:
+      - "v*" # This triggers the workflow on tags matching the pattern v*.*.*
 
 jobs:
-  zip-and-upload:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
       - name: Zip subfolders
         run: |
-          for dir in */ ; do
-            zip -r "${dir%/}.zip" "$dir"
+          for d in */ ; do
+            zip -r "${d%/}.zip" "$d"
           done
-          ls *.zip > zipfiles.txt
 
-      - name: Prepare artifact list
-        id: prepare
-        run: |
-          files=$(cat zipfiles.txt)
-          echo "files=$files" >> $GITHUB_ENV
-
-  upload-individual:
-    needs: zip-and-upload
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        file: ${{ fromJson(env.files.split('\n')) }}
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: ${{ matrix.file }}
-          path: ${{ matrix.file }}
-          if-no-files-found: "warn"
-          retention-days: 90
-          compression-level: 6
-          overwrite: true
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Assets
+        run: |
+          for file in *.zip; do
+            asset_name="${file}_${{ github.ref }}.zip"
+            echo "Uploading $file as $asset_name"
+            curl \
+              -X POST \
+              -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Content-Type: application/zip" \
+              --data-binary @"$file" \
+              "${{ steps.create_release.outputs.upload_url }}?name=$asset_name"
+          done
