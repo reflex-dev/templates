@@ -6,51 +6,27 @@ on:
       - alek/artifacts # Specify the branches you want to trigger this action on
 
 jobs:
-  zip-and-publish:
+  zip-and-upload:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup zip utility
-        run: sudo apt-get install -y zip
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
 
-      - name: List subfolders and prepare for matrix
-        id: prepare_matrix
+      - name: Zip subfolders
         run: |
-          folders=$(find . -maxdepth 1 -mindepth 1 -type d -exec basename {} \;)
-          if [ -z "$folders" ]; then
-            echo "No subfolders found."
-            exit 1
-          fi
-          echo "Found folders: $folders"
-          folders_json=$(echo "$folders" | jq -cR 'split(" ")')
-          echo "JSON folders: $folders_json"
-          echo "::set-output name=matrix::$folders_json"
+          for dir in */ ; do
+            zip -r "${dir%/}.zip" "$dir"
+          done
 
-      - name: Print matrix output
-        run: echo "Matrix: ${{ steps.prepare_matrix.outputs.matrix }}"
-
-  upload-artifacts:
-    needs: zip-and-publish
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        folder: ${{ fromJson(needs.zip-and-publish.outputs.matrix) }}
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Setup zip utility
-        run: sudo apt-get install -y zip
-
-      - name: Zip the folder
-        run: zip -r "${{ matrix.folder }}.zip" "${{ matrix.folder }}"
-
-      - name: Upload artifact
+      - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ matrix.folder }}
-          path: ${{ matrix.folder }}.zip
+          name: Zipped Subfolders
+          path: |
+            *.zip
