@@ -18,16 +18,22 @@ jobs:
         with:
           python-version: "3.x"
 
-      - name: Create artifacts
+      - name: Create and upload artifacts
         run: |
-          mkdir artifacts
           for dir in $(ls -d */); do
-            zip -r "artifacts/${dir%/}.zip" "$dir"
+            zip -r "${dir%/}.zip" "$dir"
+            echo "::set-output name=artifact_name::${dir%/}.zip"
+            echo "::set-output name=artifact_path::${dir%/}.zip"
           done
-          ls artifacts
+        id: create_artifacts
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: subfolder-artifacts
-          path: artifacts/
+        run: |
+          for dir in $(ls -d */); do
+            zip_name="${dir%/}.zip"
+            echo "Uploading $zip_name"
+            gh_path="$zip_name"
+            gh name="upload-artifact"
+            with:
+              name: "${zip_name}"
+              path: "${zip_name}"
