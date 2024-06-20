@@ -16,23 +16,32 @@ jobs:
       - name: Setup zip utility
         run: sudo apt-get install -y zip
 
-      - name: List subfolders and zip them
+      - name: List subfolders and prepare for matrix
+        id: prepare_matrix
         run: |
-          for dir in */ ; do
-            zip -r "${dir%/}.zip" "$dir"
-          done
+          folders=$(ls -d */ | sed 's#/##')
+          echo "folders=$folders" >> $GITHUB_ENV
+          echo "::set-output name=matrix::$(echo $folders | jq -c -R 'split(" ")')"
 
-      - name: Upload zips as artifacts
-        run: |
-          for dir in */ ; do
-            artifact_name="${dir%/}"
-            artifact_path="${artifact_name}.zip"
-            echo "Uploading ${artifact_name} as ${artifact_path}"
-            echo "${artifact_name}=${artifact_path}" >> $GITHUB_ENV
-          done
+  upload-artifacts:
+    needs: zip-and-publish
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        folder: ${{ fromJson(needs.zip-and-publish.outputs.matrix) }}
 
-      - name: Upload each artifact
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup zip utility
+        run: sudo apt-get install -y zip
+
+      - name: Zip the folder
+        run: zip -r "${{ matrix.folder }}.zip" "${{ matrix.folder }}"
+
+      - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ env.artifact_name }}
-          path: ${{ env.artifact_path }}
+          name: ${{ matrix.folder }}
+          path: ${{ matrix.folder }}.zip
