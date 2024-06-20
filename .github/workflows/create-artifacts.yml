@@ -14,20 +14,19 @@ jobs:
 
       - name: Set up GitHub CLI
         run: |
-          echo "${{ github.token }}" | gh auth login --with-token
+          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
 
-      - name: Create zip files for each subfolder and upload as artifacts
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Create zip files for each subfolder
         run: |
           for dir in $(find . -mindepth 1 -maxdepth 1 -type d); do
             zip_file="${dir##*/}.zip"
             zip -r "$zip_file" "$dir"
+            echo "Created $zip_file"
+          done
+
+      - name: Upload zip files to release
+        run: |
+          for zip_file in *.zip; do
             echo "Uploading $zip_file"
-            gh api \
-              -X POST \
-              -H "Accept: application/vnd.github+json" \
-              /repos/${{ github.repository }}/actions/artifacts \
-              -F name="${dir##*/}" \
-              -F file=@"$zip_file"
+            gh release upload "${{ github.event.release.tag_name }}" "$zip_file"
           done
