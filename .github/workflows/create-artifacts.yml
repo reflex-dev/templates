@@ -1,62 +1,56 @@
 name: Zip and Publish Subfolders
-
 on:
   release:
     types: [published]
-
 jobs:
   zip-and-publish:
     runs-on: ubuntu-latest
     outputs:
       files: ${{ steps.list_zip_files.outputs.files }}
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
       - name: Create zip files for each subfolder
         run: |
           for dir in $(find . -mindepth 1 -maxdepth 1 -type d); do
             zip -r "${dir##*/}.zip" "$dir"
           done
-
       - name: List zip files
         id: list_zip_files
         run: |
           files=$(ls *.zip | jq -R . | jq -s . | tr -d '\n' | tr -d ' ')
           echo "files=$files" >> $GITHUB_OUTPUT
         shell: bash
-
-      - name: Debug output (zip files)
-        run: echo "$files"
-        shell: bash
-
+      - name: Upload zip files as artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: zip-files
+          path: "*.zip"
   upload-artifacts:
     needs: zip-and-publish
     runs-on: ubuntu-latest
     strategy:
       matrix:
         file: ${{ fromJson(needs.zip-and-publish.outputs.files) }}
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
+      - name: Download zip files
+        uses: actions/download-artifact@v3
+        with:
+          name: zip-files
       - name: Debug output (file existence check)
         run: |
-          if [ -e "$matrix_file" ]; then
-            echo "File '$matrix_file' exists."
+          if [ -e "${{ matrix.file }}" ]; then
+            echo "File '${{ matrix.file }}' exists."
           else
-            echo "File '$matrix_file' does not exist."
+            echo "File '${{ matrix.file }}' does not exist."
           fi
         shell: bash
-        env:
-          matrix_file: ${{ matrix.file }}
-
       - name: Upload artifact
         uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ${{ matrix.file }}
+          asset_path: ./${{ matrix.file }}
           asset_name: ${{ matrix.file }}
           asset_content_type: application/zip
