@@ -27,7 +27,8 @@ jobs:
         shell: bash
 
       - name: Debug output
-        run: echo "Files $files"
+        run: echo "$files"
+        shell: bash
 
   upload-artifacts:
     needs: zip-and-publish
