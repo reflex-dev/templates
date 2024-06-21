@@ -41,6 +41,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Debug output
+        run: |
+          # Check if the correct number of arguments is provided
+          if [ "$#" -ne 1 ]; then
+              echo "Usage: $0 <file_path>"
+              exit 1
+          fi
+
+          # Assign the first argument to a variable
+          file_path="$1"
+
+          # Check if the file exists
+          if [ -e "$file_path" ]; then
+              echo "The file '$file_path' exists."
+          else
+              echo "The file '$file_path' does not exist."
+          fi
+        shell: bash
+
       - name: Upload artifact
         uses: actions/upload-release-asset@v1
         with:
