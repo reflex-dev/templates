@@ -43,21 +43,19 @@ jobs:
 
       - name: Debug output
         run: |
-          # Check if the correct number of arguments is provided
-          if [ "$#" -ne 1 ]; then
-              echo "Usage: $0 <file_path>"
+          # Check if the file variable is set
+          if [ -z "$file" ]; then
+              echo "Error: The 'file' variable is not set."
               exit 1
           fi
 
-          # Assign the first argument to a variable
-          file_path="$1"
-
           # Check if the file exists
-          if [ -e "$file_path" ]; then
-              echo "The file '$file_path' exists."
+          if [ -e "$file" ]; then
+              echo "The file '$file' exists."
           else
-              echo "The file '$file_path' does not exist."
+              echo "The file '$file' does not exist."
           fi
+
         shell: bash
 
       - name: Upload artifact
