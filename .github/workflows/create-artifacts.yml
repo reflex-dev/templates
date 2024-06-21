@@ -28,7 +28,8 @@ jobs:
         shell: bash
 
       - name: Debug output
-        run: echo "Files $files"
+        run: |
+          echo "Files: ${{ env.files }}"
 
   upload-artifacts:
     needs: zip-and-publish
