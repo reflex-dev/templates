@@ -19,6 +19,7 @@ jobs:
           for dir in $(find . -mindepth 1 -maxdepth 1 -type d); do
             zip -r "${dir##*/}.zip" "$dir"
           done
+
       - name: List zip files
         id: list_zip_files
         run: |
@@ -26,7 +27,7 @@ jobs:
           echo "files=$files" >> $GITHUB_OUTPUT
         shell: bash
 
-      - name: Debug output
+      - name: Debug output (zip files)
         run: echo "$files"
         shell: bash
 
@@ -41,22 +42,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Debug output
+      - name: Debug output (file existence check)
         run: |
-          # Check if the file variable is set
-          if [ -z "$file" ]; then
-              echo "Error: The 'file' variable is not set."
-              exit 1
-          fi
-
-          # Check if the file exists
-          if [ -e "$file" ]; then
-              echo "The file '$file' exists."
+          if [ -e "$matrix_file" ]; then
+            echo "File '$matrix_file' exists."
           else
-              echo "The file '$file' does not exist."
+            echo "File '$matrix_file' does not exist."
           fi
-
         shell: bash
+        env:
+          matrix_file: ${{ matrix.file }}
 
       - name: Upload artifact
         uses: actions/upload-release-asset@v1
