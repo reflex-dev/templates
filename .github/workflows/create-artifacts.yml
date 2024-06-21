@@ -20,11 +20,16 @@ jobs:
             zip -r "${dir##*/}.zip" "$dir"
           done
 
-      - name: List zip files
-        id: list_zip_files
+      - name: List and collect zip files
+        id: collect_zip_files
         run: |
-          files=$(ls *.zip | jq -R . | jq -s . | tr -d '\n' | tr -d ' ')
-          echo "files=$files" >> $GITHUB_OUTPUT
+          # List the zip files and convert them into a JSON array
+          files=$(ls *.zip)
+          echo "Generated zip files: $files"
+
+          # Format files as a JSON array
+          json_files=$(echo $files | jq -R -s -c 'split(" ")')
+          echo "files=$json_files" >> $GITHUB_OUTPUT
         shell: bash
 
       - name: Debug output
