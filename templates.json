@@ -1,0 +1,51 @@
+{
+  "templates": [
+    {
+      "id": 1,
+      "name": "blank",
+      "description": "A minimal template",
+      "code_url": "https://github.com/reflex-dev/blank-template",
+      "demo_url": "https://blank-template.reflex.run",
+      "hidden": false
+    },
+    {
+      "id": 2,
+      "name": "dashboard",
+      "description": "A dashboard with tables and graphs",
+      "code_url": "https://github.com/reflex-dev/dashboard-template",
+      "demo_url": "https://dashboard.reflex.run",
+      "hidden": false
+    },
+    {
+      "id": 3,
+      "name": "chat",
+      "description": "A ChatGPT clone",
+      "code_url": "https://github.com/reflex-dev/reflex-chat",
+      "demo_url": "https://chat.reflex.run",
+      "hidden": false
+    },
+    {
+      "id": 4,
+      "name": "sidebar",
+      "description": "A template with a sidebar to navigate pages",
+      "code_url": "https://github.com/reflex-dev/sidebar-template",
+      "demo_url": "https://sidebar-template.reflex.run",
+      "hidden": false
+    },
+    {
+      "id": 5,
+      "name": "Sales",
+      "description": "An app to manage sales and customers"
+    },
+    {
+      "id": 6,
+      "name": "api-panel",
+      "description": "An admin panel for an api."
+    },
+    {
+      "id": 7,
+      "name": "nba",
+      "description": "A data visualization app for NBA data."
+    }
+  ]
+}
