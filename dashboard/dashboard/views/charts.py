@@ -1,10 +1,14 @@
 import reflex as rx
 import random
 import datetime
+from reflex.components.radix.themes.base import (
+    LiteralAccentColor,
+)
 
 
 class StatsState(rx.State):
     area_toggle: bool = True
+    selected_tab: str = "users"
     timeframe: str = "Monthly"
     users_data = []
     revenue_data = []
@@ -84,18 +88,54 @@ def area_toggle() -> rx.Component:
     )
 
 
+def _create_gradient(color: LiteralAccentColor, id: str) -> rx.Component:
+    return (
+        rx.el.defs(
+            rx.el.lineargradient(
+                rx.el.stop(
+                    stop_color=rx.color(color, 7), offset="5%", stop_opacity=0.8
+                ),
+                rx.el.stop(stop_color=rx.color(color, 7), offset="95%", stop_opacity=0),
+                x1=0,
+                x2=0,
+                y1=0,
+                y2=1,
+                id=id,
+            ),
+        ),
+    )
+
+
+def _custom_tooltip(color: LiteralAccentColor) -> rx.Component:
+    return (
+        rx.recharts.graphing_tooltip(
+            separator=" : ",
+            content_style={
+                "backgroundColor": rx.color("gray", 1),
+                "borderRadius": "var(--radius-2)",
+                "borderWidth": "1px",
+                "borderColor": rx.color(color, 7),
+                "padding": "0.5rem",
+                "boxShadow": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+            },
+            is_animation_active=True,
+        ),
+    )
+
+
 def users_chart() -> rx.Component:
     return rx.cond(
         StatsState.area_toggle,
         rx.recharts.area_chart(
-            rx.recharts.graphing_tooltip(),
+            _create_gradient("blue", "colorBlue"),
+            _custom_tooltip("blue"),
             rx.recharts.cartesian_grid(
                 stroke_dasharray="3 3",
             ),
             rx.recharts.area(
                 data_key="Users",
-                stroke="var(--blue-9)",
-                fill="var(--blue-7)",
+                stroke=rx.color("blue", 9),
+                fill="url(#colorBlue)",
                 type_="monotone",
             ),
             rx.recharts.x_axis(data_key="Date", scale="auto"),
@@ -108,11 +148,11 @@ def users_chart() -> rx.Component:
             rx.recharts.cartesian_grid(
                 stroke_dasharray="3 3",
             ),
-            rx.recharts.graphing_tooltip(),
+            _custom_tooltip("blue"),
             rx.recharts.bar(
                 data_key="Users",
-                stroke="var(--blue-9)",
-                fill="var(--blue-7)",
+                stroke=rx.color("blue", 9),
+                fill=rx.color("blue", 7),
             ),
             rx.recharts.x_axis(data_key="Date", scale="auto"),
             rx.recharts.y_axis(),
@@ -127,14 +167,15 @@ def revenue_chart() -> rx.Component:
     return rx.cond(
         StatsState.area_toggle,
         rx.recharts.area_chart(
-            rx.recharts.graphing_tooltip(),
+            _create_gradient("green", "colorGreen"),
+            _custom_tooltip("green"),
             rx.recharts.cartesian_grid(
                 stroke_dasharray="3 3",
             ),
             rx.recharts.area(
                 data_key="Revenue",
-                stroke="var(--green-9)",
-                fill="var(--green-7)",
+                stroke=rx.color("green", 9),
+                fill="url(#colorGreen)",
                 type_="monotone",
             ),
             rx.recharts.x_axis(data_key="Date", scale="auto"),
@@ -144,14 +185,14 @@ def revenue_chart() -> rx.Component:
             height=425,
         ),
         rx.recharts.bar_chart(
-            rx.recharts.graphing_tooltip(),
+            _custom_tooltip("green"),
             rx.recharts.cartesian_grid(
                 stroke_dasharray="3 3",
             ),
             rx.recharts.bar(
                 data_key="Revenue",
-                stroke="var(--green-9)",
-                fill="var(--green-7)",
+                stroke=rx.color("green", 9),
+                fill=rx.color("green", 7),
             ),
             rx.recharts.x_axis(data_key="Date", scale="auto"),
             rx.recharts.y_axis(),
@@ -166,14 +207,15 @@ def orders_chart() -> rx.Component:
     return rx.cond(
         StatsState.area_toggle,
         rx.recharts.area_chart(
-            rx.recharts.graphing_tooltip(),
+            _create_gradient("purple", "colorPurple"),
+            _custom_tooltip("purple"),
             rx.recharts.cartesian_grid(
                 stroke_dasharray="3 3",
             ),
             rx.recharts.area(
                 data_key="Orders",
-                stroke="var(--purple-9)",
-                fill="var(--purple-7)",
+                stroke=rx.color("purple", 9),
+                fill="url(#colorPurple)",
                 type_="monotone",
             ),
             rx.recharts.x_axis(data_key="Date", scale="auto"),
@@ -183,14 +225,14 @@ def orders_chart() -> rx.Component:
             height=425,
         ),
         rx.recharts.bar_chart(
-            rx.recharts.graphing_tooltip(),
+            _custom_tooltip("purple"),
             rx.recharts.cartesian_grid(
                 stroke_dasharray="3 3",
             ),
             rx.recharts.bar(
                 data_key="Orders",
-                stroke="var(--purple-9)",
-                fill="var(--purple-7)",
+                stroke=rx.color("purple", 9),
+                fill=rx.color("purple", 7),
             ),
             rx.recharts.x_axis(data_key="Date", scale="auto"),
             rx.recharts.y_axis(),
