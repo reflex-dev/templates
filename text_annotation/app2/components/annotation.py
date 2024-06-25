@@ -3,11 +3,6 @@ from app2.components.palette import render_palette
 from app2.states.base import Base
 from app2.states.palette import Palette
 
-text: dict[str, str] = {
-    "font_family": "var(--chakra-fonts-branding)",
-    "font_weight": "var(--chakra-fontWeights-black)",
-}
-
 
 def item_subtitles(subtitle: str):
     return rx.text(subtitle, font_size="11px", weight="bold", opacity="0.81")
@@ -17,7 +12,7 @@ def item_wrapper(title: str, component: rx.Component):
 
     def item_title(title_: str):
         return rx.hstack(
-            rx.chakra.text(title_, font_size="var(--chakra-fontSizes-md)", **text),
+            rx.text(title_, weight="bold"),
             rx.chakra.accordion_icon(),
             width="100%",
             justify_content="space-between",
