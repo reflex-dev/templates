@@ -54,3 +54,21 @@ jobs:
           asset_path: ./${{ matrix.file }}
           asset_name: ${{ matrix.file }}
           asset_content_type: application/zip
+
+  upload-templates-json:
+    needs: upload-artifacts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download templates.json
+        uses: actions/download-artifact@v3
+        with:
+          name: templates-json
+      - name: Upload templates.json as release asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./templates.json
+          asset_name: templates.json
+          asset_content_type: application/json
