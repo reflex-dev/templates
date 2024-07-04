@@ -2,7 +2,7 @@ import reflex as rx
 from ..views.sidebar import sidebar
 from ..views.mobile_ui import mobile_ui
 from ..components.options_ui import mobile_header
-from ..backend.generation import GeneratorState
+from ..backend.generation import GeneratorState, CopyLocalState, copy_script
 from reflex_img_comparison_slider import img_comparison_slider
 from ..components.react_zoom import image_zoom
 from PIL.Image import Image
@@ -12,13 +12,19 @@ from .. import styles
 
 def _image_ui() -> rx.Component:
     return rx.cond(
-        GeneratorState.upscaled_image & ~GeneratorState.is_generating, # If upscaled image is available and not generating
+        GeneratorState.upscaled_image
+        & ~GeneratorState.is_generating,  # If upscaled image is available and not generating
         img_comparison_slider(
-            rx.image(src=GeneratorState.output_image, slot="first", **styles.image_props),
-            rx.image(src=GeneratorState.upscaled_image, slot="second", **styles.image_props),
+            rx.image(
+                src=GeneratorState.output_image, slot="first", **styles.image_props
+            ),
+            rx.image(
+                src=GeneratorState.upscaled_image, slot="second", **styles.image_props
+            ),
         ),
         rx.cond(
-            ~GeneratorState.is_generating & ~GeneratorState.is_upscaling, # If not generating and not upscaling
+            ~GeneratorState.is_generating
+            & ~GeneratorState.is_upscaling,  # If not generating and not upscaling
             image_zoom(rx.image(src=GeneratorState.output_image, **styles.image_props)),
             rx.skeleton(
                 rx.box(rx.image(src=GeneratorState.output_image, **styles.image_props)),
@@ -124,7 +130,7 @@ def _download_button():
 
 def _copy_button():
     return rx.cond(
-        GeneratorState.is_copying,
+        CopyLocalState.value,
         rx.tooltip(
             rx.icon_button(
                 rx.icon("clipboard-check", size=20),
@@ -132,14 +138,14 @@ def _copy_button():
                 color_scheme="green",
             ),
             content="Copied",
-            open=GeneratorState.is_copying,
+            open=CopyLocalState.value,
             side="top",
         ),
         rx.icon_button(
             rx.icon("clipboard", size=20),
             **styles.button_props,
             color_scheme="gray",
-            on_click=GeneratorState.copy_image,
+            on_click=[copy_script(), GeneratorState.copy_image],
         ),
     )
 
@@ -151,6 +157,7 @@ def _copy_button():
 )
 def index():
     return rx.flex(
+        CopyLocalState,
         sidebar(),
         mobile_header(),
         rx.center(

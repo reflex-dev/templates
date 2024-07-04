@@ -142,63 +142,59 @@ def size_selector() -> rx.Component:
             ),
             rx.hstack(
                 rx.icon("rectangle-horizontal", size=22, color=rx.color("gray", 9)),
-                rx.cond(
-                    OptionsState.hover,
-                    rx.center(
-                        rx.flex(
-                            rx.text(
-                                OptionsState.dimensions_str,
-                                size="2",
-                                justify="center",
-                                align="center",
-                            ),
-                            _create_arrow_icon(
-                                "arrow-up-left", top="2.5px", left="2.5px"
-                            ),
-                            _create_arrow_icon(
-                                "arrow-up-right", top="2.5px", right="2.5px"
-                            ),
-                            _create_arrow_icon(
-                                "arrow-down-left", bottom="2.5px", left="2.5px"
-                            ),
-                            _create_arrow_icon(
-                                "arrow-down-right", bottom="2.5px", right="2.5px"
-                            ),
-                            width=OptionsState.dimensions[OptionsState.slider_tick][0]
-                            // 8,
-                            height=OptionsState.dimensions[OptionsState.slider_tick][1]
-                            // 8,
-                            bg=rx.color("gray", 7),
-                            padding="2.5px",
+                rx.center(
+                    rx.flex(
+                        rx.text(
+                            OptionsState.dimensions_str,
+                            size="2",
                             justify="center",
                             align="center",
-                            position="relative",
-                            transition="all 0.1s ease",
-                            border="1.5px solid var(--gray-9)",
-                            box_shadow=styles.box_shadow,
-                            style={
-                                "animation": "reveal 0.3s ease both",
-                                "@keyframes reveal": {
-                                    "0%": {
-                                        "opacity": "0",
-                                        "transform": "scale(0.5)",
-                                    },
-                                    "100%": {
-                                        "opacity": "1",
-                                        "transform": "scale(1)",
-                                    },
-                                },
-                            },
                         ),
-                        position="absolute",
-                        transform="translate(0%, 45%)",
-                        width="100%",
-                        z_index="500",
+                        _create_arrow_icon("arrow-up-left", top="2.5px", left="2.5px"),
+                        _create_arrow_icon(
+                            "arrow-up-right", top="2.5px", right="2.5px"
+                        ),
+                        _create_arrow_icon(
+                            "arrow-down-left", bottom="2.5px", left="2.5px"
+                        ),
+                        _create_arrow_icon(
+                            "arrow-down-right", bottom="2.5px", right="2.5px"
+                        ),
+                        width=OptionsState.dimensions[OptionsState.slider_tick][0] // 8,
+                        height=OptionsState.dimensions[OptionsState.slider_tick][1]
+                        // 8,
+                        bg=rx.color("gray", 7),
+                        padding="2.5px",
+                        justify="center",
+                        align="center",
+                        position="relative",
+                        transition="all 0.1s ease",
+                        border="1.5px solid var(--gray-9)",
+                        box_shadow=styles.box_shadow,
+                        style={
+                            "transition": "opacity 0.3s ease-out, transform 0.3s ease-out, visibility 0.3s ease-out",
+                            "opacity": rx.cond(OptionsState.hover, "1", "0"),
+                            "visibility": rx.cond(
+                                OptionsState.hover, "visible", "hidden"
+                            ),
+                            "transform": rx.cond(
+                                OptionsState.hover, "scale(1)", "scale(0.5)"
+                            ),
+                        },
                     ),
-                    rx.text(
-                        OptionsState.dimensions_str,
-                        size="2",
-                    ),
+                    position="absolute",
+                    transform="translate(0%, 45%)",
+                    width="100%",
+                    z_index="500",
+                ),
+                rx.text(
+                    OptionsState.dimensions_str,
+                    size="2",
+                    style={
+                        "transition": "opacity 0.15s ease-out, visibility 0.15s ease-out",
+                        "visibility": rx.cond(OptionsState.hover, "hidden", "visible"),
+                        "opacity": rx.cond(OptionsState.hover, "0", "1"),
+                    },
                 ),
                 rx.icon("rectangle-vertical", size=22, color=rx.color("gray", 9)),
                 position="relative",

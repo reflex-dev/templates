@@ -10,6 +10,8 @@ import asyncio
 DEFAULT_IMAGE = "/default.webp"
 API_TOKEN_ENV_VAR = "REPLICATE_API_TOKEN"
 
+CopyLocalState = rx._x.client_state(default=False, var_name="copying")
+
 
 class ResponseStatus(Enum):
     STARTING = "starting"
@@ -26,7 +28,6 @@ class GeneratorState(rx.State):
     output_image: str = DEFAULT_IMAGE
     output_list: list[str] = []
     upscaled_image: str = ""
-    is_copying: bool = False
     is_downloading: bool = False
 
     @rx.background
@@ -231,12 +232,21 @@ class GeneratorState(rx.State):
             self.is_downloading = False
 
     async def copy_image(self):
-        self.is_copying = True  # Show the copying animation
         try:
-            image_url = self.upscaled_image if self.upscaled_image else self.output_image
+            image_url = (
+                self.upscaled_image if self.upscaled_image else self.output_image
+            )
             yield rx.set_clipboard(image_url)
-            await asyncio.sleep(1.5)  # We wait to end the animation
         except Exception as e:
             yield rx.toast.error(f"Error copying image URL: {e}")
-        finally:
-            self.is_copying = False
+
+
+def copy_script():
+    return rx.call_script(
+        """
+        refs['_client_state_setCopying'](true);
+        setTimeout(() => {
+            refs['_client_state_setCopying'](false);
+        }, 1750);
+        """
+    )
