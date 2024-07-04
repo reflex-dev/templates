@@ -178,14 +178,14 @@ def size_selector() -> rx.Component:
                                 OptionsState.hover, "visible", "hidden"
                             ),
                             "transform": rx.cond(
-                                OptionsState.hover, "scale(1)", "scale(0.5)"
+                                OptionsState.hover, "scale(1)", "scale(0)"
                             ),
                         },
                     ),
                     position="absolute",
                     transform="translate(0%, 45%)",
                     width="100%",
-                    z_index="500",
+                    z_index=rx.cond(OptionsState.hover, "500", "0"),
                 ),
                 rx.text(
                     OptionsState.dimensions_str,
