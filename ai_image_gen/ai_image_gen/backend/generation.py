@@ -236,6 +236,10 @@ class GeneratorState(rx.State):
             image_url = (
                 self.upscaled_image if self.upscaled_image else self.output_image
             )
+            if image_url == DEFAULT_IMAGE:
+                image_url = (
+                    self.router.page.full_raw_path + DEFAULT_IMAGE[1:]
+                )  # Remove the /
             yield rx.set_clipboard(image_url)
         except Exception as e:
             yield rx.toast.error(f"Error copying image URL: {e}")
