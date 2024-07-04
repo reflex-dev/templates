@@ -224,7 +224,7 @@ def output_selector() -> rx.Component:
             max=4,
             step=1,
             size="1",
-            default_value=1,
+            default_value=OptionsState.num_outputs,
             on_change=OptionsState.set_num_outputs,
         ),
         width="100%",
