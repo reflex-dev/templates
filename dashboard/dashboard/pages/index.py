@@ -76,29 +76,24 @@ def index() -> rx.Component:
         ),
         stats_cards(),
         card(
-            rx.tabs.root(
-                rx.tabs.list(
-                    tab_content_header(),
-                    rx.tabs.trigger("Users", value="users"),
-                    rx.tabs.trigger("Revenue", value="revenue"),
-                    rx.tabs.trigger("Orders", value="orders"),
-                    margin_bottom="2.5em",
-                    justify_content="flex-end",
-                    wrap="wrap",
+            rx.hstack(
+                tab_content_header(),
+                rx.segmented_control.root(
+                    rx.segmented_control.item("Users", value="users"),
+                    rx.segmented_control.item("Revenue", value="revenue"),
+                    rx.segmented_control.item("Orders", value="orders"),
+                    margin_bottom="1.5em",
+                    default_value="users",
+                    on_change=StatsState.set_selected_tab,
                 ),
-                rx.tabs.content(
-                    users_chart(),
-                    value="users",
-                ),
-                rx.tabs.content(
-                    revenue_chart(),
-                    value="revenue",
-                ),
-                rx.tabs.content(
-                    orders_chart(),
-                    value="orders",
-                ),
-                default_value="users",
+                width="100%",
+                justify="between",
+            ),
+            rx.match(
+                StatsState.selected_tab,
+                ("users", users_chart()),
+                ("revenue", revenue_chart()),
+                ("orders", orders_chart()),
             ),
         ),
         rx.grid(
