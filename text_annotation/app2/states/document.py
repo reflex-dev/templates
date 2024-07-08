@@ -25,14 +25,19 @@ class DocumentState(Base):
 
             file_stream = BytesIO(upload_data)
 
-            doc = Document(file_stream)
+            try:
+                doc = Document(file_stream)
 
-            for paragraph in doc.paragraphs:
-                words = paragraph.text.split()
+                for paragraph in doc.paragraphs:
+                    words = paragraph.text.split()
 
-                for word in words:
-                    self.content.append([word, self.counter, "transparent"])
-                    self.counter += 1
+                    for word in words:
+                        self.content.append([word, self.counter, "transparent"])
+                        self.counter += 1
+
+            except Exception:
+                self.upload_ui, self.document_ui = "flex", "none"
+                return rx.toast.error("Upload was not successful.")
 
     def highlight_start(self, word_id):
         self.first_word_id = word_id

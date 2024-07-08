@@ -12,6 +12,13 @@ def render_upload_area():
             width="100%",
             height="100%",
         ),
+        max_files=1,
+        accept={
+            "application/msword": [".doc"],
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [
+                ".docx"
+            ],
+        },
         id="upload",
         width="100%",
         height="100%",
@@ -34,7 +41,9 @@ def render_upload_confirmation():
 
     return rx.vstack(
         rx.text(
-            f"Upload the following file: {rx.selected_files('upload')}",
+            "Upload ",
+            rx.chakra.span(rx.selected_files("upload"), as_="b"),
+            " for annotation?",
             font_size="22px",
         ),
         rx.hstack(
