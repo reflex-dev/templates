@@ -5,7 +5,6 @@ from ..components.options_ui import mobile_header
 from ..backend.generation import GeneratorState, CopyLocalState, copy_script
 from reflex_img_comparison_slider import img_comparison_slider
 from ..components.react_zoom import image_zoom
-from PIL.Image import Image
 from typing import Union
 from .. import styles
 
@@ -34,7 +33,7 @@ def _image_ui() -> rx.Component:
     )
 
 
-def _image_list_item(image: Union[Image, str]) -> rx.Component:
+def _image_list_item(image: str) -> rx.Component:
     return rx.skeleton(
         rx.box(
             rx.image(

@@ -1,13 +1,21 @@
 import reflex as rx
 from .. import styles
-from ..components.options_ui import sidebar_header, prompt_input, size_selector, output_selector, style_selector, advanced_options, generate_button
+from ..components.options_ui import (
+    sidebar_header,
+    prompt_input,
+    size_selector,
+    output_selector,
+    style_selector,
+    advanced_options,
+    generate_button,
+)
 
 
 def sidebar():
     return rx.box(
         rx.vstack(
             sidebar_header(),
-            rx.vstack(
+            rx.flex(
                 rx.vstack(
                     prompt_input(),
                     size_selector(),
@@ -20,12 +28,12 @@ def sidebar():
                     padding="1em",
                     spacing="6",
                 ),
-                rx.spacer(),
-                generate_button(),
-                width="100%",
+                overflow_y="auto",
+                flex="1",
                 height="100%",
-                spacing="0",
+                width="100%",
             ),
+            generate_button(),
             width="100%",
             height="100%",
             spacing="0",
