@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 from typing import List, Dict
 
-nba_csv = "assets/nbastats.csv"
+nba_csv = "nbastats.csv"
 
 
 class State(rx.State):
