@@ -1,0 +1,58 @@
+{
+  "templates": [
+    {
+      "name": "blank",
+      "description": "A minimal template",
+      "demo_url": "https://blank-template.reflex.run",
+      "hidden": false
+    },
+    {
+      "name": "dashboard",
+      "description": "A dashboard with tables and graphs",
+      "demo_url": "https://dashboard-new.reflex.run/",
+      "hidden": false
+    },
+    {
+      "name": "sidebar",
+      "description": "A template with a sidebar to navigate pages",
+      "demo_url": "https://sidebar-template.reflex.run",
+      "hidden": true
+    },
+    {
+      "name": "sales",
+      "description": "An app to manage sales and customers",
+      "demo_url": "https://sales-new.reflex.run/",
+      "hidden": false
+    },
+    {
+      "name": "ai_image_gen",
+      "description": "An app to generate images using AI",
+      "demo_url": "https://ai-image-gen.reflex.run/",
+      "hidden": false
+    },
+    {
+      "name": "ci_template",
+      "description": "A template for continuous integration",
+      "demo_url": "https://cijob.reflex.run/",
+      "hidden": false
+    },
+    {
+      "name": "api_admin_panel",
+      "description": "An admin panel for an api.",
+      "demo_url": "https://api-admin-panel.reflex.run/",
+      "hidden": false
+    },
+    {
+      "name": "nba",
+      "description": "A data visualization app for NBA data.",
+      "demo_url": "https://nba-new.reflex.run/",
+      "hidden": false
+    },
+    {
+      "name": "customer_data_app",
+      "description": "An app to manage customer data.",
+      "demo_url": "https://customer-data-app.reflex.run/",
+      "hidden": false
+    }
+  ]
+}
