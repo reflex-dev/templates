@@ -1,51 +1,58 @@
 {
   "templates": [
     {
-      "id": 1,
       "name": "blank",
       "description": "A minimal template",
-      "code_url": "https://github.com/reflex-dev/blank-template",
       "demo_url": "https://blank-template.reflex.run",
       "hidden": false
     },
     {
-      "id": 2,
       "name": "dashboard",
       "description": "A dashboard with tables and graphs",
-      "code_url": "https://github.com/reflex-dev/dashboard-template",
-      "demo_url": "https://dashboard.reflex.run",
+      "demo_url": "https://dashboard-new.reflex.run/",
       "hidden": false
     },
     {
-      "id": 3,
-      "name": "chat",
-      "description": "A ChatGPT clone",
-      "code_url": "https://github.com/reflex-dev/reflex-chat",
-      "demo_url": "https://chat.reflex.run",
-      "hidden": false
-    },
-    {
-      "id": 4,
       "name": "sidebar",
       "description": "A template with a sidebar to navigate pages",
-      "code_url": "https://github.com/reflex-dev/sidebar-template",
       "demo_url": "https://sidebar-template.reflex.run",
+      "hidden": true
+    },
+    {
+      "name": "sales",
+      "description": "An app to manage sales and customers",
+      "demo_url": "https://sales-new.reflex.run/",
       "hidden": false
     },
     {
-      "id": 5,
-      "name": "Sales",
-      "description": "An app to manage sales and customers"
+      "name": "ai_image_gen",
+      "description": "An app to generate images using AI",
+      "demo_url": "https://ai-image-gen.reflex.run/",
+      "hidden": false
     },
     {
-      "id": 6,
-      "name": "api-panel",
-      "description": "An admin panel for an api."
+      "name": "ci_template",
+      "description": "A template for continuous integration",
+      "demo_url": "https://cijob.reflex.run/",
+      "hidden": false
     },
     {
-      "id": 7,
+      "name": "api_admin_panel",
+      "description": "An admin panel for an api.",
+      "demo_url": "https://api-admin-panel.reflex.run/",
+      "hidden": false
+    },
+    {
       "name": "nba",
-      "description": "A data visualization app for NBA data."
+      "description": "A data visualization app for NBA data.",
+      "demo_url": "https://nba-new.reflex.run/",
+      "hidden": false
+    },
+    {
+      "name": "customer_data_app",
+      "description": "An app to manage customer data.",
+      "demo_url": "https://customer-data-app.reflex.run/",
+      "hidden": false
     }
   ]
 }

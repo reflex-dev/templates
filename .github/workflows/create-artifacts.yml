@@ -26,6 +26,7 @@ jobs:
         with:
           name: zip-files
           path: "*.zip"
+          
   upload-artifacts:
     needs: zip-and-publish
     runs-on: ubuntu-latest
