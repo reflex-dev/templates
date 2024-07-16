@@ -26,7 +26,7 @@ jobs:
         with:
           name: zip-files
           path: "*.zip"
-          
+
   upload-artifacts:
     needs: zip-and-publish
     runs-on: ubuntu-latest
@@ -60,10 +60,8 @@ jobs:
     needs: upload-artifacts
     runs-on: ubuntu-latest
     steps:
-      - name: Download templates.json
-        uses: actions/download-artifact@v3
-        with:
-          name: templates-json
+      - name: Checkout repository
+        uses: actions/checkout@v2
       - name: Upload templates.json as release asset
         uses: actions/upload-release-asset@v1
         env:
