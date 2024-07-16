@@ -144,7 +144,7 @@ class State(rx.State):
             session.add(Customer(**self.current_user))
             session.commit()
         self.load_entries()
-        return rx._x.toast.info(f"User {self.current_user["name"]} has been added.", variant="outline", position="bottom-right")
+        return rx.toast.info(f"User {self.current_user["name"]} has been added.", variant="outline", position="bottom-right")
     
 
     def update_customer_to_db(self, form_data: dict):
@@ -159,7 +159,7 @@ class State(rx.State):
             session.add(customer)
             session.commit()
         self.load_entries()
-        return rx._x.toast.info(f"User {self.current_user["name"]} has been modified.", variant="outline", position="bottom-right")
+        return rx.toast.info(f"User {self.current_user["name"]} has been modified.", variant="outline", position="bottom-right")
 
 
     def delete_customer(self, id: int):
@@ -169,17 +169,17 @@ class State(rx.State):
             session.delete(customer)
             session.commit()
         self.load_entries()
-        return rx._x.toast.info(f"User {customer.name} has been deleted.", variant="outline", position="bottom-right")
+        return rx.toast.info(f"User {customer.name} has been deleted.", variant="outline", position="bottom-right")
     
     
-    @rx.cached_var
+    @rx.var(cache=True)
     def payments_change(self) -> float:
         return _get_percentage_change(self.current_month_values.total_payments, self.previous_month_values.total_payments)
 
-    @rx.cached_var
+    @rx.var(cache=True)
     def customers_change(self) -> float:
         return _get_percentage_change(self.current_month_values.num_customers, self.previous_month_values.num_customers)
 
-    @rx.cached_var
+    @rx.var(cache=True)
     def delivers_change(self) -> float:
         return _get_percentage_change(self.current_month_values.num_delivers, self.previous_month_values.num_delivers)
