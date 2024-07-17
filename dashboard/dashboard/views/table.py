@@ -109,6 +109,7 @@ def main_table() -> rx.Component:
                         size=28,
                         stroke_width=1.5,
                         cursor="pointer",
+                        flex_shrink="0",
                         on_click=TableState.toggle_sort,
                     ),
                     rx.icon(
@@ -116,6 +117,7 @@ def main_table() -> rx.Component:
                         size=28,
                         stroke_width=1.5,
                         cursor="pointer",
+                        flex_shrink="0",
                         on_click=TableState.toggle_sort,
                     ),
                 ),
