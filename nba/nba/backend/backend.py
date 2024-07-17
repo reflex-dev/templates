@@ -27,7 +27,7 @@ class State(rx.State):
     age: tuple[int, int] = (19, 40)
     salary: tuple[int, int] = (0, 25000000)
 
-    @rx.cached_var
+    @rx.var(cache=True)
     def filtered_sorted_players(self) -> list[Player]:
         players = self.players
 
@@ -70,17 +70,17 @@ class State(rx.State):
 
         return players
 
-    @rx.cached_var
+    @rx.var(cache=True)
     def page_number(self) -> int:
         return (self.offset // self.limit) + 1
 
-    @rx.cached_var
+    @rx.var(cache=True)
     def total_pages(self) -> int:
         return (self.total_items // self.limit) + (
             1 if self.total_items % self.limit else 0
         )
 
-    @rx.cached_var
+    @rx.var(cache=True, initial_value=[])
     def get_current_page(self) -> list[Player]:
         start_index = self.offset
         end_index = start_index + self.limit
@@ -110,7 +110,7 @@ class State(rx.State):
         self.sort_reverse = not self.sort_reverse
         self.load_entries()
 
-    @rx.cached_var
+    @rx.var(cache=True)
     def get_age_salary_chart_data(self) -> list[dict]:
         age_salary_data = {}
         age_count = {}
@@ -143,7 +143,7 @@ class State(rx.State):
             for age in range(self.age[0], self.age[1] + 1)  # Ensure we include all ages
         ]
 
-    @rx.cached_var
+    @rx.var(cache=True)
     def get_position_salary_chart_data(self) -> list[dict]:
         position_salary_data = {}
         position_count = {}
@@ -176,7 +176,7 @@ class State(rx.State):
             for position in position_salary_data
         ]
 
-    @rx.cached_var
+    @rx.var(cache=True)
     def get_team_salary_chart_data(self) -> list[dict]:
         team_salary_data = {}
         team_count = {}
@@ -207,7 +207,7 @@ class State(rx.State):
             for team in team_salary_data
         ]
 
-    @rx.cached_var
+    @rx.var(cache=True)
     def get_college_salary_chart_data(self) -> list[dict]:
         college_salary_data = {}
         college_count = {}
@@ -240,7 +240,7 @@ class State(rx.State):
             for college in college_salary_data
         ]
 
-    @rx.cached_var
+    @rx.var(cache=True)
     def get_team_age_average_data(self) -> list[dict]:
         team_age_data = {}
         team_count = {}
@@ -271,7 +271,7 @@ class State(rx.State):
             for team, ages in team_age_data.items()
         ]
 
-    @rx.cached_var
+    @rx.var(cache=True)
     def get_position_age_average_data(self) -> list[dict]:
         position_age_data = {}
         position_count = {}
@@ -320,4 +320,3 @@ class State(rx.State):
             size=np.random.randint(1, len(all_items[list_name]) + 1),
             replace=False,
         ).tolist()
-

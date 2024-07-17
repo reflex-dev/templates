@@ -25,7 +25,7 @@ class TableState(rx.State):
     offset: int = 0
     limit: int = 12  # Number of rows per page
 
-    @rx.cached_var
+    @rx.var(cache=True)
     def filtered_sorted_items(self) -> List[Item]:
         items = self.items
 
@@ -63,17 +63,17 @@ class TableState(rx.State):
 
         return items
 
-    @rx.cached_var
+    @rx.var(cache=True)
     def page_number(self) -> int:
         return (self.offset // self.limit) + 1
 
-    @rx.cached_var
+    @rx.var(cache=True)
     def total_pages(self) -> int:
         return (self.total_items // self.limit) + (
             1 if self.total_items % self.limit else 0
         )
 
-    @rx.cached_var
+    @rx.var(cache=True)
     def get_current_page(self) -> list[Item]:
         start_index = self.offset
         end_index = start_index + self.limit

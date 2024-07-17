@@ -12,7 +12,7 @@ def email_box():
                 size="2",
                 on_click=[
                     rx.set_clipboard(State.email_content_data),
-                    rx._x.toast.info("Copied to clipboard"),
+                    rx.toast.info("Copied to clipboard"),
                 ],
                 cursor="pointer",
                 position="absolute",
