@@ -148,7 +148,6 @@ def sidebar() -> rx.Component:
     )
 
     return rx.flex(
-        rx.spacer(),
         rx.vstack(
             sidebar_header(),
             rx.vstack(
@@ -172,10 +171,12 @@ def sidebar() -> rx.Component:
         ),
         display=["none", "none", "none", "none", "none", "flex"],
         max_width=styles.sidebar_width,
-        width="100%",
+        width="auto",
         height="100%",
         position="sticky",
+        justify="end",
         top="0px",
         left="0px",
+        flex="1",
         bg=rx.color("gray", 2),
     )
