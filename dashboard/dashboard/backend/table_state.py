@@ -73,7 +73,7 @@ class TableState(rx.State):
             1 if self.total_items % self.limit else 0
         )
 
-    @rx.var(cache=True)
+    @rx.var(cache=True, initial_value=[])
     def get_current_page(self) -> list[Item]:
         start_index = self.offset
         end_index = start_index + self.limit
