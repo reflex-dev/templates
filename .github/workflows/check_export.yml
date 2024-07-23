@@ -69,3 +69,12 @@ jobs:
               exit 1
             fi
           done
+
+    - name: Check for DeprecationWarning in logs
+      run: |
+        if grep -q "DeprecationWarning:" <<< "${{ steps.run-code.outputs.stdout }}"; then
+          echo "Found a Deprecation warning, please fix."
+          exit 1
+        else
+          echo "No deprecated code, all good."
+        fi
