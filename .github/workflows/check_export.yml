@@ -71,12 +71,11 @@ jobs:
             fi
           done
 
-      - name: Check for specific string in logs
+      - name: Check for DeprecationWarning in logs
         run: |
-          # Replace "specific string" with the string you are looking for
-          if grep -q "specific string" <<< "${{ steps.export-check.outputs.stdout }}"; then
-            echo "Found the specific string."
-          else
-            echo "Specific string not found."
+          if grep -q ""DeprecationWarning:" <<< "${{ steps.export-check.outputs.stdout }}"; then
+            echo "Found a Deprecation warning, please fix."
             exit 1
+          else
+            echo "No deprecated code, all good."
           fi
