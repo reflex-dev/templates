@@ -35,7 +35,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v3
-      - run: |
+      - id: export-check
+        run: |
           f=${{ matrix.example }}
           if [[ ! -d $f ]]; then
             echo "$f is not a directory!"
@@ -70,11 +71,12 @@ jobs:
             fi
           done
 
-    - name: Check for DeprecationWarning in logs
-      run: |
-        if grep -q "DeprecationWarning:" <<< "${{ steps.run-code.outputs.stdout }}"; then
-          echo "Found a Deprecation warning, please fix."
-          exit 1
-        else
-          echo "No deprecated code, all good."
-        fi
+      - name: Check for specific string in logs
+        run: |
+          # Replace "specific string" with the string you are looking for
+          if grep -q "specific string" <<< "${{ steps.export-check.outputs.stdout }}"; then
+            echo "Found the specific string."
+          else
+            echo "Specific string not found."
+            exit 1
+          fi
