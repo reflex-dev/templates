@@ -75,7 +75,7 @@ jobs:
 
       - name: Check for DeprecationWarning in logs
         run: |
-          if grep -q "DeprecationWarning:" <<< "${{ steps.export-check.outputs.stdout }}"; then
+          if grep -q "DeprecationWarning:" <<< "${{ steps.export-check.outputs.stderr }}"; then
             echo "Found a Deprecation warning, please fix."
             exit 1
           else
