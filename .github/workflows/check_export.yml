@@ -35,7 +35,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v3
-      - run: |
+      - id: export-check
+        run: |
           f=${{ matrix.example }}
           if [[ ! -d $f ]]; then
             echo "$f is not a directory!"
@@ -58,6 +59,8 @@ jobs:
           source venv/bin/activate
 
           pip install '${{ github.event.inputs.reflex_dep || env.REFLEX_DEP }}' -r requirements.txt
+          pip install git+https://github.com/reflex-dev/reflex.git@main
+
           export OPENAI_API_KEY="dummy"
           reflex init
           reflex export
@@ -69,3 +72,12 @@ jobs:
               exit 1
             fi
           done
+
+      - name: Check for DeprecationWarning in logs
+        run: |
+          if grep -q "DeprecationWarning:" <<< "${{ steps.export-check.outputs.stdout }}"; then
+            echo "Found a Deprecation warning, please fix."
+            exit 1
+          else
+            echo "No deprecated code, all good."
+          fi
