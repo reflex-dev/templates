@@ -144,7 +144,7 @@ class State(rx.State):
             session.add(Customer(**self.current_user))
             session.commit()
         self.load_entries()
-        return rx.toast.info(f"User {self.current_user["name"]} has been added.", variant="outline", position="bottom-right")
+        return rx.toast.info(f"User {self.current_user['name']} has been added.", variant="outline", position="bottom-right")
     
 
     def update_customer_to_db(self, form_data: dict):
@@ -159,7 +159,7 @@ class State(rx.State):
             session.add(customer)
             session.commit()
         self.load_entries()
-        return rx.toast.info(f"User {self.current_user["name"]} has been modified.", variant="outline", position="bottom-right")
+        return rx.toast.info(f"User {self.current_user['name']} has been modified.", variant="outline", position="bottom-right")
 
 
     def delete_customer(self, id: int):
