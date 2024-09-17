@@ -3,12 +3,13 @@ import reflex as rx
 from app.states.base import BaseState
 from app.states.queries import QueryState, QueryAPI
 from app.styles import text
+import reflex_chakra as rc
 
 
 def item_title(title: str):
     return rx.hstack(
         rx.text(title, font_size="var(--chakra-fontSizes-sm)", **text),
-        rx.chakra.accordion_icon(),
+        rc.accordion_icon(),
         width="100%",
         justify_content="space-between",
     )
@@ -31,7 +32,6 @@ def item_add_event(event_trigger: callable):
 
 
 def form_item_entry(data: dict[str, str]):
-
     def create_entry(title: str, function: callable):
         return (
             rx.input(
@@ -60,16 +60,16 @@ def form_item_entry(data: dict[str, str]):
 def form_item(
     title: str, state: list[dict[str, str]], func: callable, event_trigger: callable
 ):
-    return rx.chakra.accordion(
-        rx.chakra.accordion_item(
-            rx.chakra.accordion_button(item_title(title)),
-            rx.chakra.accordion_panel(
+    return rc.accordion(
+        rc.accordion_item(
+            rc.accordion_button(item_title(title)),
+            rc.accordion_panel(
                 item_add_event(event_trigger),
                 width="100%",
                 display="flex",
                 justify_content="end",
             ),
-            rx.chakra.accordion_panel(
+            rc.accordion_panel(
                 rx.vstack(rx.foreach(state, func), width="100%", spacing="1")
             ),
         ),
@@ -82,10 +82,10 @@ def form_item(
 def form_body_param_item(
     state: list[dict[str, str]], func: callable, event_trigger: callable
 ):
-    return rx.chakra.accordion(
-        rx.chakra.accordion_item(
-            rx.chakra.accordion_button(item_title("Body")),
-            rx.chakra.accordion_panel(
+    return rc.accordion(
+        rc.accordion_item(
+            rc.accordion_button(item_title("Body")),
+            rc.accordion_panel(
                 rx.match(
                     QueryState.current_req,
                     (
@@ -125,10 +125,10 @@ def form_body_param_item(
 
 
 def form_request_item():
-    return rx.chakra.accordion(
-        rx.chakra.accordion_item(
-            rx.chakra.accordion_button(item_title("Requests")),
-            rx.chakra.accordion_panel(
+    return rc.accordion(
+        rc.accordion_item(
+            rc.accordion_button(item_title("Requests")),
+            rc.accordion_panel(
                 rx.hstack(
                     rx.select(
                         QueryState.req_methods,
