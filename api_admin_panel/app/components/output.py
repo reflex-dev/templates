@@ -2,6 +2,7 @@ import reflex as rx
 
 from app.states.queries import QueryAPI
 from app.components.drawer import render_drawer
+import reflex_chakra as rc
 
 
 def create_table_header(title: str):
@@ -37,7 +38,7 @@ def create_pagination():
                 width="100px",
                 weight="bold",
             ),
-            rx.chakra.button_group(
+            rc.button_group(
                 rx.icon(
                     tag="chevron-left", on_click=QueryAPI.previous, cursor="pointer"
                 ),
