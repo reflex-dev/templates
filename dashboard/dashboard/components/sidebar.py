@@ -135,7 +135,6 @@ def sidebar() -> rx.Component:
         "/",
         "/table",
         "/about",
-        "/account",
         "/profile",
         "/settings",
     ]

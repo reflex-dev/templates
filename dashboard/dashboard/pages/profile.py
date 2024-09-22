@@ -30,7 +30,7 @@ def profile() -> rx.Component:
     """The profile page.
 
     Returns:
-        The UI for the account page.
+        The UI for the profile page.
     """
     return rx.vstack(
         rx.flex(
