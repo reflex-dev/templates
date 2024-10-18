@@ -68,9 +68,9 @@ ghost_input_style = {
     "--text-field-selection-color": "",
     "--text-field-focus-color": "transparent",
     "--text-field-border-width": "1px",
-    "backgroundClip": "content-box",
-    "backgroundColor": "transparent",
-    "boxShadow": "inset 0 0 0 var(--text-field-border-width) transparent",
+    "background_clip": "content-box",
+    "background_color": "transparent",
+    "box_shadow": "inset 0 0 0 var(--text-field-border-width) transparent",
     "color": "",
 }
 
