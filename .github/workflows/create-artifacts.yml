@@ -20,7 +20,7 @@ jobs:
       - name: List contents of submodules
         run: |
           echo "Listing contents of submodules:"
-          for submodule in reflex-chat reflex-llamaindex-templates; do
+          for submodule in reflex-chat reflex-llamaindex-template; do
             echo "Contents of $submodule:"
             ls -R $submodule || echo "$submodule not found"
           done
