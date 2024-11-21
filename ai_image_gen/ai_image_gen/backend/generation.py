@@ -30,7 +30,7 @@ class GeneratorState(rx.State):
     upscaled_image: str = ""
     is_downloading: bool = False
 
-    @rx.background
+    @rx.event(background=True)
     async def generate_image(self):
         try:
             # Check if the env variable is set
@@ -102,7 +102,7 @@ class GeneratorState(rx.State):
                 self._reset_state()
             yield rx.toast.error(f"Error, please try again: {e}")
 
-    @rx.background
+    @rx.event(background=True)
     async def upscale_image(self):
         try:
             # Check if the env variable is set
