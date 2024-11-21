@@ -36,6 +36,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
       - id: export-check
         run: |
           f=${{ matrix.example }}
