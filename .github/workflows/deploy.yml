@@ -16,7 +16,7 @@ jobs:
               id: generate-matrix
               run: |
                 FOLDERS=$(ls -d */ | sed 's|/||g' | jq -R -s -c 'split("\n")[:-1]')
-                echo "folders=$FOLDERS" >> $GITHUB_ENV
+                echo "folders=$FOLDERS" >> $GITHUB_OUTPUT
             - name: Debug output (matrix)
               run: |
                 echo "Subfolders: ${{ env.folders }}"
