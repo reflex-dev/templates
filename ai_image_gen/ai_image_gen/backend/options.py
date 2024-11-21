@@ -46,31 +46,35 @@ class OptionsState(rx.State):
     advanced_options_open: bool = False
     # Generation options
     prompt: str = ""
-    negative_prompt: str = (
-        "deformed, distorted, disfigured, poorly drawn, bad anatomy, wrong anatomy, extra limb, missing limb, floating limbs, mutated hands and fingers, disconnected limbs, mutation, mutated, ugly, disgusting, blurry, amputation, text, watermark, signature"
-    )
+    negative_prompt: str = "deformed, distorted, disfigured, poorly drawn, bad anatomy, wrong anatomy, extra limb, missing limb, floating limbs, mutated hands and fingers, disconnected limbs, mutation, mutated, ugly, disgusting, blurry, amputation, text, watermark, signature"
     num_outputs: int = 1
     seed: int = 0
     steps: int = 4
     scheduler: str = "K_EULER"
     guidance_scale: float = 0
 
-    def set_tick(self, value: int):
+    @rx.event
+    def set_tick(self, value: list):
         self.slider_tick = value[0]
         self.selected_dimensions = self.dimensions[self.slider_tick]
 
+    @rx.event
     def set_hover(self, value: bool):
         self.hover = value
 
-    def set_num_outputs(self, value: int):
+    @rx.event
+    def set_num_outputs(self, value: list):
         self.num_outputs = value[0]
 
-    def set_steps(self, value: int):
+    @rx.event
+    def set_steps(self, value: list):
         self.steps = value[0]
 
-    def set_guidance_scale(self, value: float):
+    @rx.event
+    def set_guidance_scale(self, value: list):
         self.guidance_scale = value[0]
 
+    @rx.event
     def randomize_prompt(self):
         self.prompt = random.choice(prompt_list)
 
