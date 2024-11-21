@@ -9,7 +9,7 @@ jobs:
     setup-matrix:
         runs-on: ubuntu-latest
         outputs:
-            matrix: ${{ steps.generate-matrix.outputs.matrix }}
+            folders: ${{ steps.generate-matrix.outputs.folders }}
         steps:
             - uses: actions/checkout@v3
             - name: Generate Matrix
