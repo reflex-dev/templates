@@ -18,4 +18,4 @@ jobs:
                 echo "::set-output name=folders::$(ls -d */ | sed 's|/||g' | jq -R -s -c 'split("\n")[:-1]')"
             - name: Debug output (matrix)
               run: |
-                echo "matrix=$folders"
+                echo "${{ steps.get_subfolders.outputs.folders }}"
