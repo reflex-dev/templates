@@ -29,6 +29,9 @@ jobs:
                 folder: ${{fromJson(needs.setup-matrix.outputs.folders)}}
         steps:
             - uses: actions/checkout@v3
+            - name: Install dependencies
+              run: |
+                pip install -r ${{ matrix.folder }}/requirements.txt
             - name: Deploy to ReflexCloud
               run: |
                 chmod +x deploy.sh

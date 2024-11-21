@@ -33,4 +33,4 @@ fi
 
 echo "Starting deployment..."
 # reflex deploy  # Adjust with actual Reflex deploy command
-echo "Deployment for '$SUBFOLDER' completed successfully."
+echo "Deployment for '$SUBFOLDER' completed successfully. [FAKED]"
