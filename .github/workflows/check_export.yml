@@ -72,7 +72,6 @@ jobs:
               exit 1
             fi
           done
-          ls -la
 
       - name: Check for DeprecationWarning in logs
         run: |
