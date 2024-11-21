@@ -63,7 +63,8 @@ jobs:
 
           export OPENAI_API_KEY="dummy"
           reflex init
-          reflex export
+          output=$(reflex export)
+          echo "$output" >> $GITHUB_OUTPUT
           for a in frontend.zip backend.zip; do
             if unzip -t "$a"; then
               echo "$a prepared as expected"
