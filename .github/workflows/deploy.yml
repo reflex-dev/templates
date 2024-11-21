@@ -30,4 +30,6 @@ jobs:
         steps:
             - uses: actions/checkout@v3
             - name: Deploy to ReflexCloud
-              run: ./deploy.sh ${{ matrix.folder }}
+              run: |
+                chmod +x deploy.sh
+                ./deploy.sh ${{ matrix.folder }}
