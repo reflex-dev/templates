@@ -75,9 +75,9 @@ jobs:
 
       - name: Check for DeprecationWarning in logs
         run: |
-          if (grep -i "DeprecationWarning:" export_logs.txt) ; then
-            echo "Found a Deprecation warning, please fix."
-            exit 1
-          else
-            echo "No deprecated code, all good."
-          fi
+            if grep -iq "DeprecationWarning:" export_logs.txt; then
+                echo "Found a Deprecation warning, please fix."
+                exit 1
+            else
+                echo "No deprecated code, all good."
+            fi
