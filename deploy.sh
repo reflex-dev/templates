@@ -32,5 +32,6 @@ if ! command -v reflex &> /dev/null; then
 fi
 
 echo "Starting deployment..."
+echo "DebugAuthToken= $REFLEX_AUTH_TOKEN"
 # reflex deploy  # Adjust with actual Reflex deploy command
 echo "Deployment for '$SUBFOLDER' completed successfully. [FAKED]"
