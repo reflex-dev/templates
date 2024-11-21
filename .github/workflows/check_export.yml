@@ -63,8 +63,7 @@ jobs:
 
           export OPENAI_API_KEY="dummy"
           reflex init
-          output=$(reflex export)
-          echo "stdout=$output" >> $GITHUB_OUTPUT
+          reflex export | tee export_logs.txt
           for a in frontend.zip backend.zip; do
             if unzip -t "$a"; then
               echo "$a prepared as expected"
@@ -76,7 +75,7 @@ jobs:
 
       - name: Check for DeprecationWarning in logs
         run: |
-          if grep -q "DeprecationWarning:" <<< "${{ steps.export-check.outputs.stdout }}"; then
+          if (grep -i "DeprecationWarning:" export_logs.txt) ; then
             echo "Found a Deprecation warning, please fix."
             exit 1
           else
