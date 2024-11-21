@@ -18,7 +18,7 @@ jobs:
     outputs:
       examples: ${{ steps.generate-matrix.outputs.examples }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Generate Matrix
         id: generate-matrix
         run: |
@@ -31,10 +31,13 @@ jobs:
     strategy:
       matrix:
         example: ${{ fromJSON(needs.list-examples.outputs.examples) }}
+      fail-fast: false
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.9
       - id: export-check
         run: |
           f=${{ matrix.example }}
@@ -63,7 +66,7 @@ jobs:
 
           export OPENAI_API_KEY="dummy"
           reflex init
-          reflex export
+          reflex export | tee export_logs.txt
           for a in frontend.zip backend.zip; do
             if unzip -t "$a"; then
               echo "$a prepared as expected"
@@ -75,9 +78,12 @@ jobs:
 
       - name: Check for DeprecationWarning in logs
         run: |
-          if grep -q "DeprecationWarning:" <<< "${{ steps.export-check.outputs.stdout }}"; then
-            echo "Found a Deprecation warning, please fix."
-            exit 1
-          else
-            echo "No deprecated code, all good."
-          fi
+            cd ${{ matrix.example }}
+            dep_lines=$(grep -i "DeprecationWarning:" export_logs.txt || true)
+            if [ -n "$dep_lines" ]; then
+                echo "Found Deprecation warning:"
+                echo "$dep_lines"
+                exit 1
+            else
+                echo "No deprecated code, all good."
+            fi
