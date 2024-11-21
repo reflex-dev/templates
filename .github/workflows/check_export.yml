@@ -72,9 +72,11 @@ jobs:
               exit 1
             fi
           done
+          ls -la
 
       - name: Check for DeprecationWarning in logs
         run: |
+            ls -la
             if grep -iq "DeprecationWarning:" export_logs.txt; then
                 echo "Found a Deprecation warning, please fix."
                 exit 1
