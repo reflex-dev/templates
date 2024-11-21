@@ -16,8 +16,21 @@ jobs:
               id: generate-matrix
               run: |
                 FOLDERS=$(ls -d */ | sed 's|/||g' | jq -R -s -c 'split("\n")[:-1]')
-                echo "Found subfolders: $FOLDERS"
                 echo "folders=$FOLDERS" >> $GITHUB_ENV
             - name: Debug output (matrix)
               run: |
                 echo "Subfolders: ${{ env.folders }}"
+
+    deploy:
+        needs: setup-matrix
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                folder: ${{fromJson(needs.setup-matrix.outputs.folders)}}
+        steps:
+            - uses: actions/checkout@v3
+            - name: Deploy to ReflexCloud
+              run: |
+                echo "Deploying ${{ matrix.folder }}"
+                # Add your deployment script here
+                # Example: deploy.sh ${{ matrix.folder }}
