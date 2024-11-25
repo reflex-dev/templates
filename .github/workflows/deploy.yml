@@ -36,7 +36,7 @@ jobs:
               id: set-env
               run: |
                   # Export the secret's value
-                  echo "EXTRA_ENV=--env ${{ fromJSON(secrets.ENV_VARS)[matrix.folder] }}" >> $GITHUB_ENV
+                  echo "EXTRA_ENV=--env ${{ fromJSON(secrets.DEPLOY_EXTRA_ENVS)[matrix.folder] }}" >> $GITHUB_ENV
             - name: Deploy to ReflexCloud
               env:
                 REFLEX_AUTH_TOKEN: ${{ secrets.REFLEX_AUTH_TOKEN }}
