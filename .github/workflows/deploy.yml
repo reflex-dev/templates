@@ -36,8 +36,8 @@ jobs:
               id: set-env
               run: |
                 case ${{ matrix.folder }} in
-                "ai_image_gen")
-                  echo "EXTRA_ENV=--env ${{ secrets.REPLCATE_API_TOKEN }}" >> $GITHUB_ENV
+                ai_image_gen)
+                  echo "EXTRA_ENV=--env REPLICATE_API_TOKEN=${{ secrets.REPLCATE_API_TOKEN }}" >> $GITHUB_ENV
                 *)
                   echo "EXTRA_ENV=" >> $GITHUB_ENV
                 esac
