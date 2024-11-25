@@ -1,0 +1,6 @@
+[submodule "reflex-chat"]
+	path = reflex-chat
+	url = https://github.com/reflex-dev/reflex-chat.git
+[submodule "reflex-llamaindex-template"]
+	path = reflex-llamaindex-template
+	url = https://github.com/reflex-dev/reflex-llamaindex-template.git
