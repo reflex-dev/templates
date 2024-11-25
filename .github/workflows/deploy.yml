@@ -24,6 +24,7 @@ jobs:
     deploy:
         needs: setup-matrix
         runs-on: ubuntu-latest
+        environment: Cloud Deploy
         strategy:
             matrix:
                 folder: ${{fromJson(needs.setup-matrix.outputs.folders)}}
