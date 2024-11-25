@@ -35,7 +35,5 @@ fi
 template_id=$(reflex apps project-list --token $REFLEX_AUTH_TOKEN | awk '/templates/ {print $1}')
 
 echo "Starting deployment..."
-# echo "DebugTemplateID=$template_id DebugAuthToken=$REFLEX_AUTH_TOKEN DebugExtraEnv=$EXTRA_ENV"
-echo "DebugEnvVars=$EXTRA_ENV"
-# reflex deployv2 --token $REFLEX_AUTH_TOKEN --project $template_id --no-interactive $EXTRA_ENV
-echo "Deployment for '$SUBFOLDER' completed successfully. [FAKED]"
+reflex deployv2 --token $REFLEX_AUTH_TOKEN --project $template_id --no-interactive $EXTRA_ENV
+echo "Deployment for '$SUBFOLDER' completed successfully."
