@@ -11,6 +11,7 @@ if [ -z "$1" ]; then
 fi
 
 SUBFOLDER=$1
+EXTRA_ENV=$2
 
 # Ensure the subfolder exists
 if [ ! -d "$SUBFOLDER" ]; then
@@ -24,14 +25,17 @@ cd "$SUBFOLDER"
 # Print the current working directory for debugging
 echo "Deploying content from: $(pwd)"
 
-# Add deployment logic here
-# For example, deploying with Reflex CLI
+# Check if reflex CLI is installed
 if ! command -v reflex &> /dev/null; then
   echo "Error: Reflex CLI not found. Please ensure it is installed."
   exit 1
 fi
 
+# Store the project ID in a variable
+template_id=$(reflex apps project-list --token $REFLEX_AUTH_TOKEN | awk '/templates/ {print $1}')
+
 echo "Starting deployment..."
-echo "DebugAuthToken= $REFLEX_AUTH_TOKEN"
-# reflex deploy  # Adjust with actual Reflex deploy command
+# echo "DebugTemplateID=$template_id DebugAuthToken=$REFLEX_AUTH_TOKEN DebugExtraEnv=$EXTRA_ENV"
+echo "DebugEnvVars=$EXTRA_ENV"
+# reflex deployv2 --token $REFLEX_AUTH_TOKEN --project $template_id --no-interactive $EXTRA_ENV
 echo "Deployment for '$SUBFOLDER' completed successfully. [FAKED]"

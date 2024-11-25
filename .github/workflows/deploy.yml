@@ -32,7 +32,16 @@ jobs:
             - name: Install dependencies
               run: |
                 pip install -r ${{ matrix.folder }}/requirements.txt
+            - name: Set environment dynamically
+              id: set-env
+              run: |
+                  # Convert subfolder name to uppercase to match the secret naming convention
+                  DYNAMIC_ENV_NAME="ENV_${{ matrix.folder }}"
+                  # Export the secret's value
+                  echo "EXTRA_ENV=--env ${{ secrets[DYNAMIC_ENV_NAME] }}" >> $GITHUB_ENV
             - name: Deploy to ReflexCloud
+              env:
+                REFLEX_AUTH_TOKEN: ${{ secrets.REFLEX_AUTH_TOKEN }}
               run: |
                 chmod +x deploy.sh
-                ./deploy.sh ${{ matrix.folder }}
+                ./deploy.sh ${{ matrix.folder }} "$EXTRA_ENV"
