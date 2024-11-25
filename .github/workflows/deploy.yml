@@ -35,8 +35,12 @@ jobs:
             - name: Set environment dynamically
               id: set-env
               run: |
-                  # Export the secret's value
-                  echo "EXTRA_ENV=--env ${{ fromJSON(secrets.DEPLOY_EXTRA_ENVS)[matrix.folder] }}" >> $GITHUB_ENV
+                case ${{ matrix.folder }} in
+                "ai_image_gen")
+                  echo "EXTRA_ENV=--env ${{ secrets.REPLCATE_API_TOKEN }}" >> $GITHUB_ENV
+                *)
+                  echo "EXTRA_ENV=" >> $GITHUB_ENV
+                esac
             - name: Deploy to ReflexCloud
               env:
                 REFLEX_AUTH_TOKEN: ${{ secrets.REFLEX_AUTH_TOKEN }}
