@@ -50,7 +50,7 @@ jobs:
                   echo "EXTRA_ARGS=--env OPEN_AI_KEY=${{ secrets.OPEN_AI_KEY }}" >> $GITHUB_ENV
                   ;;
                 nba)
-                  echo "EXTRA_ARGS=--vmtype c1m1}" >> $GITHUB_ENV
+                  echo "EXTRA_ARGS=--vmtype c1m1" >> $GITHUB_ENV
                   ;;
                 *)
                   echo "EXTRA_ARGS=" >> $GITHUB_ENV
