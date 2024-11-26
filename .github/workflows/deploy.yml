@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - lendemor/deploy_pipeline
+# swap to this before merging to main
+# on:
+#    release:
+#        types: [published]
+
 
 jobs:
     setup-matrix:
@@ -39,13 +44,16 @@ jobs:
               run: |
                 case ${{ matrix.folder }} in
                 ai_image_gen)
-                  echo "EXTRA_ENV=--env REPLICATE_API_TOKEN=${{ secrets.REPLICATE_API_TOKEN }}" >> $GITHUB_ENV
+                  echo "EXTRA_ARGS=--env REPLICATE_API_TOKEN=${{ secrets.REPLICATE_API_TOKEN }}" >> $GITHUB_ENV
                   ;;
                 sales)
-                  echo "EXTRA_ENV=--env OPEN_AI_KEY=${{ secrets.OPEN_AI_KEY }}" >> $GITHUB_ENV
+                  echo "EXTRA_ARGS=--env OPEN_AI_KEY=${{ secrets.OPEN_AI_KEY }}" >> $GITHUB_ENV
+                  ;;
+                nba)
+                  echo "EXTRA_ARGS=--vmtype c1m1}" >> $GITHUB_ENV
                   ;;
                 *)
-                  echo "EXTRA_ENV=" >> $GITHUB_ENV
+                  echo "EXTRA_ARGS=" >> $GITHUB_ENV
                   ;;
                 esac
             - name: Deploy to ReflexCloud
@@ -53,4 +61,4 @@ jobs:
                 REFLEX_AUTH_TOKEN: ${{ secrets.REFLEX_AUTH_TOKEN }}
               run: |
                 chmod +x deploy.sh
-                ./deploy.sh ${{ matrix.folder }} "$EXTRA_ENV"
+                ./deploy.sh ${{ matrix.folder }} "$EXTRA_ARGS"
