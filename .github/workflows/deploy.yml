@@ -1,13 +1,9 @@
 name: deploy
 
+# only redeploy when we push a new release.
 on:
-  push:
-    branches:
-      - lendemor/deploy_pipeline
-# swap to this before merging to main
-# on:
-#    release:
-#        types: [published]
+   release:
+       types: [published]
 
 
 jobs:
