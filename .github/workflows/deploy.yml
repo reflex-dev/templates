@@ -1,10 +1,13 @@
 name: deploy
 
 # only redeploy when we push a new release.
+# on:
+#    release:
+#        types: [published]
 on:
-   release:
-       types: [published]
-
+    push:
+        branches:
+            - lendemor/deploy_pipeline
 
 jobs:
     setup-matrix:
@@ -46,15 +49,16 @@ jobs:
                   echo "EXTRA_ARGS=--env OPEN_AI_KEY=${{ secrets.OPEN_AI_KEY }}" >> $GITHUB_ENV
                   ;;
                 nba)
-                  echo "EXTRA_ARGS=--vmtype c1m1" >> $GITHUB_ENV
+                  echo "EXTRA_ARGS=--vmtype ${{ vars.NBA_VM_TYPE }}" >> $GITHUB_ENV
                   ;;
                 *)
                   echo "EXTRA_ARGS=" >> $GITHUB_ENV
                   ;;
                 esac
             - name: Deploy to ReflexCloud
-              env:
-                REFLEX_AUTH_TOKEN: ${{ secrets.REFLEX_AUTH_TOKEN }}
-              run: |
-                chmod +x deploy.sh
-                ./deploy.sh ${{ matrix.folder }} "$EXTRA_ARGS"
+              uses: reflex-dev/reflex-deploy-action@v0
+              with:
+                auth_token: ${{ secrets.REFLEX_AUTH_TOKEN }}
+                project_id: ${{ secrets.REFLEX_PROJECT_ID }}
+                app_directory: ${{ matrix.folder }}
+                extra_args: ${{ env.EXTRA_ARGS }}
