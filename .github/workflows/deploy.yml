@@ -55,4 +55,4 @@ jobs:
                 project_id: ${{ secrets.REFLEX_PROJECT_ID }}
                 app_directory: ${{ matrix.folder }}
                 extra_args: ${{ env.EXTRA_ARGS }}
-                dry_run: true
+                dry_run: ${{ vars.DRY_RUN }}
