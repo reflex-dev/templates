@@ -11,7 +11,7 @@ on:
 
 jobs:
     list-templates:
-        uses: ./.github/actions/list-templates.yml
+      uses: ./.github/workflows/list-templates.yml
 
     deploy:
         needs: list-templates
