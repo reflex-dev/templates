@@ -13,6 +13,14 @@ jobs:
     list-templates:
       uses: ./.github/workflows/list-templates.yml
 
+    debug-output:
+      needs: list-templates
+      runs-on: ubuntu-latest
+      steps:
+        - name: Debug output
+          run: |
+              echo "Templates: ${{ needs.list-templates.outputs.templates }}"
+
     deploy:
         needs: list-templates
         runs-on: ubuntu-latest
