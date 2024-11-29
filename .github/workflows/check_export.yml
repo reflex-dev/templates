@@ -13,8 +13,8 @@ on:
         description: 'Reflex dep (raw pip spec)'
 
 jobs:
-    list-templates:
-        uses: ./.github/workflows/list-templates.yml
+  list-templates:
+    uses: ./.github/workflows/list-templates.yml
   
   check-export:
     needs: [list-templates]
