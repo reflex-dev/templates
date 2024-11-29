@@ -23,6 +23,8 @@ jobs:
             fail-fast: false
         steps:
             - uses: actions/checkout@v3
+              with:
+                submodules: recursive
             - name: Set environment variables
               id: set-env
               run: |
