@@ -12,7 +12,7 @@ jobs:
         id: generate-matrix
         run: |
           TEMPLATES="$(find . -not -name '.*'  -maxdepth 1 -type d | cut -f2 -d/  | sort | grep -vw chakra_apps | jq -R | jq -s -c)"
-          echo $TEMPLATES
           echo "templates=$TEMPLATES" >> $GITHUB_OUTPUT
-    
-    
+      - name: Debug output
+        run: |
+            echo "Templates: ${{ steps.generate-matrix.outputs.templates }}"
