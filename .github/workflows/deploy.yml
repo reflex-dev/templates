@@ -19,7 +19,7 @@ jobs:
         environment: Cloud Deploy
         strategy:
             matrix:
-                folder: ${{ needs.list-templates.outputs.templates }}
+                folder: ${{ fromJSON(needs.list-templates.outputs.templates) }}
             fail-fast: false
         steps:
             - uses: actions/checkout@v3
