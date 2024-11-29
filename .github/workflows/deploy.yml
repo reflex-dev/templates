@@ -35,10 +35,7 @@ jobs:
             fail-fast: false
         steps:
             - uses: actions/checkout@v3
-            - name: Install dependencies
-              run: |
-                pip install -r ${{ matrix.folder }}/requirements.txt
-            - name: Set environment dynamically
+            - name: Set environment variables
               id: set-env
               run: |
                 case ${{ matrix.folder }} in
