@@ -10,28 +10,16 @@ on:
             - lendemor/deploy_pipeline
 
 jobs:
-    setup-matrix:
-        runs-on: ubuntu-latest
-        outputs:
-            folders: ${{ steps.generate-matrix.outputs.folders }}
-        steps:
-            - uses: actions/checkout@v3
-            - name: Generate Matrix
-              id: generate-matrix
-              run: |
-                FOLDERS=$(ls -d */ | sed 's|/||g' | jq -R -s -c 'split("\n")[:-1]')
-                echo "folders=$FOLDERS" >> $GITHUB_OUTPUT
-            - name: Debug output (matrix)
-              run: |
-                echo "Subfolders: ${{ env.folders }}"
+    list-templates:
+        uses: ./.github/actions/list-templates.yml
 
     deploy:
-        needs: setup-matrix
+        needs: list-templates
         runs-on: ubuntu-latest
         environment: Cloud Deploy
         strategy:
             matrix:
-                folder: ${{fromJson(needs.setup-matrix.outputs.folders)}}
+                folder: ${{ fromJson(needs.list-templates.outputs.templates) }}
             fail-fast: false
         steps:
             - uses: actions/checkout@v3

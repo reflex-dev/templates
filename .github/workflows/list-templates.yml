@@ -1,0 +1,18 @@
+on:
+    workflow_call:
+
+jobs:
+    list-templates:
+        runs-on: ubuntu-latest
+        outputs:
+          templates: ${{ steps.generate-matrix.outputs.templates }}
+        steps:
+          - uses: actions/checkout@v4
+          - name: Generate Matrix
+            id: generate-matrix
+            run: |
+              TEMPLATES="$(find . -not -name '.*'  -maxdepth 1 -type d | cut -f2 -d/  | sort | grep -vw chakra_apps | jq -R | jq -s -c)"
+              echo $TEMPLATES
+              echo "templates=$TEMPLATES" >> $GITHUB_OUTPUT
+    
+    
