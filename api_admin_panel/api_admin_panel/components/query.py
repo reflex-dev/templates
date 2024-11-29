@@ -1,8 +1,8 @@
 import reflex as rx
 
-from app.states.base import BaseState
-from app.states.queries import QueryState, QueryAPI
-from app.styles import text
+from api_admin_panel.states.base import BaseState
+from api_admin_panel.states.queries import QueryState, QueryAPI
+from api_admin_panel.styles import text
 import reflex_chakra as rc
 
 

@@ -1,0 +1,22 @@
+on:
+  workflow_call:
+    outputs:
+      templates:
+        description: 'List of templates'
+        value: ${{ jobs.list-templates.outputs.templates }}
+jobs:
+  list-templates:
+    runs-on: ubuntu-latest
+    outputs:
+      templates: ${{ steps.generate-matrix.outputs.templates }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: List all templates
+        id: generate-matrix
+        run: |
+          TEMPLATES="$(find . -not -name '.*'  -maxdepth 1 -type d | cut -f2 -d/  | sort | grep -vw chakra_apps | jq -R | jq -s -c)"
+          TEMPLATES=$(echo "$TEMPLATES" | jq -c '.') # Ensure valid JSON format
+          echo "templates=$TEMPLATES" >> $GITHUB_OUTPUT
+      - name: Debug output
+        run: |
+            echo "Templates: ${{ steps.generate-matrix.outputs.templates }}"

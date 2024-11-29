@@ -1,6 +1,6 @@
 import reflex as rx
 
-from app.states.queries import QueryAPI
+from api_admin_panel.states.queries import QueryAPI
 
 
 def render_data(data: tuple[str, str]):
