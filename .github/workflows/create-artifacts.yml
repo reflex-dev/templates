@@ -8,8 +8,10 @@ jobs:
     outputs:
       files: ${{ steps.list_zip_files.outputs.files }}
     steps:
-      - name: Checkout code
+      - name: Checkout code with submodules
         uses: actions/checkout@v3
+        with:
+          submodules: recursive
       - name: Create zip files for each subfolder
         run: |
           for dir in $(find . -mindepth 1 -maxdepth 1 -type d); do
