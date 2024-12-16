@@ -13,24 +13,14 @@ on:
         description: 'Reflex dep (raw pip spec)'
 
 jobs:
-  list-examples:
-    runs-on: ubuntu-latest
-    outputs:
-      examples: ${{ steps.generate-matrix.outputs.examples }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: Generate Matrix
-        id: generate-matrix
-        run: |
-          EXAMPLES="$(find . -not -name '.*'  -maxdepth 1 -type d | cut -f2 -d/  | sort | grep -vw chakra_apps | jq -R | jq -s -c)"
-          echo $EXAMPLES
-          echo "examples=$EXAMPLES" >> $GITHUB_OUTPUT
-
+  list-templates:
+    uses: ./.github/workflows/list-templates.yml
+  
   check-export:
-    needs: [list-examples]
+    needs: [list-templates]
     strategy:
       matrix:
-        example: ${{ fromJSON(needs.list-examples.outputs.examples) }}
+        folder: ${{ fromJSON(needs.list-templates.outputs.templates) }}
       fail-fast: false
     runs-on: ubuntu-latest
     steps:
@@ -42,7 +32,7 @@ jobs:
           python-version: 3.9
       - id: export-check
         run: |
-          f=${{ matrix.example }}
+          f=${{ matrix.folder }}
           if [[ ! -d $f ]]; then
             echo "$f is not a directory!"
             exit 1
@@ -80,7 +70,7 @@ jobs:
 
       - name: Check for DeprecationWarning in logs
         run: |
-            cd ${{ matrix.example }}
+            cd ${{ matrix.folder }}
             dep_lines=$(grep -i "DeprecationWarning:" export_logs.txt || true)
             if [ -n "$dep_lines" ]; then
                 echo "Found Deprecation warning:"
