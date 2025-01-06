@@ -43,7 +43,7 @@ jobs:
                   ;;
                 esac
             - name: Deploy to ReflexCloud
-              uses: reflex-dev/reflex-deploy-action@v0
+              uses: reflex-dev/reflex-deploy-action@v1
               with:
                 auth_token: ${{ secrets.REFLEX_AUTH_TOKEN }}
                 project_id: ${{ secrets.REFLEX_PROJECT_ID }}
