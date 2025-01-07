@@ -1,7 +1,7 @@
 import reflex as rx
 
-from app.states.queries import QueryAPI
-from app.components.drawer import render_drawer
+from api_admin_panel.states.queries import QueryAPI
+from api_admin_panel.components.drawer import render_drawer
 import reflex_chakra as rc
 
 
