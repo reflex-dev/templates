@@ -4,9 +4,6 @@ name: deploy
 on:
   release:
     types: [published]
-  push:
-    branches:
-    - lendemor/deploy_pipeline
 
 jobs:
     list-templates:
@@ -53,7 +50,7 @@ jobs:
                   ;;
                 esac
             - name: Deploy to ReflexCloud
-              uses: reflex-dev/reflex-deploy-action@masenf/skip-checkout
+              uses: reflex-dev/reflex-deploy-action@v2
               with:
                 auth_token: ${{ secrets.REFLEX_AUTH_TOKEN }}
                 project_id: ${{ secrets.REFLEX_PROJECT_ID }}
