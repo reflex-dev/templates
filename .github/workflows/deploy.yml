@@ -16,6 +16,9 @@ jobs:
         strategy:
             matrix:
                 folder: ${{ fromJSON(needs.list-templates.outputs.templates) }}
+                exclude:
+                  # No deploy due to missing service dependencies.
+                  - folder: reflex-llamaindex-template
             fail-fast: false
         steps:
             - uses: actions/checkout@v4
@@ -29,6 +32,9 @@ jobs:
                   echo "EXTRA_ARGS=--env REPLICATE_API_TOKEN=${{ secrets.REPLICATE_API_TOKEN }}" >> $GITHUB_ENV
                   ;;
                 sales)
+                  echo "EXTRA_ARGS=--env OPENAI_API_KEY=${{ secrets.OPEN_AI_KEY }}" >> $GITHUB_ENV
+                  ;;
+                reflex-chat)
                   echo "EXTRA_ARGS=--env OPENAI_API_KEY=${{ secrets.OPEN_AI_KEY }}" >> $GITHUB_ENV
                   ;;
                 nba)
