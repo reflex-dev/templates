@@ -10,7 +10,14 @@ First, install all the necessary dependencies:
 ```shell
 pip install -r requirements.txt
 ```
-## 2. Set Your OpenAI API Key
+
+## 2. Initialize Database
+
+```shell
+reflex db init
+```
+
+## 3. Set Your OpenAI API Key
 To utilize OpenAI in this template, you need to set your OPENAI_API_KEY environment variable. Here’s how you can set it based on your operating system:
 
 ### On Linux / macOS:
@@ -28,7 +35,7 @@ set OPENAI_API_KEY=your-openai-api-key
 $env:OPENAI_API_KEY="your-openai-api-key"
 ```
 
-### 3. Run the App
+### 4. Run the App
 After setting up your environment variable, you can start the app:
 
 ```shell
@@ -41,3 +48,15 @@ This will launch the app locally and you can interact with it in your browser.
 - You can permanently set the environment variable in your shell configuration (e.g., `.bashrc` or `.zshrc` for Linux/macOS) to avoid setting it every time.
 Enjoy building with Reflex and OpenAI!
 
+## Applying Database Schema Changes
+
+If changes are made to the database models after initialization, they can be
+applied by running the following commands:
+
+```bash
+reflex db makemigrations --message "Brief description of the change"
+```
+
+```bash
+reflex db migrate
+```
