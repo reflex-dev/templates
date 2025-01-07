@@ -15,5 +15,5 @@ jobs:
           python-version: '3.12'
 
       - run: |
-          uv pip install pre-commit
+          pip install pre-commit
           pre-commit run --all-files
