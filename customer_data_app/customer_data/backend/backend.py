@@ -151,35 +151,35 @@ class State(rx.State):
         self.current_user = user
 
     def add_customer_to_db(self, form_data: dict):
-        self.current_user = form_data
-        self.current_user["date"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
         with rx.session() as session:
             if session.exec(
-                select(Customer).where(Customer.email == self.current_user["email"])
+                select(Customer).where(Customer.email == self.current_user.email)
             ).first():
                 return rx.window_alert("User with this email already exists")
-            session.add(Customer(**self.current_user))
+            self.current_user = Customer(
+                date=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                **form_data
+            )
+            session.add(self.current_user)
             session.commit()
+            session.refresh(self.current_user)
         self.load_entries()
         return rx.toast.info(
-            f"User {self.current_user['name']} has been added.", position="bottom-right"
+            f"User {self.current_user.name} has been added.", position="bottom-right"
         )
 
     def update_customer_to_db(self, form_data: dict):
-        self.current_user.update(form_data)
         with rx.session() as session:
             customer = session.exec(
-                select(Customer).where(Customer.id == self.current_user["id"])
+                select(Customer).where(Customer.id == self.current_user.id)
             ).first()
-            for field in Customer.get_fields():
-                if field != "id":
-                    setattr(customer, field, self.current_user[field])
+            form_data.pop("id", None)
+            customer.set(**form_data)
             session.add(customer)
             session.commit()
         self.load_entries()
         return rx.toast.info(
-            f"User {self.current_user['name']} has been modified.",
+            f"User {self.current_user.name} has been modified.",
             position="bottom-right",
         )
 
