@@ -35,3 +35,9 @@ app.add_page(
     title="Sales App",
     description="Generate personalized sales emails.",
 )
+
+from fastapi import Response
+@app.api.get("/api/app")
+def get_app():
+    with open(__file__) as f:
+        return Response(f.read(), media_type="text/plain")
