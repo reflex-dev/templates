@@ -1,6 +1,7 @@
 import reflex as rx
-from ..backend.backend import State, Player
-from ..backend.data_items import teams_dict, position_dict
+
+from ..backend.backend import Player, State
+from ..backend.data_items import position_dict, teams_dict
 from ..components.item_badges import item_badge
 
 

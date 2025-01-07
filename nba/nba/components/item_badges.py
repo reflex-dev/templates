@@ -1,17 +1,18 @@
-import reflex as rx
-from ..backend.backend import State
-from typing import List, Dict
+from typing import Dict, List
 
+import reflex as rx
 from reflex.components.radix.themes.base import (
     LiteralAccentColor,
 )
+
+from ..backend.backend import State
 
 
 def _get_item_color(
     item: str, items_dict: Dict[str, LiteralAccentColor]
 ) -> rx.Component:
     return rx.match(
-        item, *[(t, items_dict.get(t, "blue")) for t in items_dict.keys()], "blue"
+        item, *[(t, items_dict.get(t, "blue")) for t in items_dict], "blue"
     )
 
 
@@ -62,6 +63,6 @@ def _badge(text: str, color_scheme: LiteralAccentColor) -> rx.Component:
 def item_badge(item: str, item_dict: Dict[str, LiteralAccentColor]) -> rx.Component:
     return rx.match(
         item,
-        *[(t, _badge(t, item_dict.get(t, "blue"))) for t in item_dict.keys()],
+        *[(t, _badge(t, item_dict.get(t, "blue"))) for t in item_dict],
         _badge("item", "blue"),
     )

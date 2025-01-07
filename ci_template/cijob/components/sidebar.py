@@ -1,8 +1,8 @@
 """Sidebar component for the app."""
 
-from .. import styles
-
 import reflex as rx
+
+from .. import styles
 
 
 def sidebar_header() -> rx.Component:
@@ -10,6 +10,7 @@ def sidebar_header() -> rx.Component:
 
     Returns:
         The sidebar header component.
+
     """
     return rx.hstack(
         # The logo.
@@ -30,6 +31,7 @@ def sidebar_footer() -> rx.Component:
 
     Returns:
         The sidebar footer component.
+
     """
     return rx.hstack(
         rx.link(
@@ -66,6 +68,7 @@ def sidebar_item(text: str, url: str) -> rx.Component:
 
     Returns:
         rx.Component: The sidebar item component.
+
     """
     # Whether the item is active.
     active = (rx.State.router.page.path == url.lower()) | (
@@ -124,6 +127,7 @@ def sidebar() -> rx.Component:
 
     Returns:
         The sidebar component.
+
     """
     # Get all the decorated pages and add them to the sidebar.
     from reflex.page import get_decorated_pages

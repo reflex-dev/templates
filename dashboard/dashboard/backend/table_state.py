@@ -1,6 +1,8 @@
-import reflex as rx
-from typing import Union, List
 import csv
+from pathlib import Path
+from typing import List
+
+import reflex as rx
 
 
 class Item(rx.Base):
@@ -94,7 +96,7 @@ class TableState(rx.State):
         self.offset = (self.total_pages - 1) * self.limit
 
     def load_entries(self):
-        with open("items.csv", mode="r", encoding="utf-8") as file:
+        with Path("item.csv").open(mode="r", encoding="utf-8") as file:
             reader = csv.DictReader(file)
             self.items = [Item(**row) for row in reader]
             self.total_items = len(self.items)

@@ -1,4 +1,5 @@
 from typing import Dict
+
 from reflex.components.radix.themes.base import LiteralAccentColor
 
 # Teams

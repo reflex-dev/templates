@@ -1,13 +1,14 @@
 import reflex as rx
+
 from .. import styles
 from ..components.options_ui import (
-    sidebar_header,
-    prompt_input,
-    size_selector,
-    output_selector,
-    style_selector,
     advanced_options,
     generate_button,
+    output_selector,
+    prompt_input,
+    sidebar_header,
+    size_selector,
+    style_selector,
 )
 
 

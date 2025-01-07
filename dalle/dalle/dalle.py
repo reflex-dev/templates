@@ -1,10 +1,9 @@
 """Welcome to Reflex! This file outlines the steps to create a basic app."""
 
-import reflex as rx
-
 import os
 
 import openai
+import reflex as rx
 
 _client = None
 

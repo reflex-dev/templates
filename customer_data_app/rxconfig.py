@@ -1,5 +1,6 @@
-import reflex as rx
 import os
+
+import reflex as rx
 
 database_url = os.getenv("DATABASE_URL", "sqlite:///reflex.db")
 

@@ -1,7 +1,7 @@
 import reflex as rx
-from .. import styles
-
 from reflex.components.radix.themes.base import LiteralAccentColor
+
+from .. import styles
 
 
 def stats_card(

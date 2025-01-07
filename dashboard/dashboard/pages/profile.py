@@ -1,9 +1,9 @@
 """The profile page."""
 
-from ..templates import template
-from ..components.profile_input import profile_input
-
 import reflex as rx
+
+from ..components.profile_input import profile_input
+from ..templates import template
 
 
 class Profile(rx.Base):
@@ -31,6 +31,7 @@ def profile() -> rx.Component:
 
     Returns:
         The UI for the profile page.
+
     """
     return rx.vstack(
         rx.flex(

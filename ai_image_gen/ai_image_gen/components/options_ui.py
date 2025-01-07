@@ -1,7 +1,8 @@
 import reflex as rx
+
 from .. import styles
-from ..backend.options import OptionsState
 from ..backend.generation import GeneratorState
+from ..backend.options import OptionsState
 
 
 def sidebar_header() -> rx.Component:
@@ -280,7 +281,7 @@ def style_selector() -> rx.Component:
     return rx.vstack(
         rx.hstack(
             rx.icon("palette", size=17, color=rx.color("indigo", 9)),
-            rx.text(f"Style", size="3"),
+            rx.text("Style", size="3"),
             rx.spacer(),
             rx.cond(
                 OptionsState.selected_style,

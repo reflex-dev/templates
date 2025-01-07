@@ -1,5 +1,6 @@
 import reflex as rx
 
+
 def _badge(status: str):
     badge_mapping = {
         "Completed": ("check", "Completed", "green"),

@@ -1,6 +1,7 @@
 import reflex as rx
+
 from ..backend.backend import State
-from ..backend.data_items import teams_dict, position_dict, college_dict
+from ..backend.data_items import college_dict, position_dict, teams_dict
 from .item_badges import _selected_item_badge, _unselected_item_badge
 
 

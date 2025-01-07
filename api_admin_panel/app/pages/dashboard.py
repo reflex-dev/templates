@@ -3,8 +3,8 @@
 import reflex as rx
 
 from app.components.navbar import render_navbar
-from app.components.query import render_query_component
 from app.components.output import render_output
+from app.components.query import render_query_component
 from app.states.queries import QueryAPI
 
 
@@ -14,6 +14,7 @@ def dashboard() -> rx.Component:
 
     Returns:
         The UI for the dashboard page.
+
     """
     return rx.vstack(
         render_navbar(),

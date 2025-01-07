@@ -1,12 +1,12 @@
 import reflex as rx
-from ..views.sidebar import sidebar
-from ..views.mobile_ui import mobile_ui
-from ..components.options_ui import mobile_header
-from ..backend.generation import GeneratorState, CopyLocalState, copy_script
 from reflex_img_comparison_slider import img_comparison_slider
-from ..components.react_zoom import image_zoom
-from typing import Union
+
 from .. import styles
+from ..backend.generation import CopyLocalState, GeneratorState, copy_script
+from ..components.options_ui import mobile_header
+from ..components.react_zoom import image_zoom
+from ..views.mobile_ui import mobile_ui
+from ..views.sidebar import sidebar
 
 
 def _image_ui() -> rx.Component:

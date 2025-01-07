@@ -1,11 +1,10 @@
 """Welcome to Reflex!."""
 
 # Import all the pages.
-from .pages import *
-from . import styles
-
 import reflex as rx
 
+from . import styles
+from .pages import *
 
 # Create the app.
 app = rx.App(
