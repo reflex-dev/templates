@@ -39,6 +39,7 @@ jobs:
                   ;;
                 reflex-chat)
                   echo "EXTRA_ARGS=--env OPENAI_API_KEY=${{ secrets.OPEN_AI_KEY }}" >> $GITHUB_ENV
+                  echo "OPENAI_API_KEY=${{ secrets.OPEN_AI_KEY }}" >> $GITHUB_ENV
                   ;;
                 nba)
                   echo "EXTRA_ARGS=--vmtype ${{ vars.NBA_VM_TYPE }}" >> $GITHUB_ENV
