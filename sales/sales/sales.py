@@ -1,8 +1,9 @@
 import reflex as rx
-from .views.navbar import navbar
-from .views.email import email_gen_ui
-from .views.table import main_table
+
 from .backend.backend import State
+from .views.email import email_gen_ui
+from .views.navbar import navbar
+from .views.table import main_table
 
 
 def index() -> rx.Component:

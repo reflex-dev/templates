@@ -1,8 +1,8 @@
 """The settings page."""
 
-from ..templates import template
-
 import reflex as rx
+
+from ..templates import template
 from ..views.color_picker import primary_color_picker, secondary_color_picker
 from ..views.radius_picker import radius_picker
 from ..views.scaling_picker import scaling_picker
@@ -14,6 +14,7 @@ def settings() -> rx.Component:
 
     Returns:
         The UI for the settings page.
+
     """
     return rx.vstack(
         rx.heading("Settings", size="5"),

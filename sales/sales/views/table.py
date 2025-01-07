@@ -1,5 +1,6 @@
 import reflex as rx
-from ..backend.backend import State, Customer
+
+from ..backend.backend import Customer, State
 from ..components.form_field import form_field
 from ..components.gender_badges import gender_badge
 
@@ -55,7 +56,7 @@ def _show_customer(user: Customer):
                 _update_customer_dialog(user),
                 rx.icon_button(
                     rx.icon("trash-2", size=22),
-                    on_click=lambda: State.delete_customer(getattr(user, "id")),
+                    on_click=lambda: State.delete_customer(user.id),
                     size="2",
                     variant="solid",
                     color_scheme="red",

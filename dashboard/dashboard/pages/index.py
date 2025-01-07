@@ -1,23 +1,25 @@
 """The overview page of the app."""
 
-import reflex as rx
-from .. import styles
-from ..templates import template
-from ..views.stats_cards import stats_cards
-from ..views.charts import (
-    users_chart,
-    revenue_chart,
-    orders_chart,
-    area_toggle,
-    pie_chart,
-    timeframe_select,
-    StatsState,
-)
-from ..views.adquisition_view import adquisition
-from ..components.notification import notification
-from ..components.card import card
-from .profile import ProfileState
 import datetime
+
+import reflex as rx
+
+from .. import styles
+from ..components.card import card
+from ..components.notification import notification
+from ..templates import template
+from ..views.acquisition_view import acquisition
+from ..views.charts import (
+    StatsState,
+    area_toggle,
+    orders_chart,
+    pie_chart,
+    revenue_chart,
+    timeframe_select,
+    users_chart,
+)
+from ..views.stats_cards import stats_cards
+from .profile import ProfileState
 
 
 def _time_data() -> rx.Component:
@@ -49,6 +51,7 @@ def index() -> rx.Component:
 
     Returns:
         The UI for the overview page.
+
     """
     return rx.vstack(
         rx.heading(f"Welcome, {ProfileState.profile.name}", size="5"),
@@ -121,7 +124,7 @@ def index() -> rx.Component:
                     margin_bottom="2.5em",
                 ),
                 rx.vstack(
-                    adquisition(),
+                    acquisition(),
                 ),
             ),
             gap="1rem",

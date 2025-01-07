@@ -2,12 +2,13 @@
 
 from __future__ import annotations
 
-from .. import styles
-from ..components.sidebar import sidebar
-from ..components.navbar import navbar
 from typing import Callable
 
 import reflex as rx
+
+from .. import styles
+from ..components.navbar import navbar
+from ..components.sidebar import sidebar
 
 # Meta tags for the app.
 default_meta = [
@@ -59,12 +60,13 @@ def template(
         route: The route to reach the page.
         title: The title of the page.
         description: The description of the page.
-        meta: Additionnal meta to add to the page.
+        meta: Additional meta to add to the page.
         on_load: The event handler(s) called when the page load.
         script_tags: Scripts to attach to the page.
 
     Returns:
         The template with the page content.
+
     """
 
     def decorator(page_content: Callable[[], rx.Component]) -> rx.Component:
@@ -75,6 +77,7 @@ def template(
 
         Returns:
             The template with the page content.
+
         """
         # Get the meta tags for the page.
         all_meta = [*default_meta, *(meta or [])]

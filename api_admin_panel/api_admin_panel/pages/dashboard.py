@@ -3,8 +3,8 @@
 import reflex as rx
 
 from api_admin_panel.components.navbar import render_navbar
-from api_admin_panel.components.query import render_query_component
 from api_admin_panel.components.output import render_output
+from api_admin_panel.components.query import render_query_component
 from api_admin_panel.states.queries import QueryAPI
 
 
@@ -14,6 +14,7 @@ def dashboard() -> rx.Component:
 
     Returns:
         The UI for the dashboard page.
+
     """
     return rx.vstack(
         render_navbar(),

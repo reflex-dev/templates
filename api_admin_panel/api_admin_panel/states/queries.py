@@ -1,7 +1,8 @@
 import uuid
-import httpx
-from api_admin_panel.states.base import BaseState
 
+import httpx
+
+from api_admin_panel.states.base import BaseState
 
 # test URL: str = https://jsonplaceholder.typicode.com/posts
 # test URL: str = https://jsonplaceholder.typicode.com/todos

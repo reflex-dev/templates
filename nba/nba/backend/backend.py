@@ -1,9 +1,11 @@
-import reflex as rx
-from .player import Player
-from .data_items import all_items
-import pandas as pd
+from typing import Dict, List
+
 import numpy as np
-from typing import List, Dict
+import pandas as pd
+import reflex as rx
+
+from .data_items import all_items
+from .player import Player
 
 nba_csv = "nbastats.csv"
 

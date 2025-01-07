@@ -1,9 +1,12 @@
 import reflex as rx
-from ..backend.table_state import TableState, Item
+
+from ..backend.table_state import Item, TableState
 from ..components.status_badge import status_badge
 
 
-def _create_dialog(item: Item, icon_name: str, color_scheme: str, dialog_title: str) -> rx.Component:
+def _create_dialog(
+    item: Item, icon_name: str, color_scheme: str, dialog_title: str
+) -> rx.Component:
     return rx.dialog.root(
         rx.dialog.trigger(
             rx.icon_button(
@@ -29,11 +32,14 @@ def _create_dialog(item: Item, icon_name: str, color_scheme: str, dialog_title: 
         ),
     )
 
+
 def _delete_dialog(item: Item) -> rx.Component:
     return _create_dialog(item, "trash-2", "tomato", "Delete Dialog")
 
+
 def _approve_dialog(item: Item) -> rx.Component:
     return _create_dialog(item, "check", "grass", "Approve Dialog")
+
 
 def _edit_dialog(item: Item) -> rx.Component:
     return _create_dialog(item, "square-pen", "blue", "Edit Dialog")

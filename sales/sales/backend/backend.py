@@ -1,11 +1,10 @@
 import os
-import openai
 
+import openai
 import reflex as rx
-from sqlmodel import select, asc, desc, or_, func
+from sqlmodel import asc, desc, func, or_, select
 
 from .models import Customer
-
 
 products: dict[str, dict] = {
     "T-shirt": {

@@ -1,7 +1,8 @@
-import reflex as rx
-from typing import Union
-from sqlmodel import select, asc, desc, or_, func, cast, String
 from datetime import datetime, timedelta
+from typing import Union
+
+import reflex as rx
+from sqlmodel import String, asc, cast, desc, func, or_, select
 
 
 def _get_percentage_change(
@@ -157,8 +158,7 @@ class State(rx.State):
             ).first():
                 return rx.window_alert("User with this email already exists")
             self.current_user = Customer(
-                date=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                **form_data
+                date=datetime.now().strftime("%Y-%m-%d %H:%M:%S"), **form_data
             )
             session.add(self.current_user)
             session.commit()

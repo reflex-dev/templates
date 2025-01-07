@@ -1,6 +1,14 @@
 import reflex as rx
+
 from .. import styles
-from ..components.options_ui import prompt_input, size_selector, output_selector, style_selector, advanced_options, generate_button
+from ..components.options_ui import (
+    advanced_options,
+    generate_button,
+    output_selector,
+    prompt_input,
+    size_selector,
+    style_selector,
+)
 
 
 def mobile_ui():

@@ -1,5 +1,7 @@
-import reflex as rx
 import random
+
+import reflex as rx
+
 from ..components.prompt_list import prompt_list
 from ..components.styles_preset import styles_preset
 
@@ -87,4 +89,4 @@ class OptionsState(rx.State):
     @rx.var(cache=False)
     def dimensions_str(self) -> str:
         width, height = self.selected_dimensions
-        return f"{width} × {height}"
+        return f"{width} x {height}"

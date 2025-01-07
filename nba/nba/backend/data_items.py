@@ -1,4 +1,5 @@
 from typing import Dict
+
 from reflex.components.radix.themes.base import LiteralAccentColor
 
 # Teams
@@ -170,13 +171,9 @@ college_dict: Dict[str, LiteralAccentColor] = {
     "Lehigh": "brown",
     "Westchester CC": "blue",
     "Dayton": "red",
-    "Butler": "blue"
+    "Butler": "blue",
 }
 
 college_list = list(college_dict.keys())
 
-all_items = {
-    "teams": teams_list,
-    "positions": positions_list,
-    "colleges": college_list
-}
+all_items = {"teams": teams_list, "positions": positions_list, "colleges": college_list}

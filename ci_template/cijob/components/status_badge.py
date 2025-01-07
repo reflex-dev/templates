@@ -1,12 +1,15 @@
 import reflex as rx
 
+
 def _badge(status: str):
     badge_mapping = {
         "Completed": ("check", "Completed", "green"),
         "Pending": ("loader", "Pending", "yellow"),
         "Canceled": ("ban", "Canceled", "red"),
     }
-    icon, text, color_scheme = badge_mapping.get(status, ("loader", "Pending", "yellow"))
+    icon, text, color_scheme = badge_mapping.get(
+        status, ("loader", "Pending", "yellow")
+    )
     return rx.badge(
         rx.icon(icon, size=16),
         text,
@@ -15,6 +18,7 @@ def _badge(status: str):
         variant="surface",
         size="2",
     )
+
 
 def status_badge(status: str):
     return rx.match(

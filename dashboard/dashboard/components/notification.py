@@ -1,8 +1,9 @@
 import reflex as rx
-from dashboard import styles
 from reflex.components.radix.themes.base import (
     LiteralAccentColor,
 )
+
+from dashboard import styles
 
 
 def notification(icon: str, color: LiteralAccentColor, count: int) -> rx.Component:

@@ -1,10 +1,10 @@
 """The dashboard page."""
 
-from ..templates import template
-from ..backend.table_state import TableState
-from ..views.table import main_table
-
 import reflex as rx
+
+from ..backend.table_state import TableState
+from ..templates import template
+from ..views.table import main_table
 
 
 @template(route="/", title="Dashboard", on_load=TableState.load_entries)
@@ -13,6 +13,7 @@ def dashboard() -> rx.Component:
 
     Returns:
         The UI for the dashboard page.
+
     """
     return rx.vstack(
         rx.heading("CI Job Dashboard", size="5"),

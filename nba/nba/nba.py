@@ -1,8 +1,9 @@
+import reflex as rx
+
 from .backend.backend import State
 from .views.navbar import navbar
-from .views.table import main_table
 from .views.stats import stats_ui
-import reflex as rx
+from .views.table import main_table
 
 
 def _tabs_trigger(text: str, icon: str, value: str):

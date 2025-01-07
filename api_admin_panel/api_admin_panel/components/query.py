@@ -1,9 +1,9 @@
 import reflex as rx
+import reflex_chakra as rc
 
 from api_admin_panel.states.base import BaseState
-from api_admin_panel.states.queries import QueryState, QueryAPI
+from api_admin_panel.states.queries import QueryAPI, QueryState
 from api_admin_panel.styles import text
-import reflex_chakra as rc
 
 
 def item_title(title: str):
@@ -154,7 +154,6 @@ def form_request_item():
 
 def render_query_form():
     return rx.vstack(
-        # form_request_item(),
         form_item(
             "Headers", QueryState.headers, form_item_entry, QueryState.add_header
         ),
