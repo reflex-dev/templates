@@ -35,11 +35,11 @@ jobs:
                   echo "EXTRA_ARGS=--env REPLICATE_API_TOKEN=${{ secrets.REPLICATE_API_TOKEN }}" >> $GITHUB_ENV
                   ;;
                 customer_data_app)
-                  echo -e "\n\n# Added by deploy.yml\nrx.Model.migrate()\n" >> ${{ matrix.folder }}/rxconfig.py
+                  cat .deploy/temporary_db.py >> ${{ matrix.folder }}/${{ matrix.folder }}/${{ matrix.folder }}.py
                   ;;
                 sales)
                   echo "EXTRA_ARGS=--env OPENAI_API_KEY=${{ secrets.OPEN_AI_KEY }}" >> $GITHUB_ENV
-                  echo -e "\n\n#Added by deploy.yml\nrx.Model.migrate()\n" >> ${{ matrix.folder }}/rxconfig.py
+                  cat .deploy/temporary_db.py >> ${{ matrix.folder }}/${{ matrix.folder }}/${{ matrix.folder }}.py
                   ;;
                 reflex-chat)
                   echo "EXTRA_ARGS=--env OPENAI_API_KEY=${{ secrets.OPEN_AI_KEY }}" >> $GITHUB_ENV
