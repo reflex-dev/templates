@@ -8,7 +8,7 @@ from .. import styles
 from ..components.card import card
 from ..components.notification import notification
 from ..templates import template
-from ..views.adquisition_view import adquisition
+from ..views.acquisition_view import acquisition
 from ..views.charts import (
     StatsState,
     area_toggle,
@@ -124,7 +124,7 @@ def index() -> rx.Component:
                     margin_bottom="2.5em",
                 ),
                 rx.vstack(
-                    adquisition(),
+                    acquisition(),
                 ),
             ),
             gap="1rem",

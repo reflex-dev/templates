@@ -56,7 +56,7 @@ def item(
     )
 
 
-def adquisition() -> rx.Component:
+def acquisition() -> rx.Component:
     return rx.vstack(
         item("USA", "US", 46, "blue"),
         item("Canada", "CA", 33, "crimson"),

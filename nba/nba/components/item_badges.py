@@ -11,9 +11,7 @@ from ..backend.backend import State
 def _get_item_color(
     item: str, items_dict: Dict[str, LiteralAccentColor]
 ) -> rx.Component:
-    return rx.match(
-        item, *[(t, items_dict.get(t, "blue")) for t in items_dict], "blue"
-    )
+    return rx.match(item, *[(t, items_dict.get(t, "blue")) for t in items_dict], "blue")
 
 
 badge_props = {

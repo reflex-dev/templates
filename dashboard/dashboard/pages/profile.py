@@ -17,9 +17,7 @@ class ProfileState(rx.State):
 
     def handle_submit(self, form_data: dict):
         self.profile = Profile(**form_data)
-        return rx.toast.success(
-            "Profile updated successfully", position="top-center"
-        )
+        return rx.toast.success("Profile updated successfully", position="top-center")
 
     def toggle_notifications(self):
         self.profile.notifications = not self.profile.notifications

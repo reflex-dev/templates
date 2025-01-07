@@ -39,7 +39,7 @@ reflex db migrate
 
 ## Setting an external Database
 
-It is also possibe to set an external database so that your data is not lost every time the app closes and so you can deploy your app and maintain data. 
+It is also possible to set an external database so that your data is not lost every time the app closes and so you can deploy your app and maintain data. 
 
 In the `rxconfig.py` file we accept a `db_url` key and recognize the `DB_URL`
 environment variable. This can be set to any valid SQLAlchemy database URL.

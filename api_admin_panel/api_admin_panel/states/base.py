@@ -2,7 +2,6 @@ import reflex as rx
 
 
 class BaseState(rx.State):
-
     query_component_toggle: str = "none"
 
     is_request: str = "New Request"

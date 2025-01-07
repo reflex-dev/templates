@@ -15,7 +15,9 @@ def stats_card(
     percentage_change = (
         round(((value - prev_value) / prev_value) * 100, 2)
         if prev_value != 0
-        else 0 if value == 0 else float("inf")
+        else 0
+        if value == 0
+        else float("inf")
     )
     change = "increase" if value > prev_value else "decrease"
     arrow_icon = "trending-up" if value > prev_value else "trending-down"
@@ -76,6 +78,7 @@ def stats_card(
         width="100%",
         box_shadow=styles.box_shadow_style,
     )
+
 
 def stats_cards() -> rx.Component:
     return rx.grid(

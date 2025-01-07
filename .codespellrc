@@ -1,0 +1,4 @@
+[codespell]
+skip = *.csv
+ignore-words-list = 
+    chanel

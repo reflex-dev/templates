@@ -96,7 +96,9 @@ def _create_gradient(color: LiteralAccentColor, id: str) -> rx.Component:
                 rx.el.svg.stop(
                     stop_color=rx.color(color, 7), offset="5%", stop_opacity=0.8
                 ),
-                rx.el.svg.stop(stop_color=rx.color(color, 7), offset="95%", stop_opacity=0),
+                rx.el.svg.stop(
+                    stop_color=rx.color(color, 7), offset="95%", stop_opacity=0
+                ),
                 x1=0,
                 x2=0,
                 y1=0,
