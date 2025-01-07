@@ -118,35 +118,34 @@ class State(rx.State):
         self.current_user = user
 
     def add_customer_to_db(self, form_data: dict):
-        self.current_user = form_data
+        self.current_user = Customer(**form_data)
 
         with rx.session() as session:
             if session.exec(
-                select(Customer).where(Customer.email == self.current_user["email"])
+                select(Customer).where(Customer.email == self.current_user.email)
             ).first():
                 return rx.window_alert("User with this email already exists")
-            session.add(Customer(**self.current_user))
+            session.add(self.current_user)
             session.commit()
+            session.refresh(self.current_user)
         self.load_entries()
         return rx.toast.info(
-            f"User {self.current_user['customer_name']} has been added.",
+            f"User {self.current_user.customer_name} has been added.",
             position="bottom-right",
         )
 
     def update_customer_to_db(self, form_data: dict):
-        self.current_user.update(form_data)
         with rx.session() as session:
             customer = session.exec(
-                select(Customer).where(Customer.id == self.current_user["id"])
+                select(Customer).where(Customer.id == self.current_user.id)
             ).first()
-            for field in Customer.get_fields():
-                if field != "id":
-                    setattr(customer, field, self.current_user[field])
-            session.add(customer)
+            customer.set(**form_data)
             session.commit()
+            session.refresh(customer)
+            self.current_user = customer
         self.load_entries()
         return rx.toast.info(
-            f"User {self.current_user['customer_name']} has been modified.",
+            f"User {self.current_user.customer_name} has been modified.",
             position="bottom-right",
         )
 
@@ -190,7 +189,7 @@ class State(rx.State):
             self.gen_response = False
 
     def generate_email(self, user: Customer):
-        self.current_user = Customer(**user)
+        self.current_user = user
         self.gen_response = True
         self.email_content_data = ""
         return State.call_openai

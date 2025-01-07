@@ -1,8 +1,8 @@
 import reflex as rx
 import reflex_chakra as rc
 
-from app.components.drawer import render_drawer
-from app.states.queries import QueryAPI
+from api_admin_panel.components.drawer import render_drawer
+from api_admin_panel.states.queries import QueryAPI
 
 
 def create_table_header(title: str):

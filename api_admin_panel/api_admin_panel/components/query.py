@@ -1,9 +1,9 @@
 import reflex as rx
 import reflex_chakra as rc
 
-from app.states.base import BaseState
-from app.states.queries import QueryAPI, QueryState
-from app.styles import text
+from api_admin_panel.states.base import BaseState
+from api_admin_panel.states.queries import QueryAPI, QueryState
+from api_admin_panel.styles import text
 
 
 def item_title(title: str):

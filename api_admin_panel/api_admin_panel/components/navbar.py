@@ -1,7 +1,7 @@
 import reflex as rx
 
-from app.states.base import BaseState
-from app.styles import text
+from api_admin_panel.states.base import BaseState
+from api_admin_panel.styles import text
 
 navbar: dict[str, str] = {
     "width": "100%",

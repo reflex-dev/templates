@@ -80,13 +80,13 @@ class OptionsState(rx.State):
     def randomize_prompt(self):
         self.prompt = random.choice(prompt_list)
 
-    @rx.var
+    @rx.var(cache=False)
     def selected_style_prompt(self) -> str:
         if self.selected_style == "":
             return ""
         return self.styles_preset[self.selected_style]["prompt"]
 
-    @rx.var
+    @rx.var(cache=False)
     def dimensions_str(self) -> str:
         width, height = self.selected_dimensions
         return f"{width} x {height}"

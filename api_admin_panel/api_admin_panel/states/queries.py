@@ -2,14 +2,13 @@ import uuid
 
 import httpx
 
-from app.states.base import BaseState
+from api_admin_panel.states.base import BaseState
 
 # test URL: str = https://jsonplaceholder.typicode.com/posts
 # test URL: str = https://jsonplaceholder.typicode.com/todos
 
 
 class QueryState(BaseState):
-
     # vars for handling request calls ...
     req_methods: list[str] = ["GET", "POST"]
     req_url: str = "https://jsonplaceholder.typicode.com/posts"
@@ -98,7 +97,6 @@ class QueryState(BaseState):
 
 
 class QueryAPI(QueryState):
-
     # vars to update row entries ...
     is_open: bool = False
     selected_entry: dict[str, str]

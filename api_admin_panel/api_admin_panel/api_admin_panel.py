@@ -1,6 +1,6 @@
 import reflex as rx
 
-from app.pages import *
+from api_admin_panel.pages import *
 
 
 class State(rx.State):
