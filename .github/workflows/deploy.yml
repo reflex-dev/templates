@@ -1,13 +1,9 @@
 name: deploy
 
 # only redeploy when we push a new release.
-# on:
-#    release:
-#        types: [published]
 on:
-    push:
-        branches:
-            - lendemor/deploy_pipeline
+   release:
+       types: [published]
 
 jobs:
     list-templates:
