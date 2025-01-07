@@ -59,10 +59,11 @@ jobs:
                   ;;
                 esac
             - name: Deploy to ReflexCloud
-              uses: reflex-dev/reflex-deploy-action@v1
+              uses: reflex-dev/reflex-deploy-action@masenf/skip-checkout
               with:
                 auth_token: ${{ secrets.REFLEX_AUTH_TOKEN }}
                 project_id: ${{ secrets.REFLEX_PROJECT_ID }}
                 app_directory: ${{ matrix.folder }}
                 extra_args: ${{ env.EXTRA_ARGS }}
                 dry_run: ${{ vars.DRY_RUN }}
+                skip_checkout: "true"
