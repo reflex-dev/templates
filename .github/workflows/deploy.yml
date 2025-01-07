@@ -35,11 +35,17 @@ jobs:
                   echo "EXTRA_ARGS=--env REPLICATE_API_TOKEN=${{ secrets.REPLICATE_API_TOKEN }}" >> $GITHUB_ENV
                   ;;
                 customer_data_app)
+                  set -x
                   cat .deploy/temporary_db.py >> ${{ matrix.folder }}/customer_data/customer_data.py
+                  cat ${{ matrix.folder }}/customer_data/customer_data.py
+                  set +x
                   ;;
                 sales)
-                  echo "EXTRA_ARGS=--env OPENAI_API_KEY=${{ secrets.OPEN_AI_KEY }}" >> $GITHUB_ENV
+                  echo "EXTRA_ARGS=--env OPENAI_API_KEY=${{ secrets.OPEN_AI_KEY }} --loglevel debug" >> $GITHUB_ENV
+                  set -x
                   cat .deploy/temporary_db.py >> ${{ matrix.folder }}/${{ matrix.folder }}/${{ matrix.folder }}.py
+                  cat ${{ matrix.folder }}/${{ matrix.folder }}/${{ matrix.folder }}.py
+                  set +x
                   ;;
                 reflex-chat)
                   echo "EXTRA_ARGS=--env OPENAI_API_KEY=${{ secrets.OPEN_AI_KEY }}" >> $GITHUB_ENV
