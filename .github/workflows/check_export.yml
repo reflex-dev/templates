@@ -13,31 +13,26 @@ on:
         description: 'Reflex dep (raw pip spec)'
 
 jobs:
-  list-examples:
-    runs-on: ubuntu-latest
-    outputs:
-      examples: ${{ steps.generate-matrix.outputs.examples }}
-    steps:
-      - uses: actions/checkout@v3
-      - name: Generate Matrix
-        id: generate-matrix
-        run: |
-          EXAMPLES="$(find . -not -name '.*'  -maxdepth 1 -type d | cut -f2 -d/  | sort | grep -vw chakra_apps | jq -R | jq -s -c)"
-          echo $EXAMPLES
-          echo "examples=$EXAMPLES" >> $GITHUB_OUTPUT
-
+  list-templates:
+    uses: ./.github/workflows/list-templates.yml
+  
   check-export:
-    needs: [list-examples]
+    needs: [list-templates]
     strategy:
       matrix:
-        example: ${{ fromJSON(needs.list-examples.outputs.examples) }}
+        folder: ${{ fromJSON(needs.list-templates.outputs.templates) }}
+      fail-fast: false
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.9
       - id: export-check
         run: |
-          f=${{ matrix.example }}
+          f=${{ matrix.folder }}
           if [[ ! -d $f ]]; then
             echo "$f is not a directory!"
             exit 1
@@ -63,7 +58,7 @@ jobs:
 
           export OPENAI_API_KEY="dummy"
           reflex init
-          reflex export
+          reflex export | tee export_logs.txt
           for a in frontend.zip backend.zip; do
             if unzip -t "$a"; then
               echo "$a prepared as expected"
@@ -75,9 +70,12 @@ jobs:
 
       - name: Check for DeprecationWarning in logs
         run: |
-          if grep -q "DeprecationWarning:" <<< "${{ steps.export-check.outputs.stdout }}"; then
-            echo "Found a Deprecation warning, please fix."
-            exit 1
-          else
-            echo "No deprecated code, all good."
-          fi
+            cd ${{ matrix.folder }}
+            dep_lines=$(grep -i "DeprecationWarning:" export_logs.txt || true)
+            if [ -n "$dep_lines" ]; then
+                echo "Found Deprecation warning:"
+                echo "$dep_lines"
+                exit 1
+            else
+                echo "No deprecated code, all good."
+            fi

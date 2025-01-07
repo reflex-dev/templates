@@ -11,6 +11,4 @@ import reflex as rx
 app = rx.App(
     style=styles.base_style,
     stylesheets=styles.base_stylesheets,
-    title="Dashboard Template",
-    description="A dashboard template for Reflex.",
 )

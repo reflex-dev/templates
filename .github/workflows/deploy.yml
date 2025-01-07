@@ -1,0 +1,63 @@
+name: deploy
+
+# only redeploy when we push a new release.
+on:
+  release:
+    types: [published]
+  push:
+    branches:
+    - lendemor/deploy_pipeline
+
+jobs:
+    list-templates:
+      uses: ./.github/workflows/list-templates.yml
+
+    deploy:
+        needs: list-templates
+        runs-on: ubuntu-latest
+        environment: Cloud Deploy
+        strategy:
+            matrix:
+                folder: ${{ fromJSON(needs.list-templates.outputs.templates) }}
+                exclude:
+                  # No deploy due to missing service dependencies.
+                  - folder: reflex-llamaindex-template
+            fail-fast: false
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                submodules: recursive
+            - name: Set environment variables
+              id: set-env
+              run: |
+                case ${{ matrix.folder }} in
+                ai_image_gen)
+                  echo "EXTRA_ARGS=--env REPLICATE_API_TOKEN=${{ secrets.REPLICATE_API_TOKEN }}" >> $GITHUB_ENV
+                  ;;
+                customer_data_app)
+                  cat .deploy/temporary_db.py >> ${{ matrix.folder }}/customer_data/customer_data.py
+                  ;;
+                sales)
+                  echo "EXTRA_ARGS=--env OPENAI_API_KEY=${{ secrets.OPEN_AI_KEY }}" >> $GITHUB_ENV
+                  cat .deploy/temporary_db.py >> ${{ matrix.folder }}/${{ matrix.folder }}/${{ matrix.folder }}.py
+                  ;;
+                reflex-chat)
+                  echo "EXTRA_ARGS=--env OPENAI_API_KEY=${{ secrets.OPEN_AI_KEY }}" >> $GITHUB_ENV
+                  echo "OPENAI_API_KEY=${{ secrets.OPEN_AI_KEY }}" >> $GITHUB_ENV
+                  ;;
+                nba)
+                  echo "EXTRA_ARGS=--vmtype ${{ vars.NBA_VM_TYPE }}" >> $GITHUB_ENV
+                  ;;
+                *)
+                  echo "EXTRA_ARGS=" >> $GITHUB_ENV
+                  ;;
+                esac
+            - name: Deploy to ReflexCloud
+              uses: reflex-dev/reflex-deploy-action@masenf/skip-checkout
+              with:
+                auth_token: ${{ secrets.REFLEX_AUTH_TOKEN }}
+                project_id: ${{ secrets.REFLEX_PROJECT_ID }}
+                app_directory: ${{ matrix.folder }}
+                extra_args: ${{ env.EXTRA_ARGS }}
+                dry_run: ${{ vars.DRY_RUN }}
+                skip_checkout: "true"
