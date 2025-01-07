@@ -11,21 +11,21 @@ First, install all the necessary dependencies:
 pip install -r requirements.txt
 ```
 ## 2. Set Your OpenAI API Key
-To utilize OpenAI in this template, you need to set your OPEN_AI_KEY environment variable. Here’s how you can set it based on your operating system:
+To utilize OpenAI in this template, you need to set your OPENAI_API_KEY environment variable. Here’s how you can set it based on your operating system:
 
 ### On Linux / macOS:
 ```shell
-export OPEN_AI_KEY=your-openai-api-key
+export OPENAI_API_KEY=your-openai-api-key
 ```
 
 ### On Windows (Command Prompt):
 ```shell
-set OPEN_AI_KEY=your-openai-api-key
+set OPENAI_API_KEY=your-openai-api-key
 ```
 
 ### On Windows (PowerShell):
 ```shell
-$env:OPEN_AI_KEY="your-openai-api-key"
+$env:OPENAI_API_KEY="your-openai-api-key"
 ```
 
 ### 3. Run the App
