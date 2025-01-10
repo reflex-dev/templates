@@ -154,7 +154,7 @@ class State(rx.State):
     def add_customer_to_db(self, form_data: dict):
         with rx.session() as session:
             if session.exec(
-                select(Customer).where(Customer.email == self.current_user.email)
+                select(Customer).where(Customer.email == form_data.get("email"))
             ).first():
                 return rx.window_alert("User with this email already exists")
             self.current_user = Customer(
