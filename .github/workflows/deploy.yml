@@ -56,6 +56,7 @@ jobs:
                   echo "EXTRA_ARGS=--vmtype ${{ vars.CIJOB_VM_TYPE }}" >> $GITHUB_ENV
                   ;;
                 dalle)
+                  echo "EXTRA_ARGS=--env OPENAI_API_KEY=${{ secrets.OPEN_AI_KEY }}" >> $GITHUB_ENV
                   echo "EXTRA_ARGS=--vmtype ${{ vars.DALLE_VM_TYPE }}" >> $GITHUB_ENV
                   ;;
                 *)
