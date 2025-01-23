@@ -95,7 +95,7 @@ def _pagination_view() -> rx.Component:
             align="center",
             width="100%",
             justify="end",
-        ),
+        )
     )
 
 
