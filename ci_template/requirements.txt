@@ -1,1 +1,2 @@
 reflex>=0.5.4
+email-validator>=2.2.0

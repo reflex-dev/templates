@@ -2,21 +2,34 @@
 
 import reflex as rx
 
+import dataclasses
+from email_validator import validate_email, EmailNotValidError
 from ..components.profile_input import profile_input
 from ..templates import template
 
 
-class Profile(rx.Base):
+@dataclasses.dataclass
+class Profile:
     name: str = ""
     email: str = ""
     notifications: bool = True
 
+    def __post_init__(self):
+        if self.email:
+            validate_email(self.email)
+
 
 class ProfileState(rx.State):
     profile: Profile = Profile(name="Admin", email="", notifications=True)
+    error_msg: str = ""
 
     def handle_submit(self, form_data: dict):
-        self.profile = Profile(**form_data)
+        try:
+            self.profile = Profile(**form_data)
+        except EmailNotValidError as e:
+            self.error_msg = str(e)
+            return
+        self.error_msg = ""
         return rx.toast.success("Profile updated successfully", position="top-center")
 
     def toggle_notifications(self):
@@ -56,9 +69,10 @@ def profile() -> rx.Component:
                         "Email",
                         "email",
                         "user@reflex.dev",
-                        "email",
+                        "text",
                         "mail",
                         ProfileState.profile.email,
+                        ProfileState.error_msg,
                     ),
                     rx.button("Update", type="submit", width="100%"),
                     width="100%",
