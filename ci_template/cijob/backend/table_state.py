@@ -14,6 +14,20 @@ class Item(rx.Base):
     timestamp: str
     duration: str
 
+    def __eq__(self, other):
+        if not isinstance(other, Item):
+            return NotImplemented
+        return (
+                self.pipeline == other.pipeline and
+                self.status == other.status and
+                self.workflow == other.workflow and
+                self.timestamp == other.timestamp and
+                self.duration == other.duration
+        )
+
+    def __hash__(self):
+        return hash((self.pipeline, self.status, self.workflow, self.timestamp, self.duration))
+
 
 class TableState(rx.State):
     """The state class."""
@@ -97,9 +111,19 @@ class TableState(rx.State):
         with Path("data.csv").open(encoding="utf-8") as file:
             reader = csv.DictReader(file)
             self.items = [Item(**row) for row in reader]
-            self.initial_items = self.items
+            self.initial_items = self.items.copy()
             self.total_items = len(self.items)
 
     def toggle_sort(self):
         self.sort_reverse = not self.sort_reverse
         self.load_entries()
+
+    def delete_item(self, item: Item):
+        self.items.remove(item)
+        self.initial_items.remove(item)
+        self.total_items = len(self.items)
+        self.first_page()
+        return rx.toast.success(f"{item.pipeline} deleted successfully")
+
+
+

@@ -5,7 +5,7 @@ from ..components.status_badge import status_badge
 
 
 def _create_dialog(
-    item: Item, icon_name: str, color_scheme: str, dialog_title: str
+    item: Item, icon_name: str, color_scheme: str, dialog_title: str, action: str
 ) -> rx.Component:
     return rx.dialog.root(
         rx.dialog.trigger(
@@ -14,41 +14,59 @@ def _create_dialog(
             )
         ),
         rx.dialog.content(
-            rx.vstack(
-                rx.dialog.title(dialog_title),
-                rx.dialog.description(
+            rx.match(
+                action,
+                ("delete",
+                 rx.vstack(
+                     rx.dialog.title(dialog_title),
+                     rx.dialog.description(
+                         rx.center(
+                             rx.text("Are you sure you want to delete this item?")
+                         ),
+                         rx.hstack(
+                             rx.button("Delete", size="2", color_scheme="tomato",
+                                       on_click=TableState.delete_item(item)),
+                             rx.dialog.close(
+                                 rx.button("cancel", size="2", color_scheme=color_scheme),
+                             ),
+                         ),
+                     ),
+                 )
+                 ),
+                rx.fragment(
                     rx.vstack(
-                        rx.text(item.pipeline),
-                        rx.text(item.workflow),
-                        status_badge(item.status),
-                        rx.text(item.timestamp),
-                        rx.text(item.duration),
-                    )
-                ),
-                rx.dialog.close(
-                    rx.button("Close Dialog", size="2", color_scheme=color_scheme),
-                ),
+                        rx.dialog.title(dialog_title),
+                        rx.dialog.description(
+                            rx.vstack(
+                                rx.text(item.pipeline),
+                                rx.text(item.workflow),
+                                status_badge(item.status),
+                                rx.text(item.timestamp),
+                                rx.text(item.duration),
+                            )
+                        ),
+                        rx.dialog.close(
+                            rx.button("Close Dialog", size="2", color_scheme=color_scheme),
+                        ),
+                    ),
+                )
             ),
+
         ),
     )
 
 
 def _delete_dialog(item: Item) -> rx.Component:
-    return _create_dialog(item, "trash-2", "tomato", "Delete Dialog")
+    return _create_dialog(item, "trash-2", "tomato", "Delete Dialog", "delete")
 
 
-def _approve_dialog(item: Item) -> rx.Component:
-    return _create_dialog(item, "check", "grass", "Approve Dialog")
-
-
-def _edit_dialog(item: Item) -> rx.Component:
-    return _create_dialog(item, "square-pen", "blue", "Edit Dialog")
+def _view_dialog(item: Item) -> rx.Component:
+    return _create_dialog(item, "eye", "grass", "View Dialog", "approve")
 
 
 def _dialog_group(item: Item) -> rx.Component:
     return rx.hstack(
-        _approve_dialog(item),
-        _edit_dialog(item),
+        _view_dialog(item),
         _delete_dialog(item),
         align="center",
         spacing="2",
@@ -149,7 +167,7 @@ def _pagination_view() -> rx.Component:
             align="center",
             width="100%",
             justify="end",
-        ),
+        )
     )
 
 
