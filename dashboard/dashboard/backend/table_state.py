@@ -16,6 +16,7 @@ class Item(rx.Base):
 
 class TableState(rx.State):
     """The state class."""
+
     initial_entries: list[Item] = []
     items: List[Item] = []
 

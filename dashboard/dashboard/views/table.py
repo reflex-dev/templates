@@ -37,65 +37,63 @@ def _show_item(item: Item, index: int) -> rx.Component:
 
 
 def _pagination_view() -> rx.Component:
-    return (
-        rx.hstack(
-            rx.text(
-                "Page ",
-                rx.code(TableState.page_number),
-                f" of {TableState.total_pages}",
-                justify="end",
-            ),
-            rx.hstack(
-                rx.icon_button(
-                    rx.icon("chevrons-left", size=18),
-                    on_click=TableState.first_page,
-                    opacity=rx.cond(TableState.page_number == 1, 0.6, 1),
-                    color_scheme=rx.cond(TableState.page_number == 1, "gray", "accent"),
-                    variant="soft",
-                ),
-                rx.icon_button(
-                    rx.icon("chevron-left", size=18),
-                    on_click=TableState.prev_page,
-                    opacity=rx.cond(TableState.page_number == 1, 0.6, 1),
-                    color_scheme=rx.cond(TableState.page_number == 1, "gray", "accent"),
-                    variant="soft",
-                ),
-                rx.icon_button(
-                    rx.icon("chevron-right", size=18),
-                    on_click=TableState.next_page,
-                    opacity=rx.cond(
-                        TableState.page_number == TableState.total_pages, 0.6, 1
-                    ),
-                    color_scheme=rx.cond(
-                        TableState.page_number == TableState.total_pages,
-                        "gray",
-                        "accent",
-                    ),
-                    variant="soft",
-                ),
-                rx.icon_button(
-                    rx.icon("chevrons-right", size=18),
-                    on_click=TableState.last_page,
-                    opacity=rx.cond(
-                        TableState.page_number == TableState.total_pages, 0.6, 1
-                    ),
-                    color_scheme=rx.cond(
-                        TableState.page_number == TableState.total_pages,
-                        "gray",
-                        "accent",
-                    ),
-                    variant="soft",
-                ),
-                align="center",
-                spacing="2",
-                justify="end",
-            ),
-            spacing="5",
-            margin_top="1em",
-            align="center",
-            width="100%",
+    return rx.hstack(
+        rx.text(
+            "Page ",
+            rx.code(TableState.page_number),
+            f" of {TableState.total_pages}",
             justify="end",
-        )
+        ),
+        rx.hstack(
+            rx.icon_button(
+                rx.icon("chevrons-left", size=18),
+                on_click=TableState.first_page,
+                opacity=rx.cond(TableState.page_number == 1, 0.6, 1),
+                color_scheme=rx.cond(TableState.page_number == 1, "gray", "accent"),
+                variant="soft",
+            ),
+            rx.icon_button(
+                rx.icon("chevron-left", size=18),
+                on_click=TableState.prev_page,
+                opacity=rx.cond(TableState.page_number == 1, 0.6, 1),
+                color_scheme=rx.cond(TableState.page_number == 1, "gray", "accent"),
+                variant="soft",
+            ),
+            rx.icon_button(
+                rx.icon("chevron-right", size=18),
+                on_click=TableState.next_page,
+                opacity=rx.cond(
+                    TableState.page_number == TableState.total_pages, 0.6, 1
+                ),
+                color_scheme=rx.cond(
+                    TableState.page_number == TableState.total_pages,
+                    "gray",
+                    "accent",
+                ),
+                variant="soft",
+            ),
+            rx.icon_button(
+                rx.icon("chevrons-right", size=18),
+                on_click=TableState.last_page,
+                opacity=rx.cond(
+                    TableState.page_number == TableState.total_pages, 0.6, 1
+                ),
+                color_scheme=rx.cond(
+                    TableState.page_number == TableState.total_pages,
+                    "gray",
+                    "accent",
+                ),
+                variant="soft",
+            ),
+            align="center",
+            spacing="2",
+            justify="end",
+        ),
+        spacing="5",
+        margin_top="1em",
+        align="center",
+        width="100%",
+        justify="end",
     )
 
 

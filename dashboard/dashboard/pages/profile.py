@@ -1,9 +1,10 @@
 """The profile page."""
 
-import reflex as rx
-
 import dataclasses
-from email_validator import validate_email, EmailNotValidError
+
+import reflex as rx
+from email_validator import EmailNotValidError, validate_email
+
 from ..components.profile_input import profile_input
 from ..templates import template
 

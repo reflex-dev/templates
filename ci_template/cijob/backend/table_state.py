@@ -18,19 +18,22 @@ class Item(rx.Base):
         if not isinstance(other, Item):
             return NotImplemented
         return (
-                self.pipeline == other.pipeline and
-                self.status == other.status and
-                self.workflow == other.workflow and
-                self.timestamp == other.timestamp and
-                self.duration == other.duration
+            self.pipeline == other.pipeline
+            and self.status == other.status
+            and self.workflow == other.workflow
+            and self.timestamp == other.timestamp
+            and self.duration == other.duration
         )
 
     def __hash__(self):
-        return hash((self.pipeline, self.status, self.workflow, self.timestamp, self.duration))
+        return hash(
+            (self.pipeline, self.status, self.workflow, self.timestamp, self.duration)
+        )
 
 
 class TableState(rx.State):
     """The state class."""
+
     initial_items: List[Item] = []
     items: List[Item] = []
 
@@ -124,6 +127,3 @@ class TableState(rx.State):
         self.total_items = len(self.items)
         self.first_page()
         return rx.toast.success(f"{item.pipeline} deleted successfully")
-
-
-
