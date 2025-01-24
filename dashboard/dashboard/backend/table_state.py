@@ -75,10 +75,11 @@ class TableState(rx.State):
 
     @rx.var(cache=True)
     def total_pages(self) -> int:
-        total_filtered_items = len(self.filtered_sorted_items)
-        return (total_filtered_items // self.limit) + (
-            1 if total_filtered_items % self.limit else 1
+        filtered_items_count = len(self.filtered_sorted_items)
+        total = (filtered_items_count // self.limit) + (
+            1 if filtered_items_count % self.limit else 0
         )
+        return total if total > 0 else 1
 
     @rx.var(cache=True, initial_value=[])
     def get_current_page(self) -> list[Item]:

@@ -17,7 +17,7 @@ class Item(rx.Base):
 
 class TableState(rx.State):
     """The state class."""
-
+    initial_items: List[Item] = []
     items: List[Item] = []
 
     search_value: str = ""
@@ -42,6 +42,7 @@ class TableState(rx.State):
 
         # Filter items based on search value
         if self.search_value:
+            self.offset = 0
             search_value = self.search_value.lower()
             items = [
                 item
@@ -66,9 +67,11 @@ class TableState(rx.State):
 
     @rx.var(cache=True)
     def total_pages(self) -> int:
-        return (self.total_items // self.limit) + (
-            1 if self.total_items % self.limit else 0
+        filtered_items_count = len(self.filtered_sorted_items)
+        total = (filtered_items_count // self.limit) + (
+            1 if filtered_items_count % self.limit else 0
         )
+        return total if total > 0 else 1
 
     @rx.var(cache=True, initial_value=[])
     def get_current_page(self) -> list[Item]:
@@ -94,6 +97,7 @@ class TableState(rx.State):
         with Path("data.csv").open(encoding="utf-8") as file:
             reader = csv.DictReader(file)
             self.items = [Item(**row) for row in reader]
+            self.initial_items = self.items
             self.total_items = len(self.items)
 
     def toggle_sort(self):
