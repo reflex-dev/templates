@@ -1,6 +1,6 @@
 name: check-export
 env:
-  REFLEX_DEP: 'reflex'
+  REFLEX_DEP: "reflex"
   TELEMETRY_ENABLED: false
 on:
   push:
@@ -10,12 +10,12 @@ on:
   workflow_dispatch:
     inputs:
       reflex_dep:
-        description: 'Reflex dep (raw pip spec)'
+        description: "Reflex dep (raw pip spec)"
 
 jobs:
   list-templates:
     uses: ./.github/workflows/list-templates.yml
-  
+
   check-export:
     needs: [list-templates]
     strategy:
@@ -29,7 +29,7 @@ jobs:
           submodules: recursive
       - uses: actions/setup-python@v5
         with:
-          python-version: 3.9
+          python-version: 3.10.16
       - id: export-check
         run: |
           f=${{ matrix.folder }}
@@ -70,12 +70,12 @@ jobs:
 
       - name: Check for DeprecationWarning in logs
         run: |
-            cd ${{ matrix.folder }}
-            dep_lines=$(grep -i "DeprecationWarning:" export_logs.txt || true)
-            if [ -n "$dep_lines" ]; then
-                echo "Found Deprecation warning:"
-                echo "$dep_lines"
-                exit 1
-            else
-                echo "No deprecated code, all good."
-            fi
+          cd ${{ matrix.folder }}
+          dep_lines=$(grep -i "DeprecationWarning:" export_logs.txt || true)
+          if [ -n "$dep_lines" ]; then
+              echo "Found Deprecation warning:"
+              echo "$dep_lines"
+              exit 1
+          else
+              echo "No deprecated code, all good."
+          fi
