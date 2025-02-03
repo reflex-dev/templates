@@ -27,7 +27,7 @@ jobs:
               with:
                 submodules: recursive
             - name: Set reflex version for deploy
-              run: sed -i "s/^reflex.*$/reflex==${{ github.event.release.tag_name }}" >> requirements.txt
+              run: sed -e "s/^reflex.*$/reflex==${{ github.event.release.tag_name }}/" -i .orig requirements.txt
             - name: Set environment variables
               id: set-env
               run: |
