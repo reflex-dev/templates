@@ -11,6 +11,7 @@ on:
     inputs:
       reflex_dep:
         description: "Reflex dep (raw pip spec)"
+        default: "git+https://github.com/reflex-dev/reflex.git@main"
 
 jobs:
   list-templates:
@@ -53,7 +54,7 @@ jobs:
           python -m venv venv
           source venv/bin/activate
 
-          pip install '${{ github.event.inputs.reflex_dep || env.REFLEX_DEP || "git+https://github.com/reflex-dev/reflex.git@main" }}' -r requirements.txt
+          pip install '${{ github.event.inputs.reflex_dep || env.REFLEX_DEP }}' -r requirements.txt
 
           export OPENAI_API_KEY="dummy"
           reflex init
