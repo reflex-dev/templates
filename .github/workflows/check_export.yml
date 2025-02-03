@@ -53,8 +53,7 @@ jobs:
           python -m venv venv
           source venv/bin/activate
 
-          pip install '${{ github.event.inputs.reflex_dep || env.REFLEX_DEP }}' -r requirements.txt
-          pip install git+https://github.com/reflex-dev/reflex.git@main
+          pip install '${{ github.event.inputs.reflex_dep || env.REFLEX_DEP || "git+https://github.com/reflex-dev/reflex.git@main" }}' -r requirements.txt
 
           export OPENAI_API_KEY="dummy"
           reflex init
