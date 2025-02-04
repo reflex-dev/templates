@@ -24,7 +24,7 @@ jobs:
           echo "files=$files" >> $GITHUB_OUTPUT
         shell: bash
       - name: Upload zip files as artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: zip-files
           path: "*.zip"
@@ -37,7 +37,7 @@ jobs:
         file: ${{ fromJson(needs.zip-and-publish.outputs.files) }}
     steps:
       - name: Download zip files
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: zip-files
       - name: Debug output (file existence check)
