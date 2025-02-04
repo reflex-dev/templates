@@ -29,6 +29,14 @@ class State(rx.State):
     age: tuple[int, int] = (19, 40)
     salary: tuple[int, int] = (0, 25000000)
 
+    @rx.event
+    def set_age(self, value: list[int | float]):
+        self.age = (int(value[0]), int(value[1]))
+
+    @rx.event
+    def set_salary(self, value: list[int | float]):
+        self.salary = (int(value[0]), int(value[1]))
+
     @rx.var(cache=True)
     def filtered_sorted_players(self) -> list[Player]:
         players = self.players

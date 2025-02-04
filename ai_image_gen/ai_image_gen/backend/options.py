@@ -56,6 +56,10 @@ class OptionsState(rx.State):
     guidance_scale: float = 0
 
     @rx.event
+    def set_seed(self, value: str):
+        self.seed = int(value)
+
+    @rx.event
     def set_tick(self, value: list):
         self.slider_tick = value[0]
         self.selected_dimensions = self.dimensions[self.slider_tick]

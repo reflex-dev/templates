@@ -68,10 +68,14 @@ class State(rx.State):
     )
     gen_response = False
     tone: str = "😊 Formal"
-    length: str = "1000"
+    length: int = 1000
     search_value: str = ""
     sort_value: str = ""
     sort_reverse: bool = False
+
+    @rx.event
+    def set_length(self, value: list[int | float]):
+        self.length = int(value[0])
 
     def load_entries(self) -> list[Customer]:
         """Get all users from the database."""
