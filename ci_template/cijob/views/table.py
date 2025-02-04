@@ -5,7 +5,7 @@ from ..components.status_badge import status_badge
 
 
 def _create_dialog(
-    item: Item, icon_name: str, color_scheme: str, dialog_title: str
+    item: Item, icon_name: str, color_scheme: str, dialog_title: str, action: str
 ) -> rx.Component:
     return rx.dialog.root(
         rx.dialog.trigger(
@@ -14,19 +14,50 @@ def _create_dialog(
             )
         ),
         rx.dialog.content(
-            rx.vstack(
-                rx.dialog.title(dialog_title),
-                rx.dialog.description(
+            rx.match(
+                action,
+                (
+                    "delete",
                     rx.vstack(
-                        rx.text(item.pipeline),
-                        rx.text(item.workflow),
-                        status_badge(item.status),
-                        rx.text(item.timestamp),
-                        rx.text(item.duration),
-                    )
+                        rx.dialog.title(dialog_title),
+                        rx.dialog.description(
+                            rx.center(
+                                rx.text("Are you sure you want to delete this item?")
+                            ),
+                            rx.hstack(
+                                rx.button(
+                                    "Delete",
+                                    size="2",
+                                    color_scheme="tomato",
+                                    on_click=TableState.delete_item(item),
+                                ),
+                                rx.dialog.close(
+                                    rx.button(
+                                        "cancel", size="2", color_scheme=color_scheme
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
                 ),
-                rx.dialog.close(
-                    rx.button("Close Dialog", size="2", color_scheme=color_scheme),
+                rx.fragment(
+                    rx.vstack(
+                        rx.dialog.title(dialog_title),
+                        rx.dialog.description(
+                            rx.vstack(
+                                rx.text(item.pipeline),
+                                rx.text(item.workflow),
+                                status_badge(item.status),
+                                rx.text(item.timestamp),
+                                rx.text(item.duration),
+                            )
+                        ),
+                        rx.dialog.close(
+                            rx.button(
+                                "Close Dialog", size="2", color_scheme=color_scheme
+                            ),
+                        ),
+                    ),
                 ),
             ),
         ),
@@ -34,21 +65,16 @@ def _create_dialog(
 
 
 def _delete_dialog(item: Item) -> rx.Component:
-    return _create_dialog(item, "trash-2", "tomato", "Delete Dialog")
+    return _create_dialog(item, "trash-2", "tomato", "Delete Dialog", "delete")
 
 
-def _approve_dialog(item: Item) -> rx.Component:
-    return _create_dialog(item, "check", "grass", "Approve Dialog")
-
-
-def _edit_dialog(item: Item) -> rx.Component:
-    return _create_dialog(item, "square-pen", "blue", "Edit Dialog")
+def _view_dialog(item: Item) -> rx.Component:
+    return _create_dialog(item, "eye", "grass", "View Dialog", "approve")
 
 
 def _dialog_group(item: Item) -> rx.Component:
     return rx.hstack(
-        _approve_dialog(item),
-        _edit_dialog(item),
+        _view_dialog(item),
         _delete_dialog(item),
         align="center",
         spacing="2",
@@ -91,65 +117,63 @@ def _show_item(item: Item, index: int) -> rx.Component:
 
 
 def _pagination_view() -> rx.Component:
-    return (
-        rx.hstack(
-            rx.text(
-                "Page ",
-                rx.code(TableState.page_number),
-                f" of {TableState.total_pages}",
-                justify="end",
-            ),
-            rx.hstack(
-                rx.icon_button(
-                    rx.icon("chevrons-left", size=18),
-                    on_click=TableState.first_page,
-                    opacity=rx.cond(TableState.page_number == 1, 0.6, 1),
-                    color_scheme=rx.cond(TableState.page_number == 1, "gray", "accent"),
-                    variant="soft",
-                ),
-                rx.icon_button(
-                    rx.icon("chevron-left", size=18),
-                    on_click=TableState.prev_page,
-                    opacity=rx.cond(TableState.page_number == 1, 0.6, 1),
-                    color_scheme=rx.cond(TableState.page_number == 1, "gray", "accent"),
-                    variant="soft",
-                ),
-                rx.icon_button(
-                    rx.icon("chevron-right", size=18),
-                    on_click=TableState.next_page,
-                    opacity=rx.cond(
-                        TableState.page_number == TableState.total_pages, 0.6, 1
-                    ),
-                    color_scheme=rx.cond(
-                        TableState.page_number == TableState.total_pages,
-                        "gray",
-                        "accent",
-                    ),
-                    variant="soft",
-                ),
-                rx.icon_button(
-                    rx.icon("chevrons-right", size=18),
-                    on_click=TableState.last_page,
-                    opacity=rx.cond(
-                        TableState.page_number == TableState.total_pages, 0.6, 1
-                    ),
-                    color_scheme=rx.cond(
-                        TableState.page_number == TableState.total_pages,
-                        "gray",
-                        "accent",
-                    ),
-                    variant="soft",
-                ),
-                align="center",
-                spacing="2",
-                justify="end",
-            ),
-            spacing="5",
-            margin_top="1em",
-            align="center",
-            width="100%",
+    return rx.hstack(
+        rx.text(
+            "Page ",
+            rx.code(TableState.page_number),
+            f" of {TableState.total_pages}",
             justify="end",
         ),
+        rx.hstack(
+            rx.icon_button(
+                rx.icon("chevrons-left", size=18),
+                on_click=TableState.first_page,
+                opacity=rx.cond(TableState.page_number == 1, 0.6, 1),
+                color_scheme=rx.cond(TableState.page_number == 1, "gray", "accent"),
+                variant="soft",
+            ),
+            rx.icon_button(
+                rx.icon("chevron-left", size=18),
+                on_click=TableState.prev_page,
+                opacity=rx.cond(TableState.page_number == 1, 0.6, 1),
+                color_scheme=rx.cond(TableState.page_number == 1, "gray", "accent"),
+                variant="soft",
+            ),
+            rx.icon_button(
+                rx.icon("chevron-right", size=18),
+                on_click=TableState.next_page,
+                opacity=rx.cond(
+                    TableState.page_number == TableState.total_pages, 0.6, 1
+                ),
+                color_scheme=rx.cond(
+                    TableState.page_number == TableState.total_pages,
+                    "gray",
+                    "accent",
+                ),
+                variant="soft",
+            ),
+            rx.icon_button(
+                rx.icon("chevrons-right", size=18),
+                on_click=TableState.last_page,
+                opacity=rx.cond(
+                    TableState.page_number == TableState.total_pages, 0.6, 1
+                ),
+                color_scheme=rx.cond(
+                    TableState.page_number == TableState.total_pages,
+                    "gray",
+                    "accent",
+                ),
+                variant="soft",
+            ),
+            align="center",
+            spacing="2",
+            justify="end",
+        ),
+        spacing="5",
+        margin_top="1em",
+        align="center",
+        width="100%",
+        justify="end",
     )
 
 

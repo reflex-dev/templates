@@ -8,6 +8,7 @@ def profile_input(
     type: str,
     icon: str,
     default_value: str = "",
+    error_msg: str = "",
 ) -> rx.Component:
     return rx.vstack(
         rx.hstack(
@@ -24,6 +25,7 @@ def profile_input(
             width="100%",
             name=name,
         ),
+        rx.el.span(rx.text(error_msg, color="red", size="2"), width="100%"),
         direction="column",
         spacing="1",
         width="100%",

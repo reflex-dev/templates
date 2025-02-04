@@ -14,10 +14,27 @@ class Item(rx.Base):
     timestamp: str
     duration: str
 
+    def __eq__(self, other):
+        if not isinstance(other, Item):
+            return NotImplemented
+        return (
+            self.pipeline == other.pipeline
+            and self.status == other.status
+            and self.workflow == other.workflow
+            and self.timestamp == other.timestamp
+            and self.duration == other.duration
+        )
+
+    def __hash__(self):
+        return hash(
+            (self.pipeline, self.status, self.workflow, self.timestamp, self.duration)
+        )
+
 
 class TableState(rx.State):
     """The state class."""
 
+    initial_items: List[Item] = []
     items: List[Item] = []
 
     search_value: str = ""
@@ -42,6 +59,7 @@ class TableState(rx.State):
 
         # Filter items based on search value
         if self.search_value:
+            self.offset = 0
             search_value = self.search_value.lower()
             items = [
                 item
@@ -66,9 +84,11 @@ class TableState(rx.State):
 
     @rx.var(cache=True)
     def total_pages(self) -> int:
-        return (self.total_items // self.limit) + (
-            1 if self.total_items % self.limit else 0
+        filtered_items_count = len(self.filtered_sorted_items)
+        total = (filtered_items_count // self.limit) + (
+            1 if filtered_items_count % self.limit else 0
         )
+        return total if total > 0 else 1
 
     @rx.var(cache=True, initial_value=[])
     def get_current_page(self) -> list[Item]:
@@ -94,8 +114,16 @@ class TableState(rx.State):
         with Path("data.csv").open(encoding="utf-8") as file:
             reader = csv.DictReader(file)
             self.items = [Item(**row) for row in reader]
+            self.initial_items = self.items.copy()
             self.total_items = len(self.items)
 
     def toggle_sort(self):
         self.sort_reverse = not self.sort_reverse
         self.load_entries()
+
+    def delete_item(self, item: Item):
+        self.items.remove(item)
+        self.initial_items.remove(item)
+        self.total_items = len(self.items)
+        self.first_page()
+        return rx.toast.success(f"{item.pipeline} deleted successfully")
