@@ -17,6 +17,10 @@ class StatsState(rx.State):
     device_data = []
     yearly_device_data = []
 
+    @rx.event
+    def set_selected_tab(self, tab: str | list[str]):
+        self.selected_tab = tab if isinstance(tab, str) else tab[0]
+
     def toggle_areachart(self):
         self.area_toggle = not self.area_toggle
 
