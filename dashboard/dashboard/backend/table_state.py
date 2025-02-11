@@ -62,14 +62,16 @@ class TableState(rx.State):
                     ]
                 )
             ]
-
+            self.total_items = len(items)
+        else:
+            self.total_items = len(self.items)
         return items
 
     @rx.var(cache=True)
     def page_number(self) -> int:
         return (self.offset // self.limit) + 1
 
-    @rx.var(cache=True)
+    @rx.var(cache=False)
     def total_pages(self) -> int:
         return (self.total_items // self.limit) + (
             1 if self.total_items % self.limit else 1
