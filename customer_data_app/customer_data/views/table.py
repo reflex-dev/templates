@@ -12,7 +12,7 @@ def show_customer(user: Customer):
         rx.table.cell(user.email),
         rx.table.cell(user.phone),
         rx.table.cell(user.address),
-        rx.table.cell(f"${user.payments:,}"),
+        rx.table.cell(f"${user.payments}"),
         rx.table.cell(user.date),
         rx.table.cell(
             rx.match(
