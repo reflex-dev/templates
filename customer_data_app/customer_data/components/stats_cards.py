@@ -62,12 +62,12 @@ def stats_card(
                 ),
                 rx.hstack(
                     rx.heading(
-                        f"{extra_char}{value:,}",
+                        f"{extra_char}{value}",
                         size="7",
                         weight="bold",
                     ),
                     rx.text(
-                        f"from {extra_char}{prev_value:,}",
+                        f"from {extra_char}{prev_value}",
                         size="3",
                         color=rx.color("gray", 10),
                     ),
