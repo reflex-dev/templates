@@ -149,7 +149,7 @@ def main_table() -> rx.Component:
                     width="100%",
                     variant="surface",
                     color_scheme="gray",
-                    on_change=TableState.set_search_value,
+                    on_change=[TableState.set_search_value, TableState.first_page]
                 ),
                 align="center",
                 justify="end",
