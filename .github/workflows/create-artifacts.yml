@@ -19,6 +19,7 @@ jobs:
           R2_BUCKET: ${{ secrets.R2_BUCKET }}
           R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
         run: |
+          env | grep R2_
           pip install awscli
           aws configure set aws_access_key_id "$AWS_ACCESS_KEY_ID"
           aws configure set aws_secret_access_key "$AWS_SECRET_ACCESS_KEY"
@@ -27,6 +28,4 @@ jobs:
           for dir in $(find . -mindepth 1 -maxdepth 1 -type d ! -name '.git'); do
             aws s3 cp "$dir" "s3://$R2_BUCKET/${dir#./}" --recursive --exclude "*.zip"
           done
-      - name: Debug env
-        run: |
-          env | grep R2_
+          
