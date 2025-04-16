@@ -1,70 +1,63 @@
-name: Zip and Publish Subfolders
+name: Upload Directories to R2
 on:
   release:
     types: [published]
 jobs:
-  zip-and-publish:
+  list-directories:
     runs-on: ubuntu-latest
     outputs:
-      files: ${{ steps.list_zip_files.outputs.files }}
+      directories: ${{ steps.list_dirs.outputs.directories }}
     steps:
       - name: Checkout code with submodules
         uses: actions/checkout@v3
         with:
           submodules: recursive
-      - name: Create zip files for each subfolder
+      - name: List directories
+        id: list_dirs
         run: |
-          for dir in $(find . -mindepth 1 -maxdepth 1 -type d); do
-            zip -r "${dir##*/}.zip" "$dir"
-          done
-      - name: List zip files
-        id: list_zip_files
-        run: |
-          files=$(ls *.zip | jq -R . | jq -s . | tr -d '\n' | tr -d ' ')
-          echo "files=$files" >> $GITHUB_OUTPUT
+          directories=$(find . -mindepth 1 -maxdepth 1 -type d | sed 's|^./||' | jq -R . | jq -s . | tr -d '\n' | tr -d ' ')
+          echo "directories=$directories" >> $GITHUB_OUTPUT
         shell: bash
-      - name: Upload zip files as artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: zip-files
-          path: "*.zip"
 
-  upload-artifacts:
-    needs: zip-and-publish
+  upload-to-r2:
+    needs: list-directories
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        file: ${{ fromJson(needs.zip-and-publish.outputs.files) }}
+        directory: ${{ fromJson(needs.list-directories.outputs.directories) }}
     steps:
-      - name: Download zip files
-        uses: actions/download-artifact@v4
+      - name: Checkout code with submodules
+        uses: actions/checkout@v3
         with:
-          name: zip-files
-      - name: Debug output (file existence check)
+          submodules: recursive
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID_DEV }}
+          aws-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY_DEV }}
+          aws-region: auto
+      - name: Upload directory to R2
         run: |
-          if [ -e "${{ matrix.file }}" ]; then
-            echo "File '${{ matrix.file }}' exists."
-          else
-            echo "File '${{ matrix.file }}' does not exist."
-          fi
+          aws s3 sync ./${{ matrix.directory }} s3://${{ secrets.R2_BUCKET_NAME_DEV }}/${{ matrix.directory }} --endpoint-url ${{ secrets.R2_ENDPOINT_URL }}
         shell: bash
-      - name: Upload artifact
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./${{ matrix.file }}
-          asset_name: ${{ matrix.file }}
-          asset_content_type: application/zip
 
   upload-templates-json:
-    needs: upload-artifacts
+    needs: upload-to-r2
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      - name: Upload templates.json as release asset
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID_DEV }}
+          aws-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY_DEV }}
+          aws-region: auto
+      - name: Upload templates.json to R2
+        run: |
+          aws s3 cp ./templates.json s3://${{ secrets.R2_BUCKET_NAME_DEV }}/templates.json --endpoint-url ${{ secrets.R2_ENDPOINT_URL_DEV }}
+        shell: bash
+      - name: Upload templates.json as release asset (for backward compatibility)
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
