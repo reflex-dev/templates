@@ -1,10 +1,10 @@
-import reflex as rx
-from typing import List, Dict, TypedDict
-from sqlalchemy import text, func, Float
-from business_analytics_dashboard.models.employee import Employee
-import os
 from collections import Counter
-from decimal import Decimal
+from typing import List, TypedDict
+
+import reflex as rx
+from sqlalchemy import text
+
+from business_analytics_dashboard.models.employee import Employee
 
 
 class DepartmentData(TypedDict):
@@ -68,8 +68,7 @@ class DashboardState(rx.State):
                 ]
                 async with self:
                     self.employees = employees_data
-        except Exception as e:
-            print(f"Database Error fetching employees: {e}")
+        except Exception:
             async with self:
                 self.employees = []
         finally:
@@ -86,19 +85,12 @@ class DashboardState(rx.State):
                         "\n                        SELECT SUM(total_amount)\n                        FROM expense_reports\n                        "
                     )
                 )
-                total_amount_decimal = (
-                    result.scalar_one_or_none()
-                )
+                total_amount_decimal = result.scalar_one_or_none()
                 async with self:
                     self.total_expense_amount = (
-                        float(total_amount_decimal)
-                        if total_amount_decimal
-                        else 0.0
+                        float(total_amount_decimal) if total_amount_decimal else 0.0
                     )
-        except Exception as e:
-            print(
-                f"Database Error fetching total expense amount: {e}"
-            )
+        except Exception:
             async with self:
                 self.total_expense_amount = 0.0
         finally:
@@ -116,19 +108,12 @@ class DashboardState(rx.State):
                         "\n                        SELECT AVG(total_amount)\n                        FROM expense_reports\n                        "
                     )
                 )
-                avg_amount_decimal = (
-                    result.scalar_one_or_none()
-                )
+                avg_amount_decimal = result.scalar_one_or_none()
                 async with self:
                     self.average_expense_amount = (
-                        float(avg_amount_decimal)
-                        if avg_amount_decimal
-                        else 0.0
+                        float(avg_amount_decimal) if avg_amount_decimal else 0.0
                     )
-        except Exception as e:
-            print(
-                f"Database Error fetching average expense amount: {e}"
-            )
+        except Exception:
             async with self:
                 self.average_expense_amount = 0.0
         finally:
@@ -140,17 +125,8 @@ class DashboardState(rx.State):
         """Get a sorted list of unique departments."""
         if not self.employees:
             return ["All"]
-        departments = sorted(
-            list(
-                set(
-                    (
-                        emp["department"]
-                        for emp in self.employees
-                    )
-                )
-            )
-        )
-        return ["All"] + departments
+        departments = sorted({emp["department"] for emp in self.employees})
+        return ["All", *departments]
 
     @rx.var
     def filtered_employees(self) -> List[Employee]:
@@ -158,10 +134,7 @@ class DashboardState(rx.State):
         filtered = self.employees
         if self.selected_department != "All":
             filtered = [
-                emp
-                for emp in filtered
-                if emp["department"]
-                == self.selected_department
+                emp for emp in filtered if emp["department"] == self.selected_department
             ]
         if self.search_query:
             search_lower = self.search_query.lower()
@@ -171,10 +144,7 @@ class DashboardState(rx.State):
                 if search_lower in emp["first_name"].lower()
                 or search_lower in emp["last_name"].lower()
                 or search_lower in emp["email"].lower()
-                or (
-                    search_lower
-                    in emp["department"].lower()
-                )
+                or (search_lower in emp["department"].lower())
             ]
         return filtered
 
@@ -190,14 +160,11 @@ class DashboardState(rx.State):
             target_employees = [
                 emp
                 for emp in self.employees
-                if emp["department"]
-                == self.selected_department
+                if emp["department"] == self.selected_department
             ]
         if not target_employees:
             return []
-        dept_counts = Counter(
-            (emp["department"] for emp in target_employees)
-        )
+        dept_counts = Counter((emp["department"] for emp in target_employees))
         return [
             DepartmentData(name=dept, value=count)
             for dept, count in dept_counts.items()

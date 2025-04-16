@@ -1,15 +1,15 @@
 """Basic Dashboard App"""
 
 import reflex as rx
-from business_analytics_dashboard.components.sidebar import sidebar
+
 from business_analytics_dashboard.components.account_executive_metrics import (
     account_executive_metrics_table,
 )
 from business_analytics_dashboard.components.department_pie_chart import (
     department_pie_chart,
 )
+from business_analytics_dashboard.components.sidebar import sidebar
 from business_analytics_dashboard.states.dashboard_state import DashboardState
-from rxconfig import config
 
 
 def expense_analysis_component() -> rx.Component:
@@ -32,8 +32,7 @@ def expense_analysis_component() -> rx.Component:
                         class_name="text-lg text-gray-700 font-medium",
                     ),
                     rx.el.p(
-                        "$ "
-                        + DashboardState.formatted_total_expense,
+                        "$ " + DashboardState.formatted_total_expense,
                         class_name="text-3xl font-bold text-blue-600",
                     ),
                     class_name="mb-4",
@@ -44,8 +43,7 @@ def expense_analysis_component() -> rx.Component:
                         class_name="text-lg text-gray-700 font-medium",
                     ),
                     rx.el.p(
-                        "$ "
-                        + DashboardState.formatted_average_expense,
+                        "$ " + DashboardState.formatted_average_expense,
                         class_name="text-2xl font-semibold text-green-600",
                     ),
                 ),

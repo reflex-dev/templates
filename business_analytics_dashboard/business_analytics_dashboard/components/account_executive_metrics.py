@@ -1,4 +1,5 @@
 import reflex as rx
+
 from business_analytics_dashboard.states.dashboard_state import DashboardState
 
 
@@ -19,9 +20,7 @@ def account_executive_metrics_table() -> rx.Component:
                 rx.el.select(
                     rx.foreach(
                         DashboardState.available_departments,
-                        lambda dept: rx.el.option(
-                            dept, value=dept
-                        ),
+                        lambda dept: rx.el.option(dept, value=dept),
                     ),
                     id="department-select",
                     value=DashboardState.selected_department,
@@ -33,9 +32,7 @@ def account_executive_metrics_table() -> rx.Component:
             rx.el.input(
                 type="text",
                 placeholder="Search in table...",
-                on_change=DashboardState.set_search_query.debounce(
-                    500
-                ),
+                on_change=DashboardState.set_search_query.debounce(500),
                 class_name="w-full md:w-auto p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900 placeholder-gray-400",
             ),
             class_name="flex flex-col md:flex-row justify-between items-center mb-6 space-y-4 md:space-y-0",
@@ -106,19 +103,14 @@ def account_executive_metrics_table() -> rx.Component:
                     ),
                     rx.cond(
                         ~DashboardState.loading
-                        & (
-                            DashboardState.filtered_employees.length()
-                            == 0
-                        ),
+                        & (DashboardState.filtered_employees.length() == 0),
                         rx.el.caption(
                             rx.el.p(
                                 rx.cond(
-                                    DashboardState.search_query
-                                    != "",
+                                    DashboardState.search_query != "",
                                     "No employees match your search or filter.",
                                     rx.cond(
-                                        DashboardState.selected_department
-                                        != "All",
+                                        DashboardState.selected_department != "All",
                                         "No employees found in the selected department.",
                                         "No employee data available.",
                                     ),

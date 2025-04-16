@@ -1,7 +1,8 @@
 import reflex as rx
 import reflex.components.recharts as recharts
-from business_analytics_dashboard.states.dashboard_state import DashboardState
+
 from business_analytics_dashboard.components.tooltip_props import TOOLTIP_PROPS
+from business_analytics_dashboard.states.dashboard_state import DashboardState
 
 
 def department_pie_chart() -> rx.Component:
@@ -18,19 +19,15 @@ def department_pie_chart() -> rx.Component:
                 class_name="text-gray-500 text-center",
             ),
             rx.cond(
-                DashboardState.department_distribution.length()
-                > 0,
+                DashboardState.department_distribution.length() > 0,
                 recharts.pie_chart(
-                    recharts.graphing_tooltip(
-                        **TOOLTIP_PROPS
-                    ),
+                    recharts.graphing_tooltip(**TOOLTIP_PROPS),
                     recharts.pie(
                         rx.foreach(
                             DashboardState.department_distribution,
                             lambda _, index: recharts.cell(
                                 fill=DashboardState.department_colors[
-                                    index
-                                    % DashboardState.department_colors.length()
+                                    index % DashboardState.department_colors.length()
                                 ]
                             ),
                         ),
@@ -39,7 +36,6 @@ def department_pie_chart() -> rx.Component:
                         name_key="name",
                         cx="50%",
                         cy="50%",
-
                         outer_radius="80%",
                         padding_angle=5,
                         stroke="0",
@@ -48,8 +44,8 @@ def department_pie_chart() -> rx.Component:
                         custom_attrs={
                             "fontSize": "12px",
                             "fontWeight": "bold",
-                            "paddingAngle": 3, 
-                            "cornerRadius": 5
+                            "paddingAngle": 3,
+                            "cornerRadius": 5,
                         },
                     ),
                     recharts.legend(
@@ -66,8 +62,7 @@ def department_pie_chart() -> rx.Component:
                 ),
                 rx.el.p(
                     rx.cond(
-                        DashboardState.selected_department
-                        != "All",
+                        DashboardState.selected_department != "All",
                         f"No employee data available for the '{DashboardState.selected_department}' department.",
                         "No employee data available to display the chart.",
                     ),
