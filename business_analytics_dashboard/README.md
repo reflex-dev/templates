@@ -1,0 +1,1 @@
+Data scheme from the following DB URL: postgresql://postgres.btwpzljfglhpylzukstx:L2oFgi6CAijm6e3P@aws-0-us-west-1.pooler.supabase.com:6543/postgres

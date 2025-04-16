@@ -63,6 +63,11 @@
       "name": "reflex-llamaindex-template",
       "description": "A template for LlamaIndex.",
       "hidden": false
+    },
+    {
+      "name": "business_analytics_dashboard",
+      "description": "A business analytics dashboard.",
+      "hidden": false
     }
   ]
 }
