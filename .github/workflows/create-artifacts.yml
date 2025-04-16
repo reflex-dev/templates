@@ -38,7 +38,13 @@ jobs:
           aws-region: auto
       - name: Upload directory to R2
         run: |
-          aws s3 sync ./${{ matrix.directory }} s3://${{ secrets.R2_BUCKET_NAME_DEV }}/${{ matrix.directory }} --endpoint-url ${{ secrets.R2_ENDPOINT_URL }}
+          # Create a temporary directory with the project structure
+          mkdir -p temp_upload/templates/${{ matrix.directory }}
+          cp -r ./${{ matrix.directory }}/* temp_upload/templates/${{ matrix.directory }}/
+          # Upload the structured directory to R2
+          aws s3 sync temp_upload/ s3://${{ secrets.R2_BUCKET_NAME_DEV }}/ --endpoint-url ${{ secrets.R2_ENDPOINT_URL_DEV }}
+          # Clean up
+          rm -rf temp_upload
         shell: bash
 
   upload-templates-json:
@@ -55,7 +61,7 @@ jobs:
           aws-region: auto
       - name: Upload templates.json to R2
         run: |
-          aws s3 cp ./templates.json s3://${{ secrets.R2_BUCKET_NAME_DEV }}/templates.json --endpoint-url ${{ secrets.R2_ENDPOINT_URL_DEV }}
+          aws s3 cp ./templates.json s3://${{ secrets.R2_BUCKET_NAME_DEV }}/templates/templates.json --endpoint-url ${{ secrets.R2_ENDPOINT_URL_DEV }}
         shell: bash
       - name: Upload templates.json as release asset (for backward compatibility)
         uses: actions/upload-release-asset@v1
