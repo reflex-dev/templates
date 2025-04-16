@@ -63,6 +63,11 @@
       "name": "reflex-llamaindex-template",
       "description": "A template for LlamaIndex.",
       "hidden": false
+    },
+    {
+      "name": "admin_dashboard",
+      "description": "An admin dashboard",
+      "hidden": false
     }
   ]
 }
