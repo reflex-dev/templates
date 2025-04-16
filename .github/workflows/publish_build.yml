@@ -1,0 +1,23 @@
+name: Publish Templates
+on:
+  push:
+  release:
+    types: [published]
+jobs:
+  zip-and-publish:
+    runs-on: ubuntu-latest
+    environment: Reflex Build Dev
+    steps:
+      - name: Checkout code with submodules
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Upload all files in subfolders to R2
+        env:
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+        run: |
+          pip install boto3
+          python scripts/upload.py
