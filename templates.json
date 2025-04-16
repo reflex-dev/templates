@@ -6,6 +6,7 @@
       "demo_url": "https://blank-template.reflex.run",
       "hidden": false,
       "id": "00000000-0000-0000-0000-000000000000"
+      "reflex_build": true
     },
     {
       "name": "dashboard",
@@ -13,6 +14,7 @@
       "demo_url": "https://dashboard-new.reflex.run/",
       "hidden": false,
       "id": "00000000-0000-0000-0000-000000000000"
+      "reflex_build": true
     },
     {
       "name": "sidebar",
@@ -20,6 +22,7 @@
       "demo_url": "https://sidebar-template.reflex.run",
       "hidden": true,
       "id": "00000000-0000-0000-0000-000000000000"
+      "reflex_build": true
     },
     {
       "name": "sales",
@@ -27,6 +30,7 @@
       "demo_url": "https://sales-new.reflex.run/",
       "hidden": false,
       "id": "00000000-0000-0000-0000-000000000000"
+      "reflex_build": true
     },
     {
       "name": "ai_image_gen",
@@ -34,6 +38,7 @@
       "demo_url": "https://ai-image-gen.reflex.run/",
       "hidden": false,
       "id": "00000000-0000-0000-0000-000000000000"
+      "reflex_build": false
     },
     {
       "name": "ci_template",
@@ -41,6 +46,7 @@
       "demo_url": "https://cijob.reflex.run/",
       "hidden": false,
       "id": "00000000-0000-0000-0000-000000000000"
+      "reflex_build": true
     },
     {
       "name": "api_admin_panel",
@@ -48,6 +54,7 @@
       "demo_url": "https://api-admin-panel.reflex.run/",
       "hidden": false,
       "id": "00000000-0000-0000-0000-000000000000"
+      "reflex_build": true
     },
     {
       "name": "nba",
@@ -55,6 +62,7 @@
       "demo_url": "https://nba-new.reflex.run/",
       "hidden": false,
       "id": "00000000-0000-0000-0000-000000000000"
+      "reflex_build": true
     },
     {
       "name": "customer_data_app",
@@ -62,18 +70,21 @@
       "demo_url": "https://customer-data-app.reflex.run/",
       "hidden": false,
       "id": "00000000-0000-0000-0000-000000000000"
+      "reflex_build": false
     },
     {
       "name": "reflex-chat",
       "description": "A chat app built with Reflex.",
       "hidden": false,
       "id": "00000000-0000-0000-0000-000000000000"
+      "reflex_build": false
     },
     {
       "name": "reflex-llamaindex-template",
       "description": "A template for LlamaIndex.",
       "hidden": false,
       "id": "00000000-0000-0000-0000-000000000000"
+      "reflex_build": false
     }
   ]
 }
