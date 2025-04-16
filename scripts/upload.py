@@ -3,6 +3,7 @@ import json
 import boto3
 from botocore.client import Config
 import mimetypes
+import uuid
 
 # Read credentials and config from environment variables
 R2_ACCESS_KEY_ID = os.environ["R2_ACCESS_KEY_ID"]
@@ -24,7 +25,6 @@ def upload_file(local_path, s3_key):
     extra_args = {"ContentType": content_type} if content_type else {}
     with open(local_path, "rb") as f:
         s3.upload_fileobj(f, R2_BUCKET, s3_key, ExtraArgs=extra_args)
-    print(f"Uploaded {local_path} to s3://{R2_BUCKET}/{s3_key}")
 
 def upload_preview_file(local_path, bucket, s3_key):
     content_type, _ = mimetypes.guess_type(local_path)
@@ -32,7 +32,6 @@ def upload_preview_file(local_path, bucket, s3_key):
     # Use the same credentials and endpoint, but different bucket
     with open(local_path, "rb") as f:
         s3.upload_fileobj(f, bucket, s3_key, ExtraArgs=extra_args)
-    print(f"Uploaded {local_path} to s3://{bucket}/{s3_key}")
 
 def main():
     root = os.path.dirname(os.path.abspath(__file__))
@@ -40,8 +39,12 @@ def main():
     templates_json = os.path.join(base, "templates.json")
     with open(templates_json, "r") as f:
         templates = json.load(f)["templates"]
-    name_to_id = {t["name"]: t["id"] for t in templates if t.get("id")}
-    for template_name, template_id in name_to_id.items():
+    # Only publish templates with reflex_build true
+    for t in templates:
+        if not t.get("reflex_build", False):
+            continue
+        template_name = t["name"]
+        template_id = str(uuid.uuid5(uuid.NAMESPACE_DNS, template_name))
         template_path = os.path.join(base, template_name)
         if os.path.isdir(template_path):
             purge_id_path(template_id)

@@ -5,7 +5,6 @@
       "description": "A minimal template.",
       "demo_url": "https://blank-template.reflex.run",
       "hidden": false,
-      "id": "00000000-0000-0000-0000-000000000000"
       "reflex_build": true
     },
     {
@@ -13,7 +12,6 @@
       "description": "A dashboard with tables and graphs.",
       "demo_url": "https://dashboard-new.reflex.run/",
       "hidden": false,
-      "id": "00000000-0000-0000-0000-000000000000"
       "reflex_build": true
     },
     {
@@ -21,7 +19,6 @@
       "description": "A template with a sidebar to navigate pages.",
       "demo_url": "https://sidebar-template.reflex.run",
       "hidden": true,
-      "id": "00000000-0000-0000-0000-000000000000"
       "reflex_build": true
     },
     {
@@ -29,7 +26,6 @@
       "description": "An app to manage sales and customers.",
       "demo_url": "https://sales-new.reflex.run/",
       "hidden": false,
-      "id": "00000000-0000-0000-0000-000000000000"
       "reflex_build": true
     },
     {
@@ -37,7 +33,6 @@
       "description": "An app to generate images using AI.",
       "demo_url": "https://ai-image-gen.reflex.run/",
       "hidden": false,
-      "id": "00000000-0000-0000-0000-000000000000"
       "reflex_build": false
     },
     {
@@ -45,7 +40,6 @@
       "description": "A template for continuous integration.",
       "demo_url": "https://cijob.reflex.run/",
       "hidden": false,
-      "id": "00000000-0000-0000-0000-000000000000"
       "reflex_build": true
     },
     {
@@ -53,7 +47,6 @@
       "description": "An admin panel for an api.",
       "demo_url": "https://api-admin-panel.reflex.run/",
       "hidden": false,
-      "id": "00000000-0000-0000-0000-000000000000"
       "reflex_build": true
     },
     {
@@ -61,7 +54,6 @@
       "description": "A data visualization app for NBA data.",
       "demo_url": "https://nba-new.reflex.run/",
       "hidden": false,
-      "id": "00000000-0000-0000-0000-000000000000"
       "reflex_build": true
     },
     {
@@ -69,21 +61,19 @@
       "description": "An app to manage customer data.",
       "demo_url": "https://customer-data-app.reflex.run/",
       "hidden": false,
-      "id": "00000000-0000-0000-0000-000000000000"
       "reflex_build": false
     },
     {
       "name": "reflex-chat",
       "description": "A chat app built with Reflex.",
       "hidden": false,
-      "id": "00000000-0000-0000-0000-000000000000"
+      "id": "00000000-0000-0000-0000-000000000000",
       "reflex_build": false
     },
     {
       "name": "reflex-llamaindex-template",
       "description": "A template for LlamaIndex.",
       "hidden": false,
-      "id": "00000000-0000-0000-0000-000000000000"
       "reflex_build": false
     }
   ]
