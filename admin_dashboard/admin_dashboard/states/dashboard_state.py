@@ -1,13 +1,14 @@
-import reflex as rx
-from typing import (
-    TypedDict,
-    Optional,
-    List,
-    Dict,
-    Union,
-    Literal,
-)
 from datetime import datetime
+from typing import (
+    Dict,
+    List,
+    Literal,
+    Optional,
+    TypedDict,
+    Union,
+)
+
+import reflex as rx
 
 
 class CustomerData(TypedDict):
@@ -338,9 +339,7 @@ initial_customer_data = [
 processed_customers = [
     {
         **customer,
-        "next_renewal_date": parse_date(
-            customer["next_renewal"]
-        ),
+        "next_renewal_date": parse_date(customer["next_renewal"]),
     }
     for customer in initial_customer_data
 ]
@@ -349,9 +348,7 @@ valid_customers = [
     for customer in processed_customers
     if customer["next_renewal_date"] is not None
 ]
-SortColumn = Literal[
-    "next_renewal", "revenue", "licenses", "active_licenses"
-]
+SortColumn = Literal["next_renewal", "revenue", "licenses", "active_licenses"]
 SortOrder = Literal["asc", "desc"]
 
 
@@ -384,31 +381,22 @@ class DashboardState(rx.State):
             customers_to_filter = [
                 customer
                 for customer in customers_to_filter
-                if search_lower
-                in customer["customer_name"].lower()
+                if search_lower in customer["customer_name"].lower()
             ]
         if self.sort_column is not None:
 
             def sort_key(customer: CustomerData):
                 if self.sort_column == "next_renewal":
-                    date_val = customer.get(
-                        "next_renewal_date"
-                    )
+                    date_val = customer.get("next_renewal_date")
                     if date_val is None:
                         return (
-                            datetime.max
-                            if self.sort_order == "asc"
-                            else datetime.min
+                            datetime.max if self.sort_order == "asc" else datetime.min
                         )
                     return date_val
                 key_value = customer.get(self.sort_column)
                 if isinstance(key_value, (int, float)):
                     return key_value
-                return (
-                    float("-inf")
-                    if self.sort_order == "asc"
-                    else float("inf")
-                )
+                return float("-inf") if self.sort_order == "asc" else float("inf")
 
             customers_to_filter = sorted(
                 customers_to_filter,
@@ -453,11 +441,7 @@ class DashboardState(rx.State):
     def sort_by(self, column_key: SortColumn):
         """Toggle sorting for a specific column."""
         if self.sort_column == column_key:
-            self.sort_order = (
-                "desc"
-                if self.sort_order == "asc"
-                else "asc"
-            )
+            self.sort_order = "desc" if self.sort_order == "asc" else "asc"
         else:
             self.sort_column = column_key
             self.sort_order = "asc"

@@ -1,4 +1,5 @@
 import reflex as rx
+
 from admin_dashboard.states.dashboard_state import (
     DashboardState,
     SortColumn,
@@ -124,19 +125,13 @@ def table_header(col: str) -> rx.Component:
                 col,
                 sort_icon(column_key),
                 class_name="flex items-center cursor-pointer hover:text-gray-700 transition-colors duration-150 ease-in-out",
-                style={
-                    "justify_content": justify_content_val
-                },
+                style={"justify_content": justify_content_val},
             ),
             scope="col",
             class_name=combined_class,
-            on_click=lambda: DashboardState.sort_by(
-                column_key
-            ),
+            on_click=lambda: DashboardState.sort_by(column_key),
         ),
-        rx.el.th(
-            col, scope="col", class_name=combined_class
-        ),
+        rx.el.th(col, scope="col", class_name=combined_class),
     )
 
 
@@ -151,9 +146,7 @@ def data_table() -> rx.Component:
                 ),
                 rx.el.input(
                     placeholder="Search by customer name",
-                    on_change=DashboardState.set_search_term.debounce(
-                        300
-                    ),
+                    on_change=DashboardState.set_search_term.debounce(300),
                     default_value=DashboardState.search_term,
                     key=f"search-input-{DashboardState.search_term}",
                     class_name="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm text-gray-800",
@@ -191,9 +184,7 @@ def data_table() -> rx.Component:
                             rx.el.td(
                                 rx.el.span(
                                     "$",
-                                    customer[
-                                        "revenue"
-                                    ].to_string(),
+                                    customer["revenue"].to_string(),
                                 ),
                                 class_name="px-4 py-3 whitespace-nowrap text-sm text-gray-700 text-right",
                             ),
@@ -208,45 +199,32 @@ def data_table() -> rx.Component:
                             rx.el.td(
                                 rx.el.span(
                                     rx.cond(
-                                        customer[
-                                            "active_license_growth"
-                                        ]
-                                        > 0,
+                                        customer["active_license_growth"] > 0,
                                         "+",
                                         "",
                                     ),
-                                    customer[
-                                        "active_license_growth"
-                                    ],
+                                    customer["active_license_growth"],
                                     "%",
                                 ),
                                 class_name=rx.cond(
-                                    customer[
-                                        "active_license_growth"
-                                    ]
-                                    > 0,
+                                    customer["active_license_growth"] > 0,
                                     "px-4 py-3 whitespace-nowrap text-sm text-green-600 text-center",
                                     "px-4 py-3 whitespace-nowrap text-sm text-red-600 text-center",
                                 ),
                             ),
                             rx.el.td(
-                                industry_tag(
-                                    customer["industry"]
-                                ),
+                                industry_tag(customer["industry"]),
                                 class_name="px-4 py-3 whitespace-nowrap text-sm text-left",
                             ),
                             rx.el.td(
-                                platform_tag(
-                                    customer["platform"]
-                                ),
+                                platform_tag(customer["platform"]),
                                 class_name="px-4 py-3 whitespace-nowrap text-sm text-left",
                             ),
                             on_click=lambda: DashboardState.select_customer(
                                 customer["id"]
                             ),
                             class_name=rx.cond(
-                                DashboardState.selected_customer_id
-                                == customer["id"],
+                                DashboardState.selected_customer_id == customer["id"],
                                 "bg-emerald-50 border-l-4 border-emerald-500 cursor-pointer hover:bg-emerald-100 transition-colors duration-150 ease-in-out",
                                 "border-b border-gray-200 cursor-pointer hover:bg-gray-50 transition-colors duration-150 ease-in-out",
                             ),
@@ -259,8 +237,7 @@ def data_table() -> rx.Component:
         ),
         rx.el.div(
             rx.el.p(
-                DashboardState.result_count.to_string()
-                + " results",
+                DashboardState.result_count.to_string() + " results",
                 class_name="text-sm text-gray-500 mt-4",
             ),
             class_name="flex justify-end",
