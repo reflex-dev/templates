@@ -1,75 +1,28 @@
-name: Zip and Publish Subfolders
+name: Publish Templates
 on:
   release:
     types: [published]
 jobs:
   zip-and-publish:
     runs-on: ubuntu-latest
-    outputs:
-      files: ${{ steps.list_zip_files.outputs.files }}
+    environment: Reflex Build Dev
     steps:
       - name: Checkout code with submodules
         uses: actions/checkout@v3
         with:
           submodules: recursive
-      - name: Create zip files for each subfolder
+      - name: Upload all files in subfolders to R2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.REFLEX_R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.REFLEX_R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: ${{ secrets.REFLEX_R2_BUCKET }}
+          R2_ENDPOINT: ${{ secrets.REFLEX_R2_ENDPOINT }}
         run: |
-          for dir in $(find . -mindepth 1 -maxdepth 1 -type d); do
-            zip -r "${dir##*/}.zip" "$dir"
+          pip install awscli
+          aws configure set aws_access_key_id "$AWS_ACCESS_KEY_ID"
+          aws configure set aws_secret_access_key "$AWS_SECRET_ACCESS_KEY"
+          aws configure set default.region us-east-1
+          aws configure set default.s3.endpoint_url "$R2_ENDPOINT"
+          for dir in $(find . -mindepth 1 -maxdepth 1 -type d ! -name '.git'); do
+            aws s3 cp "$dir" "s3://$R2_BUCKET/${dir#./}" --recursive --exclude "*.zip"
           done
-      - name: List zip files
-        id: list_zip_files
-        run: |
-          files=$(ls *.zip | jq -R . | jq -s . | tr -d '\n' | tr -d ' ')
-          echo "files=$files" >> $GITHUB_OUTPUT
-        shell: bash
-      - name: Upload zip files as artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: zip-files
-          path: "*.zip"
-
-  upload-artifacts:
-    needs: zip-and-publish
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        file: ${{ fromJson(needs.zip-and-publish.outputs.files) }}
-    steps:
-      - name: Download zip files
-        uses: actions/download-artifact@v4
-        with:
-          name: zip-files
-      - name: Debug output (file existence check)
-        run: |
-          if [ -e "${{ matrix.file }}" ]; then
-            echo "File '${{ matrix.file }}' exists."
-          else
-            echo "File '${{ matrix.file }}' does not exist."
-          fi
-        shell: bash
-      - name: Upload artifact
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./${{ matrix.file }}
-          asset_name: ${{ matrix.file }}
-          asset_content_type: application/zip
-
-  upload-templates-json:
-    needs: upload-artifacts
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: Upload templates.json as release asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./templates.json
-          asset_name: templates.json
-          asset_content_type: application/json
