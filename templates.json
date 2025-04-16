@@ -67,7 +67,6 @@
       "name": "reflex-chat",
       "description": "A chat app built with Reflex.",
       "hidden": false,
-      "id": "00000000-0000-0000-0000-000000000000",
       "reflex_build": false
     },
     {
