@@ -74,6 +74,12 @@
       "description": "A template for LlamaIndex.",
       "hidden": false,
       "reflex_build": false
+    },
+    {
+      "name": "account_management_dashboard",
+      "description": "An account management dashboard app",
+      "hidden": false,
+      "reflex_build": false
     }
   ]
 }
