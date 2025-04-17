@@ -1,6 +1,7 @@
+import reflex as rx
+
 from admin_dashboard.states.dashboard_state import DashboardState, SortColumn
 
-import reflex as rx
 
 def platform_tag(platform: rx.Var[str]) -> rx.Component:
     """Renders a colored tag based on the platform."""

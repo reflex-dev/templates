@@ -7,8 +7,10 @@ from typing import (
     TypedDict,
     Union,
 )
-from admin_dashboard.states.initial_data import initial_data
+
 import reflex as rx
+
+from admin_dashboard.states.initial_data import initial_data
 
 
 class CustomerData(TypedDict):

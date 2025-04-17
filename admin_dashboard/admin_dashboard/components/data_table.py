@@ -1,11 +1,10 @@
 import reflex as rx
 
+from admin_dashboard.components.tags_icons import industry_tag, platform_tag, sort_icon
 from admin_dashboard.states.dashboard_state import (
     DashboardState,
     SortColumn,
 )
-
-from admin_dashboard.components.tags_icons import industry_tag, platform_tag, sort_icon
 
 
 def table_header(col: str) -> rx.Component:
