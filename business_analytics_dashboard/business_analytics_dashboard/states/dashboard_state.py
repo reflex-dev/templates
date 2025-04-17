@@ -1,15 +1,23 @@
-from collections import Counter
-from typing import List, TypedDict
-
 import reflex as rx
-from sqlalchemy import text
-
+from typing import List, Dict, TypedDict
 from business_analytics_dashboard.models.employee import Employee
+from collections import Counter, defaultdict
+import random
+from faker import Faker
+import asyncio
+import statistics
+
+fake = Faker()
 
 
 class DepartmentData(TypedDict):
     name: str
     value: int
+
+
+class AverageSalaryData(TypedDict):
+    department: str
+    average_salary: float
 
 
 class DashboardState(rx.State):
@@ -19,114 +27,96 @@ class DashboardState(rx.State):
     search_query: str = ""
     selected_department: str = "All"
     loading: bool = False
-    loading_revenue: bool = False
-    total_expense_amount: float = 0.0
-    average_expense_amount: float = 0.0
-    department_colors: list[str] = [
-        "#2B79D1",
-        "#2469B3",
-        "#1E5AA1",
-        "#3D8EE1",
-        "#61A9E4",
-        "#8BC34A",
-        "#CDDC39",
+    _base_department_colors: list[str] = [
+        "#FF6347",
+        "#4CAF50",
         "#FFEB3B",
+        "#2196F3",
+        "#9C27B0",
         "#FFC107",
+        "#8BC34A",
         "#FF9800",
+        "#F44336",
+        "#00BCD4",
     ]
 
     @rx.event(background=True)
     async def fetch_dashboard_data(self):
-        """Fetch all necessary data for the dashboard."""
+        """Generate fake data for the dashboard."""
         async with self:
             self.loading = True
-            self.loading_revenue = True
-        yield DashboardState.fetch_employees
-        yield DashboardState.fetch_total_expense_amount
-        yield DashboardState.fetch_average_expense_amount
+        await asyncio.sleep(0.5)
+        await self._generate_fake_data()
+        async with self:
+            self.loading = False
 
-    @rx.event(background=True)
-    async def fetch_employees(self):
-        """Fetch employees from the database."""
-        try:
-            async with rx.asession() as session:
-                result = await session.execute(
-                    text(
-                        "\n                        SELECT employee_id, first_name, last_name, email, department\n                        FROM employees\n                        "
-                    )
+    async def _generate_fake_data(self):
+        """Helper method to generate fake employee data."""
+        departments = [
+            "Sales",
+            "Marketing",
+            "Engineering",
+            "Support",
+            "HR",
+            "Finance",
+        ]
+        employees_data = []
+        for i in range(1, 51):
+            first_name = fake.first_name()
+            last_name = fake.last_name()
+            department = random.choice(departments)
+            employees_data.append(
+                Employee(
+                    employee_id=1000 + i,
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=fake.email(),
+                    department=department,
+                    salary=random.randint(50000, 150000),
+                    projects_closed=random.randint(0, 20),
+                    pending_projects=random.randint(0, 5),
                 )
-                rows = result.fetchall()
-                employees_data = [
-                    Employee(
-                        employee_id=row[0],
-                        first_name=row[1],
-                        last_name=row[2],
-                        email=row[3],
-                        department=row[4],
-                    )
-                    for row in rows
-                ]
-                async with self:
-                    self.employees = employees_data
-        except Exception:
-            async with self:
-                self.employees = []
-        finally:
-            async with self:
-                self.loading = False
-
-    @rx.event(background=True)
-    async def fetch_total_expense_amount(self):
-        """Fetch total expense amount from the database."""
-        try:
-            async with rx.asession() as session:
-                result = await session.execute(
-                    text(
-                        "\n                        SELECT SUM(total_amount)\n                        FROM expense_reports\n                        "
-                    )
-                )
-                total_amount_decimal = result.scalar_one_or_none()
-                async with self:
-                    self.total_expense_amount = (
-                        float(total_amount_decimal) if total_amount_decimal else 0.0
-                    )
-        except Exception:
-            async with self:
-                self.total_expense_amount = 0.0
-        finally:
-            async with self:
-                if not self.loading:
-                    self.loading_revenue = False
-
-    @rx.event(background=True)
-    async def fetch_average_expense_amount(self):
-        """Fetch average expense amount from the database."""
-        try:
-            async with rx.asession() as session:
-                result = await session.execute(
-                    text(
-                        "\n                        SELECT AVG(total_amount)\n                        FROM expense_reports\n                        "
-                    )
-                )
-                avg_amount_decimal = result.scalar_one_or_none()
-                async with self:
-                    self.average_expense_amount = (
-                        float(avg_amount_decimal) if avg_amount_decimal else 0.0
-                    )
-        except Exception:
-            async with self:
-                self.average_expense_amount = 0.0
-        finally:
-            async with self:
-                self.loading_revenue = False
+            )
+        async with self:
+            self.employees = employees_data
 
     @rx.var
     def available_departments(self) -> list[str]:
-        """Get a sorted list of unique departments."""
+        """Get a sorted list of unique departments including 'All'."""
         if not self.employees:
             return ["All"]
-        departments = sorted({emp["department"] for emp in self.employees})
-        return ["All", *departments]
+        departments = sorted(
+            list(
+                set(
+                    (
+                        emp["department"]
+                        for emp in self.employees
+                    )
+                )
+            )
+        )
+        return ["All"] + departments
+
+    @rx.var
+    def departments_for_filter(self) -> list[str]:
+        """Get a sorted list of unique departments excluding 'All'."""
+        return [
+            dept
+            for dept in self.available_departments
+            if dept != "All"
+        ]
+
+    @rx.var
+    def department_color_map(self) -> Dict[str, str]:
+        """Maps each department to a consistent color."""
+        departments = self.departments_for_filter
+        color_map = {}
+        num_colors = len(self._base_department_colors)
+        for i, dept in enumerate(departments):
+            color_map[dept] = self._base_department_colors[
+                i % num_colors
+            ]
+        return color_map
 
     @rx.var
     def filtered_employees(self) -> List[Employee]:
@@ -134,7 +124,10 @@ class DashboardState(rx.State):
         filtered = self.employees
         if self.selected_department != "All":
             filtered = [
-                emp for emp in filtered if emp["department"] == self.selected_department
+                emp
+                for emp in filtered
+                if emp["department"]
+                == self.selected_department
             ]
         if self.search_query:
             search_lower = self.search_query.lower()
@@ -144,7 +137,19 @@ class DashboardState(rx.State):
                 if search_lower in emp["first_name"].lower()
                 or search_lower in emp["last_name"].lower()
                 or search_lower in emp["email"].lower()
-                or (search_lower in emp["department"].lower())
+                or (
+                    search_lower
+                    in emp["department"].lower()
+                )
+                or (search_lower in str(emp["salary"]))
+                or (
+                    search_lower
+                    in str(emp["projects_closed"])
+                )
+                or (
+                    search_lower
+                    in str(emp["pending_projects"])
+                )
             ]
         return filtered
 
@@ -152,33 +157,103 @@ class DashboardState(rx.State):
     def department_distribution(
         self,
     ) -> List[DepartmentData]:
-        """Calculate the distribution of employees for the selected department or all."""
+        """Calculate the distribution of employees by department."""
         if not self.employees:
             return []
         target_employees = self.employees
         if self.selected_department != "All":
             target_employees = [
                 emp
-                for emp in self.employees
-                if emp["department"] == self.selected_department
+                for emp in target_employees
+                if emp["department"]
+                == self.selected_department
             ]
-        if not target_employees:
+        if self.search_query:
+            search_lower = self.search_query.lower()
+            target_employees = [
+                emp
+                for emp in target_employees
+                if search_lower in emp["first_name"].lower()
+                or search_lower in emp["last_name"].lower()
+                or search_lower in emp["email"].lower()
+                or (
+                    search_lower
+                    in emp["department"].lower()
+                )
+                or (search_lower in str(emp["salary"]))
+                or (
+                    search_lower
+                    in str(emp["projects_closed"])
+                )
+                or (
+                    search_lower
+                    in str(emp["pending_projects"])
+                )
+            ]
+        if not target_employees and (
+            self.selected_department != "All"
+            or self.search_query
+        ):
             return []
-        dept_counts = Counter((emp["department"] for emp in target_employees))
+        dept_counts = Counter(
+            (emp["department"] for emp in target_employees)
+        )
+        if not dept_counts and (
+            self.selected_department != "All"
+            or self.search_query
+        ):
+            return []
+        elif (
+            not dept_counts
+            and self.selected_department == "All"
+            and (not self.search_query)
+        ):
+            dept_counts = Counter(
+                (
+                    emp["department"]
+                    for emp in self.employees
+                )
+            )
+            if not dept_counts:
+                return []
         return [
             DepartmentData(name=dept, value=count)
             for dept, count in dept_counts.items()
         ]
 
     @rx.var
-    def formatted_total_expense(self) -> str:
-        """Format the total expense amount as a string."""
-        return f"{self.total_expense_amount:,.2f}"
-
-    @rx.var
-    def formatted_average_expense(self) -> str:
-        """Format the average expense amount as a string."""
-        return f"{self.average_expense_amount:,.2f}"
+    def average_salary_by_department(
+        self,
+    ) -> list[AverageSalaryData]:
+        """Calculate the average salary for each department."""
+        if not self.employees:
+            return []
+        dept_salaries = defaultdict(list)
+        for emp in self.employees:
+            dept_salaries[emp["department"]].append(
+                emp["salary"]
+            )
+        avg_salaries = []
+        for dept in self.departments_for_filter:
+            salaries = dept_salaries.get(dept, [])
+            if salaries:
+                avg_salary = statistics.mean(salaries)
+                avg_salaries.append(
+                    AverageSalaryData(
+                        department=dept,
+                        average_salary=round(avg_salary, 2),
+                    )
+                )
+            else:
+                pass
+        if self.selected_department != "All":
+            avg_salaries = [
+                item
+                for item in avg_salaries
+                if item["department"]
+                == self.selected_department
+            ]
+        return avg_salaries
 
     @rx.event
     def set_search_query(self, value: str):

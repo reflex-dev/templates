@@ -21,10 +21,11 @@ TOOLTIP_PROPS = {
         "fontWeight": "500",
         "letterSpacing": "-0.01rem",
         "minWidth": "8rem",
-        "width": "170px",
+        "width": "200px",
         "padding": "0.375rem 0.625rem",
         "position": "relative",
         "background": rx.color("gray", 1),
         "borderColor": rx.color("gray", 4),
     },
+    "label_style": {"color": rx.color("gray", 11)},
 }

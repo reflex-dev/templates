@@ -1,8 +1,7 @@
 import reflex as rx
 import reflex.components.recharts as recharts
-
-from business_analytics_dashboard.components.tooltip_props import TOOLTIP_PROPS
 from business_analytics_dashboard.states.dashboard_state import DashboardState
+from business_analytics_dashboard.components.tooltip_props import TOOLTIP_PROPS
 
 
 def department_pie_chart() -> rx.Component:
@@ -10,7 +9,7 @@ def department_pie_chart() -> rx.Component:
     return rx.el.div(
         rx.el.h2(
             "Department Distribution",
-            class_name="text-2xl font-semibold text-gray-800 mb-4 text-center",
+            class_name="text-lg font-semibold text-gray-800 mb-4 text-center",
         ),
         rx.cond(
             DashboardState.loading,
@@ -19,16 +18,20 @@ def department_pie_chart() -> rx.Component:
                 class_name="text-gray-500 text-center",
             ),
             rx.cond(
-                DashboardState.department_distribution.length() > 0,
+                DashboardState.department_distribution.length()
+                > 0,
                 recharts.pie_chart(
-                    recharts.graphing_tooltip(**TOOLTIP_PROPS),
+                    recharts.graphing_tooltip(
+                        **TOOLTIP_PROPS
+                    ),
                     recharts.pie(
                         rx.foreach(
                             DashboardState.department_distribution,
-                            lambda _, index: recharts.cell(
-                                fill=DashboardState.department_colors[
-                                    index % DashboardState.department_colors.length()
-                                ]
+                            lambda data_point, _: recharts.cell(
+                                fill=DashboardState.department_color_map.get(
+                                    data_point["name"],
+                                    "#8884d8",
+                                )
                             ),
                         ),
                         data=DashboardState.department_distribution,
@@ -62,8 +65,20 @@ def department_pie_chart() -> rx.Component:
                 ),
                 rx.el.p(
                     rx.cond(
-                        DashboardState.selected_department != "All",
-                        f"No employee data available for the '{DashboardState.selected_department}' department.",
+                        (
+                            DashboardState.selected_department
+                            != "All"
+                        )
+                        | (
+                            DashboardState.search_query
+                            != ""
+                        ),
+                        rx.cond(
+                            DashboardState.search_query
+                            != "",
+                            "No employee data matches your search criteria.",
+                            f"No employee data available for the '{DashboardState.selected_department}' department.",
+                        ),
                         "No employee data available to display the chart.",
                     ),
                     class_name="text-gray-500 text-center py-10",

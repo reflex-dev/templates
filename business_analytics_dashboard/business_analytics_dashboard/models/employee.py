@@ -7,3 +7,6 @@ class Employee(TypedDict):
     last_name: str
     email: str
     department: str
+    salary: int
+    projects_closed: int
+    pending_projects: int

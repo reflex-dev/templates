@@ -1,7 +1,9 @@
 import reflex as rx
 
 
-def sidebar_link(text: str, url: str, is_active: bool) -> rx.Component:
+def sidebar_link(
+    text: str, url: str, is_active: bool
+) -> rx.Component:
     """Creates a sidebar link component."""
     return rx.el.a(
         rx.el.div(
@@ -22,8 +24,7 @@ def sidebar() -> rx.Component:
     return rx.el.div(
         rx.el.div(
             rx.el.label(
-                "Analytics",
-                class_name="text-lg font-bold",
+                "Analytics", class_name="text-lg font-bold"
             ),
             class_name="px-6 py-2 mb-4 flex justify-start",
         ),
