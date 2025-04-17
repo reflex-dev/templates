@@ -4,7 +4,7 @@ on:
 jobs:
   zip-and-publish:
     runs-on: ubuntu-latest
-    environment: Reflex Build Dev
+    environment: Reflex Build Stg
     steps:
       - name: Checkout code with submodules
         uses: actions/checkout@v3
