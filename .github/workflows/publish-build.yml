@@ -1,8 +1,6 @@
 name: Publish Templates
 on:
-  push:
-  release:
-    types: [published]
+  workflow_dispatch:
 jobs:
   zip-and-publish:
     runs-on: ubuntu-latest
