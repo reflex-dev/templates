@@ -1,4 +1,4 @@
-name: Publish Templates
+name: Publish Templates Prod
 on:
   workflow_dispatch:
 jobs:
