@@ -47,21 +47,31 @@ def main():
         template_id = str(uuid.uuid5(uuid.NAMESPACE_DNS, template_name))
         template_path = os.path.join(base, template_name)
         if os.path.isdir(template_path):
-            purge_id_path(template_id)
-            for dirpath, _, filenames in os.walk(template_path):
-                for filename in filenames:
-                    if filename.endswith(".zip"):
-                        continue
-                    local_path = os.path.join(dirpath, filename)
-                    rel_path = os.path.relpath(local_path, template_path)
-                    s3_key = f"{template_id}/{rel_path}"
-                    upload_file(local_path, s3_key)
-            # Upload preview.png if it exists in the base of the template directory
-            preview_path = os.path.join(template_path, "preview.png")
-            if os.path.isfile(preview_path):
-                preview_bucket = "preview-images-dev"
-                preview_s3_key = f"{template_id}/00000000-0000-0000-0000-000000000000.png"
-                upload_preview_file(preview_path, preview_bucket, preview_s3_key)
+            import tempfile, shutil, subprocess
+            with tempfile.TemporaryDirectory() as tmpdir:
+                temp_template_path = os.path.join(tmpdir, template_name)
+                shutil.copytree(template_path, temp_template_path)
+                # Run 'reflex rename app' in the temp directory
+                try:
+                    subprocess.run(["reflex", "rename", "app"], cwd=temp_template_path, check=True)
+                except Exception as e:
+                    print(f"Failed to run 'reflex rename app' for {template_name}: {e}")
+                    continue
+                purge_id_path(template_id)
+                for dirpath, _, filenames in os.walk(temp_template_path):
+                    for filename in filenames:
+                        if filename.endswith(".zip"):
+                            continue
+                        local_path = os.path.join(dirpath, filename)
+                        rel_path = os.path.relpath(local_path, temp_template_path)
+                        s3_key = f"{template_id}/{rel_path}"
+                        upload_file(local_path, s3_key)
+                # Upload preview.png if it exists in the base of the template directory
+                preview_path = os.path.join(temp_template_path, "preview.png")
+                if os.path.isfile(preview_path):
+                    preview_bucket = "preview-images-dev"
+                    preview_s3_key = f"{template_id}/00000000-0000-0000-0000-000000000000.png"
+                    upload_preview_file(preview_path, preview_bucket, preview_s3_key)
 
 def purge_id_path(template_id):
     print(f"Purging s3://{R2_BUCKET}/{template_id}/ ...")
