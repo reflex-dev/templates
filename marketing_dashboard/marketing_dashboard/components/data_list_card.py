@@ -1,5 +1,6 @@
+from typing import Dict, List, Union
+
 import reflex as rx
-from typing import List, Dict, Union
 
 
 def data_list_card(

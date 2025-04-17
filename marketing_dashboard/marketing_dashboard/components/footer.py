@@ -1,7 +1,4 @@
 import reflex as rx
-from marketing_dashboard.states.marketing_dashboard_state import (
-    MarketingDashboardState,
-)
 
 
 def footer() -> rx.Component:

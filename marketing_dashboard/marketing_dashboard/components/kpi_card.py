@@ -1,5 +1,6 @@
-import reflex as rx
 from typing import Union
+
+import reflex as rx
 
 
 def kpi_card(

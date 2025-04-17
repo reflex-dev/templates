@@ -1,12 +1,13 @@
 import reflex as rx
+
+from marketing_dashboard.components.data_list_card import data_list_card
+from marketing_dashboard.components.footer import footer
+from marketing_dashboard.components.kpi_only_card import kpi_only_card
+from marketing_dashboard.components.line_chart_card import line_chart_card
+from marketing_dashboard.components.progress_card import progress_card
 from marketing_dashboard.states.marketing_dashboard_state import (
     MarketingDashboardState,
 )
-from marketing_dashboard.components.line_chart_card import line_chart_card
-from marketing_dashboard.components.progress_card import progress_card
-from marketing_dashboard.components.data_list_card import data_list_card
-from marketing_dashboard.components.kpi_only_card import kpi_only_card
-from marketing_dashboard.components.footer import footer
 
 
 def index() -> rx.Component:

@@ -1,7 +1,8 @@
-import reflex as rx
 import datetime
 import random
-from typing import List, Dict, Union
+from typing import Dict, List, Union
+
+import reflex as rx
 
 
 def generate_chart_data() -> List[Dict[str, Union[str, int]]]:
@@ -27,14 +28,9 @@ def generate_medium_data() -> List[Dict[str, Union[str, int]]]:
         "email",
         "(none)",
     ]
-    data = []
-    for medium in mediums:
-        data.append(
-            {
-                "medium": medium,
-                "value": random.randint(100, 1000),
-            }
-        )
+    data = [
+        {"medium": medium, "value": random.randint(100, 1000)} for medium in mediums
+    ]
     return data
 
 

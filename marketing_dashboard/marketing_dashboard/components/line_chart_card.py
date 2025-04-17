@@ -1,8 +1,9 @@
+from typing import Dict, List, Union
+
 import reflex as rx
-from typing import Union, List, Dict
+
 from marketing_dashboard.states.marketing_dashboard_state import (
     TOOLTIP_PROPS,
-    MarketingDashboardState,
 )
 
 
