@@ -1,18 +1,18 @@
 """Basic Dashboard App"""
 
 import reflex as rx
-from business_analytics_dashboard.components.sidebar import sidebar
+
 from business_analytics_dashboard.components.account_executive_metrics import (
     account_executive_metrics_table,
-)
-from business_analytics_dashboard.components.department_pie_chart import (
-    department_pie_chart,
 )
 from business_analytics_dashboard.components.average_salary_chart import (
     average_salary_bar_chart,
 )
+from business_analytics_dashboard.components.department_pie_chart import (
+    department_pie_chart,
+)
+from business_analytics_dashboard.components.sidebar import sidebar
 from business_analytics_dashboard.states.dashboard_state import DashboardState
-from rxconfig import config
 
 
 def index() -> rx.Component:

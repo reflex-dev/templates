@@ -1,11 +1,13 @@
-import reflex as rx
-from typing import List, Dict, TypedDict
-from business_analytics_dashboard.models.employee import Employee
-from collections import Counter, defaultdict
-import random
-from faker import Faker
 import asyncio
+import random
 import statistics
+from collections import Counter, defaultdict
+from typing import Dict, List, TypedDict
+
+import reflex as rx
+from faker import Faker
+
+from business_analytics_dashboard.models.employee import Employee
 
 fake = Faker()
 
@@ -85,26 +87,13 @@ class DashboardState(rx.State):
         """Get a sorted list of unique departments including 'All'."""
         if not self.employees:
             return ["All"]
-        departments = sorted(
-            list(
-                set(
-                    (
-                        emp["department"]
-                        for emp in self.employees
-                    )
-                )
-            )
-        )
-        return ["All"] + departments
+        departments = sorted({emp["department"] for emp in self.employees})
+        return ["All", *departments]
 
     @rx.var
     def departments_for_filter(self) -> list[str]:
         """Get a sorted list of unique departments excluding 'All'."""
-        return [
-            dept
-            for dept in self.available_departments
-            if dept != "All"
-        ]
+        return [dept for dept in self.available_departments if dept != "All"]
 
     @rx.var
     def department_color_map(self) -> Dict[str, str]:
@@ -113,9 +102,7 @@ class DashboardState(rx.State):
         color_map = {}
         num_colors = len(self._base_department_colors)
         for i, dept in enumerate(departments):
-            color_map[dept] = self._base_department_colors[
-                i % num_colors
-            ]
+            color_map[dept] = self._base_department_colors[i % num_colors]
         return color_map
 
     @rx.var
@@ -124,10 +111,7 @@ class DashboardState(rx.State):
         filtered = self.employees
         if self.selected_department != "All":
             filtered = [
-                emp
-                for emp in filtered
-                if emp["department"]
-                == self.selected_department
+                emp for emp in filtered if emp["department"] == self.selected_department
             ]
         if self.search_query:
             search_lower = self.search_query.lower()
@@ -137,19 +121,10 @@ class DashboardState(rx.State):
                 if search_lower in emp["first_name"].lower()
                 or search_lower in emp["last_name"].lower()
                 or search_lower in emp["email"].lower()
-                or (
-                    search_lower
-                    in emp["department"].lower()
-                )
+                or (search_lower in emp["department"].lower())
                 or (search_lower in str(emp["salary"]))
-                or (
-                    search_lower
-                    in str(emp["projects_closed"])
-                )
-                or (
-                    search_lower
-                    in str(emp["pending_projects"])
-                )
+                or (search_lower in str(emp["projects_closed"]))
+                or (search_lower in str(emp["pending_projects"]))
             ]
         return filtered
 
@@ -165,8 +140,7 @@ class DashboardState(rx.State):
             target_employees = [
                 emp
                 for emp in target_employees
-                if emp["department"]
-                == self.selected_department
+                if emp["department"] == self.selected_department
             ]
         if self.search_query:
             search_lower = self.search_query.lower()
@@ -176,44 +150,24 @@ class DashboardState(rx.State):
                 if search_lower in emp["first_name"].lower()
                 or search_lower in emp["last_name"].lower()
                 or search_lower in emp["email"].lower()
-                or (
-                    search_lower
-                    in emp["department"].lower()
-                )
+                or (search_lower in emp["department"].lower())
                 or (search_lower in str(emp["salary"]))
-                or (
-                    search_lower
-                    in str(emp["projects_closed"])
-                )
-                or (
-                    search_lower
-                    in str(emp["pending_projects"])
-                )
+                or (search_lower in str(emp["projects_closed"]))
+                or (search_lower in str(emp["pending_projects"]))
             ]
         if not target_employees and (
-            self.selected_department != "All"
-            or self.search_query
+            self.selected_department != "All" or self.search_query
         ):
             return []
-        dept_counts = Counter(
-            (emp["department"] for emp in target_employees)
-        )
-        if not dept_counts and (
-            self.selected_department != "All"
-            or self.search_query
-        ):
+        dept_counts = Counter((emp["department"] for emp in target_employees))
+        if not dept_counts and (self.selected_department != "All" or self.search_query):
             return []
         elif (
             not dept_counts
             and self.selected_department == "All"
             and (not self.search_query)
         ):
-            dept_counts = Counter(
-                (
-                    emp["department"]
-                    for emp in self.employees
-                )
-            )
+            dept_counts = Counter((emp["department"] for emp in self.employees))
             if not dept_counts:
                 return []
         return [
@@ -230,9 +184,7 @@ class DashboardState(rx.State):
             return []
         dept_salaries = defaultdict(list)
         for emp in self.employees:
-            dept_salaries[emp["department"]].append(
-                emp["salary"]
-            )
+            dept_salaries[emp["department"]].append(emp["salary"])
         avg_salaries = []
         for dept in self.departments_for_filter:
             salaries = dept_salaries.get(dept, [])
@@ -250,8 +202,7 @@ class DashboardState(rx.State):
             avg_salaries = [
                 item
                 for item in avg_salaries
-                if item["department"]
-                == self.selected_department
+                if item["department"] == self.selected_department
             ]
         return avg_salaries
 
