@@ -61,7 +61,7 @@
       "description": "An app to manage customer data.",
       "demo_url": "https://customer-data-app.reflex.run/",
       "hidden": false,
-      "reflex_build": false
+      "reflex_build": true
     },
     {
       "name": "reflex-chat",
