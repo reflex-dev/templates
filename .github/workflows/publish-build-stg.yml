@@ -19,11 +19,6 @@ jobs:
         run: |
           pip install boto3
           python scripts/upload.py
-      - name: Read templates.json
-        id: templates_json
-        run: |
-          content=$(cat templates.json | jq -c .)
-          echo "templates_json=$content" >> $GITHUB_OUTPUT
       - name: Trigger workflow in Flexgen repo
         uses: peter-evans/repository-dispatch@v3
         with:
