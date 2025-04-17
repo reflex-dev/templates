@@ -74,6 +74,12 @@
       "description": "A template for LlamaIndex.",
       "hidden": false,
       "reflex_build": false
+    },
+    {
+      "name": "marketing_dashboard",
+      "description": "A marketing dashboard",
+      "hidden": false,
+      "reflex_build": false
     }
   ]
 }
