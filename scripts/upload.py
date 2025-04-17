@@ -20,11 +20,13 @@ s3 = session.client(
     config=Config(signature_version="s3v4"),
 )
 
+
 def upload_file(local_path, s3_key):
     content_type, _ = mimetypes.guess_type(local_path)
     extra_args = {"ContentType": content_type} if content_type else {}
     with open(local_path, "rb") as f:
         s3.upload_fileobj(f, R2_BUCKET, s3_key, ExtraArgs=extra_args)
+
 
 def upload_preview_file(local_path, bucket, s3_key):
     content_type, _ = mimetypes.guess_type(local_path)
@@ -32,6 +34,7 @@ def upload_preview_file(local_path, bucket, s3_key):
     # Use the same credentials and endpoint, but different bucket
     with open(local_path, "rb") as f:
         s3.upload_fileobj(f, bucket, s3_key, ExtraArgs=extra_args)
+
 
 def main():
     root = os.path.dirname(os.path.abspath(__file__))
@@ -48,12 +51,15 @@ def main():
         template_path = os.path.join(base, template_name)
         if os.path.isdir(template_path):
             import tempfile, shutil, subprocess
+
             with tempfile.TemporaryDirectory() as tmpdir:
                 temp_template_path = os.path.join(tmpdir, template_name)
                 shutil.copytree(template_path, temp_template_path)
                 # Run 'reflex rename app' in the temp directory
                 try:
-                    subprocess.run(["reflex", "rename", "app"], cwd=temp_template_path, check=True)
+                    subprocess.run(
+                        ["reflex", "rename", "app"], cwd=temp_template_path, check=True
+                    )
                 except Exception as e:
                     print(f"Failed to run 'reflex rename app' for {template_name}: {e}")
                     continue
@@ -70,8 +76,11 @@ def main():
                 preview_path = os.path.join(temp_template_path, "preview.png")
                 if os.path.isfile(preview_path):
                     preview_bucket = "preview-images-dev"
-                    preview_s3_key = f"{template_id}/00000000-0000-0000-0000-000000000000.png"
+                    preview_s3_key = (
+                        f"{template_id}/00000000-0000-0000-0000-000000000000.png"
+                    )
                     upload_preview_file(preview_path, preview_bucket, preview_s3_key)
+
 
 def purge_id_path(template_id):
     print(f"Purging s3://{R2_BUCKET}/{template_id}/ ...")
@@ -82,6 +91,7 @@ def purge_id_path(template_id):
             delete_keys = [{"Key": obj["Key"]} for obj in objects]
             s3.delete_objects(Bucket=R2_BUCKET, Delete={"Objects": delete_keys})
             print(f"Deleted {len(delete_keys)} objects from {template_id}/")
+
 
 if __name__ == "__main__":
     main()
