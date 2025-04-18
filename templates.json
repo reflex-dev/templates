@@ -68,12 +68,18 @@
       "description": "A chat app built with Reflex.",
       "hidden": false,
       "reflex_build": false
-    },
+    }
     {
       "name": "reflex-llamaindex-template",
       "description": "A template for LlamaIndex.",
       "hidden": false,
       "reflex_build": false
+    },
+    {
+      "name": "company_dashboard",
+      "description": "A company dashboard app",
+      "hidden": false,
+      "reflex_build": false
     }
-  ]
+  ],
 }
