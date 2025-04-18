@@ -74,6 +74,12 @@
       "description": "A template for LlamaIndex.",
       "hidden": false,
       "reflex_build": false
+    },
+    {
+      "name": "space_dashboard",
+      "description": "A space dashboard app",
+      "hidden": false,
+      "reflex_build": false
     }
   ]
 }
