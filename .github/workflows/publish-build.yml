@@ -55,4 +55,4 @@ jobs:
         token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         repository: reflex-dev/flexgen
         event-type: release
-        client-payload: '{"release": ${{ needs.prepare-release-info.outputs }}}'
+        client-payload: '{"release": ${{ needs.prepare-release-info.outputs.release_info }}}'
