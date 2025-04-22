@@ -1,10 +1,10 @@
 import reflex as rx
-from retail_analytics_dashbaord.components.billing_cycle import billing_cycle
-from retail_analytics_dashbaord.components.customize_charts_dialog import (
+from retail_analytics_dashboard.components.billing_cycle import billing_cycle
+from retail_analytics_dashboard.components.customize_charts_dialog import (
     customize_charts_dialog,
 )
-from retail_analytics_dashbaord.components.overview_section import overview_section
-from retail_analytics_dashbaord.components.sidebar import sidebar
+from retail_analytics_dashboard.components.overview_section import overview_section
+from retail_analytics_dashboard.components.sidebar import sidebar
 
 
 def index() -> rx.Component:
