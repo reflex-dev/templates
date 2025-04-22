@@ -1,7 +1,7 @@
 from typing import List
 
 import reflex as rx
-from retail_analytics_dashbaord.states.dashboard_state import (
+from retail_analytics_dashboard.states.dashboard_state import (
     TOOLTIP_PROPS,
     ChartDataPoint,
     OverviewMetric,

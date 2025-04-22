@@ -1,6 +1,6 @@
 import reflex as rx
-from retail_analytics_dashbaord.components.overview_chart import overview_chart
-from retail_analytics_dashbaord.states.dashboard_state import DashboardState
+from retail_analytics_dashboard.components.overview_chart import overview_chart
+from retail_analytics_dashboard.states.dashboard_state import DashboardState
 
 
 def overview_section() -> rx.Component:

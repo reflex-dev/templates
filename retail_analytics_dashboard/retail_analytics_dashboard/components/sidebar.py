@@ -1,5 +1,5 @@
 import reflex as rx
-from retail_analytics_dashbaord.states.dashboard_state import DashboardState
+from retail_analytics_dashboard.states.dashboard_state import DashboardState
 
 
 def sidebar_nav_item(item: rx.Var[dict]) -> rx.Component:

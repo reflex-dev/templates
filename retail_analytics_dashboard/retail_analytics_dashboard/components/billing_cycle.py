@@ -1,9 +1,9 @@
 import reflex as rx
-from retail_analytics_dashbaord.components.progress_bar import (
+from retail_analytics_dashboard.components.progress_bar import (
     cost_progress_bar,
     progress_bar,
 )
-from retail_analytics_dashbaord.states.dashboard_state import DashboardState
+from retail_analytics_dashboard.states.dashboard_state import DashboardState
 
 
 def billing_cycle_stats() -> rx.Component:
