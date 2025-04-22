@@ -1,9 +1,8 @@
 import reflex as rx
+
 from table_dashboard.states.dashboard_state import (
     DashboardState,
-    DetailEntry,
 )
-from typing import List
 
 
 def status_badge(status: rx.Var[str]) -> rx.Component:
@@ -29,9 +28,7 @@ def status_badge(status: rx.Var[str]) -> rx.Component:
     )
 
 
-def table_header_cell(
-    name: str, is_sortable: bool = True
-) -> rx.Component:
+def table_header_cell(name: str, is_sortable: bool = True) -> rx.Component:
     """Creates a table header cell with optional sorting."""
     return rx.el.th(
         rx.el.div(
@@ -41,18 +38,14 @@ def table_header_cell(
                 rx.el.span(
                     rx.icon(
                         tag=rx.cond(
-                            (
-                                DashboardState.sort_column
-                                == name
-                            )
+                            (DashboardState.sort_column == name)
                             & DashboardState.sort_ascending,
                             "arrow_upward",
                             "arrow_downward",
                         ),
                         size=14,
                         class_name=rx.cond(
-                            DashboardState.sort_column
-                            == name,
+                            DashboardState.sort_column == name,
                             "text-gray-800",
                             "text-gray-400 hover:text-gray-600",
                         ),
@@ -86,12 +79,8 @@ def details_table() -> rx.Component:
                                 class_name="h-4 w-4 border-gray-300 rounded text-blue-600 focus:ring-blue-500 cursor-pointer",
                                 on_change=DashboardState.toggle_select_all_on_page,
                                 checked=DashboardState.all_rows_on_page_selected
-                                & (
-                                    DashboardState.paginated_data.length()
-                                    > 0
-                                ),
-                                disabled=DashboardState.paginated_data.length()
-                                <= 0,
+                                & (DashboardState.paginated_data.length() > 0),
+                                disabled=DashboardState.paginated_data.length() <= 0,
                             ),
                             scope="col",
                             class_name="px-4 py-2",
@@ -135,14 +124,11 @@ def details_table() -> rx.Component:
                                 class_name="px-4 py-2 whitespace-nowrap text-sm text-gray-500",
                             ),
                             rx.el.td(
-                                row[
-                                    "stability"
-                                ].to_string(),
+                                row["stability"].to_string(),
                                 class_name="px-4 py-2 whitespace-nowrap text-sm text-gray-500",
                             ),
                             rx.el.td(
-                                "$"
-                                + row["costs"].to_string(),
+                                "$" + row["costs"].to_string(),
                                 class_name="px-4 py-2 whitespace-nowrap text-sm text-gray-500",
                             ),
                             rx.el.td(
@@ -187,15 +173,13 @@ def details_table() -> rx.Component:
                 rx.el.button(
                     rx.icon(tag="chevron_left", size=18),
                     on_click=DashboardState.previous_page,
-                    disabled=DashboardState.current_page
-                    <= 1,
+                    disabled=DashboardState.current_page <= 1,
                     class_name="p-1 border border-gray-300 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50",
                 ),
                 rx.el.button(
                     rx.icon(tag="chevron_right", size=18),
                     on_click=DashboardState.next_page,
-                    disabled=DashboardState.current_page
-                    >= DashboardState.total_pages,
+                    disabled=DashboardState.current_page >= DashboardState.total_pages,
                     class_name="p-1 border border-gray-300 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 ml-2",
                 ),
                 class_name="flex items-center",

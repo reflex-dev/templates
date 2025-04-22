@@ -1,8 +1,9 @@
 import reflex as rx
-from table_dashboard.states.dashboard_state import DashboardState
-from table_dashboard.components.sidebar import sidebar
-from table_dashboard.components.header import header
+
 from table_dashboard.components.details_table import details_table
+from table_dashboard.components.header import header
+from table_dashboard.components.sidebar import sidebar
+from table_dashboard.states.dashboard_state import DashboardState
 
 
 def index() -> rx.Component:

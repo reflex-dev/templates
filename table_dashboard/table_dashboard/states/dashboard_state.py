@@ -1,15 +1,15 @@
-import reflex as rx
-from typing import (
-    TypedDict,
-    List,
-    Optional,
-    Dict,
-    Literal,
-    Set,
-)
 import datetime
-import pandas as pd
 import io
+from typing import (
+    List,
+    Literal,
+    Optional,
+    Set,
+    TypedDict,
+)
+
+import pandas as pd
+import reflex as rx
 
 
 class DetailEntry(TypedDict):
@@ -210,20 +210,12 @@ class DashboardState(rx.State):
     @rx.var
     def unique_statuses(self) -> List[str]:
         """Get unique statuses from the data."""
-        return sorted(
-            list(
-                set((item["status"] for item in self._data))
-            )
-        )
+        return sorted(list(set((item["status"] for item in self._data))))
 
     @rx.var
     def unique_regions(self) -> List[str]:
         """Get unique regions from the data."""
-        return sorted(
-            list(
-                set((item["region"] for item in self._data))
-            )
-        )
+        return sorted(list(set((item["region"] for item in self._data))))
 
     @rx.var
     def filtered_data(self) -> List[DetailEntry]:
@@ -233,33 +225,16 @@ class DashboardState(rx.State):
             data = [
                 item
                 for item in data
-                if self.search_owner.lower()
-                in item["owner"].lower()
+                if self.search_owner.lower() in item["owner"].lower()
             ]
         if self.selected_statuses:
-            data = [
-                item
-                for item in data
-                if item["status"] in self.selected_statuses
-            ]
+            data = [item for item in data if item["status"] in self.selected_statuses]
         if self.selected_regions:
-            data = [
-                item
-                for item in data
-                if item["region"] in self.selected_regions
-            ]
+            data = [item for item in data if item["region"] in self.selected_regions]
         if self.min_cost is not None:
-            data = [
-                item
-                for item in data
-                if item["costs"] >= self.min_cost
-            ]
+            data = [item for item in data if item["costs"] >= self.min_cost]
         if self.max_cost is not None:
-            data = [
-                item
-                for item in data
-                if item["costs"] <= self.max_cost
-            ]
+            data = [item for item in data if item["costs"] <= self.max_cost]
         return data
 
     @rx.var
@@ -276,9 +251,7 @@ class DashboardState(rx.State):
                     "Costs": "costs",
                     "Last edited": "last_edited",
                 }
-                internal_key = sort_key_map.get(
-                    self.sort_column
-                )
+                internal_key = sort_key_map.get(self.sort_column)
                 if internal_key:
                     if self.sort_column == "Last edited":
                         key_func = lambda item: datetime.datetime.strptime(
@@ -286,9 +259,7 @@ class DashboardState(rx.State):
                             "%d/%m/%Y %H:%M",
                         )
                     else:
-                        key_func = lambda item: item[
-                            internal_key
-                        ]
+                        key_func = lambda item: item[internal_key]
                     data_to_sort = sorted(
                         data_to_sort,
                         key=key_func,
@@ -319,8 +290,7 @@ class DashboardState(rx.State):
         if self.rows_per_page <= 0:
             return 1
         return (
-            (self.total_rows + self.rows_per_page - 1)
-            // self.rows_per_page
+            (self.total_rows + self.rows_per_page - 1) // self.rows_per_page
             if self.rows_per_page > 0
             else 1
         )
@@ -328,22 +298,16 @@ class DashboardState(rx.State):
     @rx.var
     def paginated_data(self) -> List[DetailEntry]:
         """Get the data for the current page."""
-        start_index = (
-            self.current_page - 1
-        ) * self.rows_per_page
+        start_index = (self.current_page - 1) * self.rows_per_page
         end_index = start_index + self.rows_per_page
-        return self.filtered_and_sorted_data[
-            start_index:end_index
-        ]
+        return self.filtered_and_sorted_data[start_index:end_index]
 
     @rx.var
     def current_rows_display(self) -> str:
         """Display string for current rows."""
         if self.total_rows == 0:
             return "0"
-        start = (
-            self.current_page - 1
-        ) * self.rows_per_page + 1
+        start = (self.current_page - 1) * self.rows_per_page + 1
         end = min(
             self.current_page * self.rows_per_page,
             self.total_rows,
@@ -360,9 +324,7 @@ class DashboardState(rx.State):
         """Check if all rows on the current page are selected."""
         if not self.paginated_data:
             return False
-        return self.page_item_ids.issubset(
-            self.selected_rows
-        )
+        return self.page_item_ids.issubset(self.selected_rows)
 
     def set_search_owner(self, value: str):
         """Update the search owner filter."""
@@ -413,9 +375,7 @@ class DashboardState(rx.State):
         self.show_region_filter = False
         self.show_costs_filter = False
         if is_opening:
-            self.temp_selected_statuses = (
-                self.selected_statuses.copy()
-            )
+            self.temp_selected_statuses = self.selected_statuses.copy()
 
     def toggle_region_filter(self):
         is_opening = not self.show_region_filter
@@ -423,9 +383,7 @@ class DashboardState(rx.State):
         self.show_status_filter = False
         self.show_costs_filter = False
         if is_opening:
-            self.temp_selected_regions = (
-                self.selected_regions.copy()
-            )
+            self.temp_selected_regions = self.selected_regions.copy()
 
     def toggle_costs_filter(self):
         is_opening = not self.show_costs_filter
@@ -434,14 +392,10 @@ class DashboardState(rx.State):
         self.show_region_filter = False
         if is_opening:
             self.temp_min_cost_str = (
-                str(self.min_cost)
-                if self.min_cost is not None
-                else ""
+                str(self.min_cost) if self.min_cost is not None else ""
             )
             self.temp_max_cost_str = (
-                str(self.max_cost)
-                if self.max_cost is not None
-                else ""
+                str(self.max_cost) if self.max_cost is not None else ""
             )
 
     def toggle_temp_status(self, status: str):
@@ -463,16 +417,12 @@ class DashboardState(rx.State):
         self.temp_max_cost_str = value
 
     def apply_status_filter(self):
-        self.selected_statuses = (
-            self.temp_selected_statuses.copy()
-        )
+        self.selected_statuses = self.temp_selected_statuses.copy()
         self.show_status_filter = False
         self.current_page = 1
 
     def apply_region_filter(self):
-        self.selected_regions = (
-            self.temp_selected_regions.copy()
-        )
+        self.selected_regions = self.temp_selected_regions.copy()
         self.show_region_filter = False
         self.current_page = 1
 
@@ -483,16 +433,12 @@ class DashboardState(rx.State):
             if self.temp_min_cost_str.strip():
                 new_min_cost = float(self.temp_min_cost_str)
         except ValueError:
-            print(
-                f"Invalid min cost value: {self.temp_min_cost_str}"
-            )
+            print(f"Invalid min cost value: {self.temp_min_cost_str}")
         try:
             if self.temp_max_cost_str.strip():
                 new_max_cost = float(self.temp_max_cost_str)
         except ValueError:
-            print(
-                f"Invalid max cost value: {self.temp_max_cost_str}"
-            )
+            print(f"Invalid max cost value: {self.temp_max_cost_str}")
         self.min_cost = new_min_cost
         self.max_cost = new_max_cost
         self.show_costs_filter = False
@@ -547,19 +493,11 @@ class DashboardState(rx.State):
         """Download the filtered and sorted data as CSV."""
         df = pd.DataFrame(self.filtered_and_sorted_data)
         display_columns = [
-            col.lower().replace(" ", "_")
-            for col in self.column_names
-            if col != "Edit"
+            col.lower().replace(" ", "_") for col in self.column_names if col != "Edit"
         ]
-        if (
-            "last_edited" not in df.columns
-            and "last_edited" in display_columns
-        ):
+        if "last_edited" not in df.columns and "last_edited" in display_columns:
             display_columns.remove("last_edited")
-        if (
-            "costs" in df.columns
-            and "costs" in display_columns
-        ):
+        if "costs" in df.columns and "costs" in display_columns:
             pass
         column_mapping = {
             "owner": "Owner",
@@ -569,17 +507,8 @@ class DashboardState(rx.State):
             "costs": "Costs",
             "last_edited": "Last edited",
         }
-        df_display = df[
-            [
-                key
-                for key in column_mapping
-                if key in df.columns
-            ]
-        ]
-        df_display.columns = [
-            column_mapping[col]
-            for col in df_display.columns
-        ]
+        df_display = df[[key for key in column_mapping if key in df.columns]]
+        df_display.columns = [column_mapping[col] for col in df_display.columns]
         stream = io.StringIO()
         df_display.to_csv(stream, index=False)
         return rx.download(

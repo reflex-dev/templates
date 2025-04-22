@@ -1,7 +1,9 @@
+from typing import Callable
+
 import reflex as rx
-from table_dashboard.states.dashboard_state import DashboardState
-from typing import List, Set, Callable, Optional
 from reflex.event import EventSpec
+
+from table_dashboard.states.dashboard_state import DashboardState
 
 
 def filter_checkbox_item(
@@ -34,9 +36,7 @@ def status_filter_dropdown() -> rx.Component:
                 DashboardState.unique_statuses,
                 lambda status: filter_checkbox_item(
                     label=status,
-                    is_checked=DashboardState.temp_selected_statuses.contains(
-                        status
-                    ),
+                    is_checked=DashboardState.temp_selected_statuses.contains(status),
                     on_change=DashboardState.toggle_temp_status,
                 ),
             ),
@@ -72,9 +72,7 @@ def region_filter_dropdown() -> rx.Component:
                 DashboardState.unique_regions,
                 lambda region: filter_checkbox_item(
                     label=region,
-                    is_checked=DashboardState.temp_selected_regions.contains(
-                        region
-                    ),
+                    is_checked=DashboardState.temp_selected_regions.contains(region),
                     on_change=DashboardState.toggle_temp_region,
                 ),
             ),
@@ -153,9 +151,7 @@ def filter_button(
             label,
             class_name="flex items-center",
         ),
-        rx.icon(
-            tag="chevron_down", size=14, class_name="ml-1"
-        ),
+        rx.icon(tag="chevron_down", size=14, class_name="ml-1"),
         on_click=on_click,
         class_name=rx.cond(
             has_filter,

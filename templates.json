@@ -86,6 +86,12 @@
       "description": "A table dashboard app.",
       "hidden": false,
       "reflex_build": false
+    },
+    {
+      "name": "retention_dashboard",
+      "description": "A retention dashboard app.",
+      "hidden": false,
+      "reflex_build": false
     }
   ]
 }

@@ -1,11 +1,12 @@
 import reflex as rx
-from table_dashboard.states.dashboard_state import DashboardState
+
 from table_dashboard.components.filter_dropdown import (
-    status_filter_dropdown,
-    region_filter_dropdown,
     costs_filter_dropdown,
     filter_button,
+    region_filter_dropdown,
+    status_filter_dropdown,
 )
+from table_dashboard.states.dashboard_state import DashboardState
 
 
 def header() -> rx.Component:
@@ -22,8 +23,7 @@ def header() -> rx.Component:
                         "Status",
                         on_click=DashboardState.toggle_status_filter,
                         is_active=DashboardState.show_status_filter,
-                        has_filter=DashboardState.selected_statuses.length()
-                        > 0,
+                        has_filter=DashboardState.selected_statuses.length() > 0,
                     ),
                     status_filter_dropdown(),
                     class_name="relative",
@@ -33,8 +33,7 @@ def header() -> rx.Component:
                         "Region",
                         on_click=DashboardState.toggle_region_filter,
                         is_active=DashboardState.show_region_filter,
-                        has_filter=DashboardState.selected_regions.length()
-                        > 0,
+                        has_filter=DashboardState.selected_regions.length() > 0,
                     ),
                     region_filter_dropdown(),
                     class_name="relative",
@@ -44,9 +43,7 @@ def header() -> rx.Component:
                         "Costs",
                         on_click=DashboardState.toggle_costs_filter,
                         is_active=DashboardState.show_costs_filter,
-                        has_filter=(
-                            DashboardState.min_cost != None
-                        )
+                        has_filter=(DashboardState.min_cost != None)
                         | (DashboardState.max_cost != None),
                     ),
                     costs_filter_dropdown(),
@@ -60,9 +57,7 @@ def header() -> rx.Component:
                     ),
                     rx.el.input(
                         placeholder="Search by owner...",
-                        on_change=DashboardState.set_search_owner.debounce(
-                            300
-                        ),
+                        on_change=DashboardState.set_search_owner.debounce(300),
                         class_name="pl-10 pr-4 py-1.5 border border-gray-300 rounded w-64 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500",
                         default_value=DashboardState.search_owner,
                     ),
@@ -72,17 +67,9 @@ def header() -> rx.Component:
                     "Reset All",
                     on_click=DashboardState.reset_all_filters,
                     class_name="px-3 py-1.5 border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50",
-                    disabled=(
-                        DashboardState.search_owner == ""
-                    )
-                    & (
-                        DashboardState.selected_statuses.length()
-                        == 0
-                    )
-                    & (
-                        DashboardState.selected_regions.length()
-                        == 0
-                    )
+                    disabled=(DashboardState.search_owner == "")
+                    & (DashboardState.selected_statuses.length() == 0)
+                    & (DashboardState.selected_regions.length() == 0)
                     & (DashboardState.min_cost == None)
                     & (DashboardState.max_cost == None),
                 ),
@@ -97,8 +84,7 @@ def header() -> rx.Component:
                     ),
                     "Export",
                     on_click=DashboardState.download_csv,
-                    disabled=DashboardState.filtered_and_sorted_data.length()
-                    <= 0,
+                    disabled=DashboardState.filtered_and_sorted_data.length() <= 0,
                     class_name="flex items-center px-3 py-1.5 border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed",
                 ),
                 rx.el.button(

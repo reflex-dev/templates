@@ -39,9 +39,7 @@ def sidebar() -> rx.Component:
                 class_name="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded",
             ),
             rx.el.a(
-                rx.icon(
-                    tag="list", size=18, class_name="mr-3"
-                ),
+                rx.icon(tag="list", size=18, class_name="mr-3"),
                 "Details",
                 href="#",
                 class_name="flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded",
