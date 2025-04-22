@@ -35,6 +35,9 @@ jobs:
                 ai_image_gen)
                   echo "EXTRA_ARGS=--env REPLICATE_API_TOKEN=${{ secrets.REPLICATE_API_TOKEN }}" >> $GITHUB_ENV
                   ;;
+                retail_analytics_dashboard)
+                  echo "EXTRA_ARGS=" >> $GITHUB_ENV
+                  ;;
                 customer_data_app)
                   cat .deploy/temporary_db.py >> ${{ matrix.folder }}/customer_data/customer_data.py
                   echo "EXTRA_ARGS=--vmtype ${{ vars.CUSTOMER_DATA_VM_TYPE }}" >> $GITHUB_ENV

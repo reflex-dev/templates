@@ -74,6 +74,12 @@
       "description": "A template for LlamaIndex.",
       "hidden": false,
       "reflex_build": false
+    },
+    {
+      "name": "retail_analytics_dashbaord",
+      "description": "A retail analytics dashboard app.",
+      "hidden": false,
+      "reflex_build": false
     }
   ]
 }
