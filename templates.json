@@ -5,28 +5,28 @@
       "description": "A minimal template.",
       "demo_url": "https://blank-template.reflex.run",
       "hidden": false,
-      "reflex_build": true
+      "reflex_build": false
     },
     {
       "name": "dashboard",
       "description": "A dashboard with tables and graphs.",
       "demo_url": "https://dashboard-new.reflex.run/",
       "hidden": false,
-      "reflex_build": true
+      "reflex_build": false
     },
     {
       "name": "sidebar",
       "description": "A template with a sidebar to navigate pages.",
       "demo_url": "https://sidebar-template.reflex.run",
       "hidden": true,
-      "reflex_build": true
+      "reflex_build": false
     },
     {
       "name": "sales",
       "description": "An app to manage sales and customers.",
       "demo_url": "https://sales-new.reflex.run/",
       "hidden": false,
-      "reflex_build": true
+      "reflex_build": false
     },
     {
       "name": "ai_image_gen",
@@ -40,14 +40,14 @@
       "description": "A template for continuous integration.",
       "demo_url": "https://cijob.reflex.run/",
       "hidden": false,
-      "reflex_build": true
+      "reflex_build": false
     },
     {
       "name": "api_admin_panel",
       "description": "An admin panel for an api.",
       "demo_url": "https://api-admin-panel.reflex.run/",
       "hidden": false,
-      "reflex_build": true
+      "reflex_build": false
     },
     {
       "name": "nba",
@@ -73,7 +73,7 @@
       "name": "reflex-llamaindex-template",
       "description": "A template for LlamaIndex.",
       "hidden": false,
-      "reflex_build": false
+      "reflex_build": true
     }
   ]
 }
