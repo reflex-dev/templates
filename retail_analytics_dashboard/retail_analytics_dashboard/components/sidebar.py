@@ -5,14 +5,10 @@ from retail_analytics_dashbaord.states.dashboard_state import DashboardState
 def sidebar_nav_item(item: rx.Var[dict]) -> rx.Component:
     """Renders a single navigation item in the sidebar."""
     return rx.el.a(
-        rx.icon(
-            tag=item["icon"], class_name="w-5 h-5 mr-3"
-        ),
+        rx.icon(tag=item["icon"], class_name="w-5 h-5 mr-3"),
         item["name"],
         href="#",
-        on_click=lambda: DashboardState.set_active_nav(
-            item["name"]
-        ),
+        on_click=lambda: DashboardState.set_active_nav(item["name"]),
         class_name=rx.cond(
             item["active"],
             "flex items-center px-4 py-2 text-sm font-medium text-indigo-700 bg-indigo-100 rounded-md transition-colors duration-150",

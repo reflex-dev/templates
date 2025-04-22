@@ -1,9 +1,9 @@
 import reflex as rx
+from retail_analytics_dashbaord.components.overview_chart import overview_chart
 from retail_analytics_dashbaord.states.dashboard_state import (
     DashboardState,
     OverviewMetric,
 )
-from retail_analytics_dashbaord.components.overview_chart import overview_chart
 
 
 def customize_chart_item(
@@ -14,12 +14,8 @@ def customize_chart_item(
         overview_chart(metric),
         rx.el.input(
             type="checkbox",
-            checked=DashboardState.temp_chart_visibility[
-                metric["id"]
-            ],
-            on_click=lambda: DashboardState.toggle_temp_chart_visibility(
-                metric["id"]
-            ),
+            checked=DashboardState.temp_chart_visibility[metric["id"]],
+            on_click=lambda: DashboardState.toggle_temp_chart_visibility(metric["id"]),
             class_name="absolute top-3 right-3 h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded cursor-pointer",
         ),
         class_name="relative bg-white rounded-md shadow-sm border border-gray-200",
@@ -68,5 +64,5 @@ def customize_charts_dialog() -> rx.Component:
             ),
             class_name="fixed inset-0 z-50 overflow-hidden",
         ),
-        rx.el.div()
+        rx.el.div(),
     )

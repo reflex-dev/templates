@@ -1,7 +1,8 @@
-import reflex as rx
-from typing import TypedDict, List, Union, Dict, Any
-import random
 import datetime
+import random
+from typing import Dict, List, TypedDict
+
+import reflex as rx
 
 TOOLTIP_PROPS = {
     "content_style": {
@@ -84,24 +85,16 @@ def generate_chart_data(
     max_val2: int = 150,
 ) -> List[ChartDataPoint]:
     data: List[ChartDataPoint] = []
-    start_date = datetime.datetime.strptime(
-        start_date_str, "%d/%m/%Y"
-    )
-    end_date = datetime.datetime.strptime(
-        end_date_str, "%d/%m/%Y"
-    )
+    start_date = datetime.datetime.strptime(start_date_str, "%d/%m/%Y")
+    end_date = datetime.datetime.strptime(end_date_str, "%d/%m/%Y")
     date_delta = (end_date - start_date) / (num_points - 1)
     for i in range(num_points):
         current_date = start_date + date_delta * i
         data.append(
             {
                 "date": current_date.strftime("%d/%m/%Y"),
-                "value1": random.randint(
-                    min_val1, max_val1
-                ),
-                "value2": random.randint(
-                    min_val2, max_val2
-                ),
+                "value1": random.randint(min_val1, max_val1),
+                "value2": random.randint(min_val2, max_val2),
             }
         )
     return data
@@ -327,12 +320,9 @@ class DashboardState(rx.State):
             "color": "bg-gray-400",
         },
     ]
-    overview_metrics: List[OverviewMetric] = (
-        overview_metrics_data
-    )
+    overview_metrics: List[OverviewMetric] = overview_metrics_data
     chart_visibility: Dict[str, bool] = {
-        metric["id"]: True
-        for metric in overview_metrics_data
+        metric["id"]: True for metric in overview_metrics_data
     }
     temp_chart_visibility: Dict[str, bool] = {}
     show_customize_dialog: bool = False
@@ -340,12 +330,7 @@ class DashboardState(rx.State):
     @rx.var
     def current_total_cost(self) -> float:
         """Calculates the current total cost from the breakdown items."""
-        return sum(
-            (
-                item["value_num"]
-                for item in self.billing_costs_items
-            )
-        )
+        return sum((item["value_num"] for item in self.billing_costs_items))
 
     @rx.var
     def remaining_budget_value(self) -> float:
@@ -357,22 +342,13 @@ class DashboardState(rx.State):
         """Calculates the remaining budget percentage."""
         if self.total_budget == 0:
             return 0.0
-        percentage = (
-            self.remaining_budget_value
-            / self.total_budget
-            * 100
-        )
+        percentage = self.remaining_budget_value / self.total_budget * 100
         return round(percentage * 10) / 10
 
     @rx.var
     def total_cost_percentage(self) -> float:
         """Calculates the total percentage used based on cost items."""
-        return sum(
-            (
-                item["percentage"]
-                for item in self.billing_costs_items
-            )
-        )
+        return sum((item["percentage"] for item in self.billing_costs_items))
 
     @rx.var
     def visible_overview_metrics(
@@ -382,9 +358,7 @@ class DashboardState(rx.State):
         return [
             metric
             for metric in self.overview_metrics
-            if self.chart_visibility.get(
-                metric["id"], False
-            )
+            if self.chart_visibility.get(metric["id"], False)
         ]
 
     @rx.event
@@ -399,28 +373,22 @@ class DashboardState(rx.State):
     @rx.event
     def toggle_customize_dialog(self):
         """Toggles the customize charts dialog and initializes temporary visibility."""
-        self.show_customize_dialog = (
-            not self.show_customize_dialog
-        )
+        self.show_customize_dialog = not self.show_customize_dialog
         if self.show_customize_dialog:
-            self.temp_chart_visibility = (
-                self.chart_visibility.copy()
-            )
+            self.temp_chart_visibility = self.chart_visibility.copy()
 
     @rx.event
     def toggle_temp_chart_visibility(self, chart_id: str):
         """Toggles the visibility of a specific chart in the temporary state."""
         if chart_id in self.temp_chart_visibility:
-            self.temp_chart_visibility[chart_id] = (
-                not self.temp_chart_visibility[chart_id]
-            )
+            self.temp_chart_visibility[chart_id] = not self.temp_chart_visibility[
+                chart_id
+            ]
 
     @rx.event
     def apply_chart_visibility(self):
         """Applies the temporary visibility settings to the actual state and closes the dialog."""
-        self.chart_visibility = (
-            self.temp_chart_visibility.copy()
-        )
+        self.chart_visibility = self.temp_chart_visibility.copy()
         self.show_customize_dialog = False
 
     @rx.event

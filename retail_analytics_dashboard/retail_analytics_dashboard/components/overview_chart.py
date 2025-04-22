@@ -1,10 +1,11 @@
+from typing import List
+
 import reflex as rx
 from retail_analytics_dashbaord.states.dashboard_state import (
     TOOLTIP_PROPS,
     ChartDataPoint,
     OverviewMetric,
 )
-from typing import List, Dict, Union
 
 
 def overview_chart(
@@ -21,8 +22,7 @@ def overview_chart(
                 metric["change"],
                 class_name="ml-2 text-xs font-medium px-1.5 py-0.5 rounded-full "
                 + rx.cond(
-                    metric["change_color"]
-                    == "text-green-600",
+                    metric["change_color"] == "text-green-600",
                     "bg-green-100 text-green-600",
                     "bg-red-100 text-red-600",
                 ),
@@ -47,9 +47,7 @@ def overview_chart(
                     vertical=False,
                     class_name="opacity-50",
                 ),
-                rx.recharts.graphing_tooltip(
-                    **TOOLTIP_PROPS
-                ),
+                rx.recharts.graphing_tooltip(**TOOLTIP_PROPS),
                 rx.recharts.line(
                     data_key="value1",
                     stroke="#8884d8",
@@ -76,9 +74,7 @@ def overview_chart(
                     tick_line=False,
                     domain=["auto", "auto"],
                 ),
-                data=metric["chart_data"].to(
-                    List[ChartDataPoint]
-                ),
+                data=metric["chart_data"].to(List[ChartDataPoint]),
                 height=120,
                 margin={
                     "top": 5,
