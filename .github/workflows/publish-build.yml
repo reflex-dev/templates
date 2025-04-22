@@ -55,4 +55,3 @@ jobs:
         repository: reflex-dev/flexgen
         event-type: release
         client-payload: '{"release": ${{ needs.prepare-release-info.outputs }}}'
-f
