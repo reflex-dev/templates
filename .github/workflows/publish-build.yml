@@ -1,0 +1,23 @@
+name: Publish Templates
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Choose deployment environment'
+        required: true
+        type: choice
+        options:
+        - Reflex Build Dev
+        - Reflex Build Stg
+        - Reflex Build Prod
+jobs:
+  trigger-second-repo:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Trigger second repo
+      uses: peter-evans/repository-dispatch@v2
+      with:
+        token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        repository: reflex-dev/flexgen
+        event-type: release
+        client-payload: '{"release": ${{ toJson(github.event.release) }}}'
