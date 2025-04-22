@@ -80,6 +80,12 @@
       "description": "A retail analytics dashboard app.",
       "hidden": false,
       "reflex_build": false
+    },
+    {
+      "name": "table_dashboard",
+      "description": "A table dashboard app.",
+      "hidden": false,
+      "reflex_build": false
     }
   ]
 }
