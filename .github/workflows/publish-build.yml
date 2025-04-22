@@ -42,6 +42,7 @@ jobs:
               repo: context.repo.repo
             });
           }
+          console.log(release.tag_name);
           return release.tag_name;
 
   trigger-second-repo:
