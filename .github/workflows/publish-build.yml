@@ -42,8 +42,8 @@ jobs:
               repo: context.repo.repo
             });
           }
-          console.log(release);
-          return release;
+          console.log(release.data.tag_name);
+          return release.data.tag_name;
 
   trigger-second-repo:
     needs: prepare-release-info
