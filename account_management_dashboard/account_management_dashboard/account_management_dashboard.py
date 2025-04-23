@@ -1,17 +1,18 @@
 import reflex as rx
-from account_management_dashboard.states.account_state import AccountState
-from account_management_dashboard.components.sidebar import sidebar
-from account_management_dashboard.components.header import header_component
-from account_management_dashboard.components.net_worth_summary import (
-    net_worth_summary,
-)
-from account_management_dashboard.components.net_worth_graph import (
-    net_worth_graph_component,
-)
+
 from account_management_dashboard.components.account_section import (
     account_category_section,
 )
+from account_management_dashboard.components.header import header_component
+from account_management_dashboard.components.net_worth_graph import (
+    net_worth_graph_component,
+)
+from account_management_dashboard.components.net_worth_summary import (
+    net_worth_summary,
+)
+from account_management_dashboard.components.sidebar import sidebar
 from account_management_dashboard.components.summary_section import summary_section
+from account_management_dashboard.states.account_state import AccountState
 
 
 def index() -> rx.Component:

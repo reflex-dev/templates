@@ -1,11 +1,13 @@
+from typing import List
+
 import reflex as rx
+
 from account_management_dashboard.states.account_state import (
-    AccountState,
     AccountCategory,
     AccountDetail,
+    AccountState,
     SparklinePoint,
 )
-from typing import List, Dict
 
 try:
     import reflex.components.recharts as recharts
@@ -98,11 +100,6 @@ def account_category_section(
 ) -> rx.Component:
     """Displays a collapsible section for an account category."""
     is_open = category["is_open"]
-    change_color = rx.cond(
-        category["one_month_change"] >= 0,
-        "text-green-600",
-        "text-red-600",
-    )
     change_icon = rx.cond(
         category["one_month_change"] >= 0,
         "arrow_up",

@@ -1,42 +1,16 @@
-import reflex as rx
-from typing import TypedDict, List, Dict, Union
 import datetime
 import random
+from typing import Dict, List, Union
+
+import reflex as rx
 from dateutil.relativedelta import relativedelta
 
-
-class NetWorthDataPoint(TypedDict):
-    date: str
-    value: float
-
-
-class SparklinePoint(TypedDict):
-    value: float
-
-
-class AccountDetail(TypedDict):
-    id: str
-    name: str
-    type: str
-    balance: float
-    last_updated: str
-    logo_url: str
-    sparkline_data: List[SparklinePoint]
-
-
-class AccountCategory(TypedDict):
-    category_name: str
-    total_balance: float
-    one_month_change: float
-    one_month_change_percent: float
-    accounts: List[AccountDetail]
-    is_open: bool
-
-
-class AssetLiabilitySummaryItem(TypedDict):
-    name: str
-    value: float
-    color: str
+from account_management_dashboard.models.models import (
+    AccountCategory,
+    AssetLiabilitySummaryItem,
+    NetWorthDataPoint,
+)
+from account_management_dashboard.states.data import account_categories_data
 
 
 def generate_net_worth_data(
@@ -101,96 +75,7 @@ class AccountState(rx.State):
         "All time",
     ]
     selected_performance_type: str = "Net worth performance"
-    account_categories: List[AccountCategory] = [
-        {
-            "category_name": "Cash",
-            "total_balance": 65342.3,
-            "one_month_change": 1826.1,
-            "one_month_change_percent": 2.9,
-            "is_open": True,
-            "accounts": [
-                {
-                    "id": "citi1",
-                    "name": "Melanie's Checking",
-                    "type": "Checking",
-                    "balance": 15234.75,
-                    "last_updated": "16 hours ago",
-                    "logo_url": "/simple_logo_bank.png",
-                    "sparkline_data": [
-                        {"value": 15000},
-                        {"value": 15100},
-                        {"value": 15050},
-                        {"value": 15200},
-                        {"value": 15150},
-                        {"value": 15234.75},
-                    ],
-                },
-                {
-                    "id": "joint1",
-                    "name": "Joint Savings",
-                    "type": "Savings",
-                    "balance": 50107.55,
-                    "last_updated": "16 hours ago",
-                    "logo_url": "/simple_minimalist_bank.png",
-                    "sparkline_data": [
-                        {"value": 50000},
-                        {"value": 50050},
-                        {"value": 50100},
-                        {"value": 50080},
-                        {"value": 50107.55},
-                    ],
-                },
-            ],
-        },
-        {
-            "category_name": "Credit Cards",
-            "total_balance": 2828.99,
-            "one_month_change": -63.03,
-            "one_month_change_percent": -2.2,
-            "is_open": True,
-            "accounts": [
-                {
-                    "id": "amex1",
-                    "name": "Joint Credit Card",
-                    "type": "Credit Card",
-                    "balance": 2828.99,
-                    "last_updated": "16 hours ago",
-                    "logo_url": "/design_white_simple.png",
-                    "sparkline_data": [
-                        {"value": 2900},
-                        {"value": 2880},
-                        {"value": 2850},
-                        {"value": 2830},
-                        {"value": 2828.99},
-                    ],
-                }
-            ],
-        },
-        {
-            "category_name": "Investments",
-            "total_balance": 542301.55,
-            "one_month_change": 10287.56,
-            "one_month_change_percent": 1.9,
-            "is_open": True,
-            "accounts": [
-                {
-                    "id": "401k1",
-                    "name": "Jon's 401k",
-                    "type": "401k",
-                    "balance": 180336.73,
-                    "last_updated": "1 day ago",
-                    "logo_url": "/simple_minimalist_bank.png",
-                    "sparkline_data": [
-                        {"value": 178000},
-                        {"value": 179000},
-                        {"value": 180000},
-                        {"value": 180500},
-                        {"value": 180336.73},
-                    ],
-                }
-            ],
-        },
-    ]
+    account_categories: List[AccountCategory] = account_categories_data
     assets_summary: List[AssetLiabilitySummaryItem] = [
         {
             "name": "Investments",
@@ -250,51 +135,46 @@ class AccountState(rx.State):
             start_date_limit = today - relativedelta(months=1)
         filtered_data = []
         for point in self._raw_net_worth_data:
-            try:
-                date_obj = datetime.datetime.strptime(point["date"], "%Y-%m-%d").date()
-                if start_date_limit is None or date_obj >= start_date_limit:
-                    if (
-                        self.selected_graph_range == "1 year"
-                        or self.selected_graph_range == "All time"
-                    ):
-                        display_date = date_obj.strftime("%b %Y")
-                    else:
-                        display_date = date_obj.strftime("%b %d")
-                    sampling_rate = 1
-                    if self.selected_graph_range == "1 year":
-                        sampling_rate = 7
-                    elif (
-                        self.selected_graph_range == "All time"
-                        and len(self._raw_net_worth_data) > 30
-                    ):
-                        total_days = (
-                            datetime.datetime.strptime(
-                                self._raw_net_worth_data[-1]["date"],
-                                "%Y-%m-%d",
-                            ).date()
-                            - datetime.datetime.strptime(
-                                self._raw_net_worth_data[0]["date"],
-                                "%Y-%m-%d",
-                            ).date()
-                        ).days
-                        sampling_rate = max(1, total_days // 60)
-                    point_index = self._raw_net_worth_data.index(point)
-                    if (
-                        len(filtered_data) == 0
-                        or point_index % sampling_rate == 0
-                        or point_index == len(self._raw_net_worth_data) - 1
-                    ):
-                        filtered_data.append(
-                            {
-                                "date": display_date,
-                                "value": point["value"],
-                            }
-                        )
-            except ValueError:
-                print(
-                    f"Warning: Could not parse date '{point['date']}'. Skipping point."
-                )
-                continue
+            date_obj = datetime.datetime.strptime(point["date"], "%Y-%m-%d").date()
+            if start_date_limit is None or date_obj >= start_date_limit:
+                if (
+                    self.selected_graph_range == "1 year"
+                    or self.selected_graph_range == "All time"
+                ):
+                    display_date = date_obj.strftime("%b %Y")
+                else:
+                    display_date = date_obj.strftime("%b %d")
+                sampling_rate = 1
+                if self.selected_graph_range == "1 year":
+                    sampling_rate = 7
+                elif (
+                    self.selected_graph_range == "All time"
+                    and len(self._raw_net_worth_data) > 30
+                ):
+                    total_days = (
+                        datetime.datetime.strptime(
+                            self._raw_net_worth_data[-1]["date"],
+                            "%Y-%m-%d",
+                        ).date()
+                        - datetime.datetime.strptime(
+                            self._raw_net_worth_data[0]["date"],
+                            "%Y-%m-%d",
+                        ).date()
+                    ).days
+                    sampling_rate = max(1, total_days // 60)
+                point_index = self._raw_net_worth_data.index(point)
+                if (
+                    len(filtered_data) == 0
+                    or point_index % sampling_rate == 0
+                    or point_index == len(self._raw_net_worth_data) - 1
+                ):
+                    filtered_data.append(
+                        {
+                            "date": display_date,
+                            "value": point["value"],
+                        }
+                    )
+
         if filtered_data and self._raw_net_worth_data:
             last_raw_date = datetime.datetime.strptime(
                 self._raw_net_worth_data[-1]["date"],
@@ -428,7 +308,7 @@ class AccountState(rx.State):
         if value in self.graph_ranges:
             self.selected_graph_range = value
         else:
-            print(f"Warning: Invalid graph range selected: {value}")
+            pass
 
     @rx.event
     def set_summary_view(self, view: str):
@@ -439,7 +319,6 @@ class AccountState(rx.State):
     @rx.event
     def refresh_all(self):
         """Placeholder for refreshing all account data. Simulates data changes."""
-        print("Refreshing all data...")
         new_data = generate_net_worth_data()
         self._raw_net_worth_data = new_data
         self.net_worth = new_data[-1]["value"]
@@ -545,5 +424,4 @@ class AccountState(rx.State):
     @rx.event
     def add_account(self):
         """Placeholder for adding a new account."""
-        print("Add account clicked...")
         yield rx.toast.warning("Add Account functionality not implemented yet.")
