@@ -72,66 +72,78 @@
     {
       "name": "reflex-llamaindex-template",
       "description": "A template for LlamaIndex.",
-      "hidden": false
+      "hidden": false,
+      "reflex_build": false
     },
     {
       "name": "admin_dashboard",
       "description": "An admin dashboard",
+      "demo_url": "https://admin-dashboard-aqua-apple.reflex.run/",
       "hidden": false,
-      "reflex_build": false
+      "reflex_build": true
     },
     {
-      "name": "retail_analytics_dashbaord",
+      "name": "retail_analytics_dashboard",
       "description": "A retail analytics dashboard app.",
+      "demo_url": "https://retail-analytics-dashboard-teal-grass.reflex.run/",
       "hidden": false,
-      "reflex_build": false
+      "reflex_build": true
     },
     {
       "name": "table_dashboard",
       "description": "A table dashboard app.",
+      "demo_url": "https://table-dashboard-aqua-ring.reflex.run/",
       "hidden": false,
-      "reflex_build": false
+      "reflex_build": true
     },
     {
       "name": "retention_dashboard",
       "description": "A retention dashboard app.",
+      "demo_url": "https://retention-dashboard-lime-panda.reflex.run/",
       "hidden": false,
       "reflex_build": false
     },
+    {
       "name": "business_analytics_dashboard",
       "description": "A business analytics dashboard.",
+      "demo_url": "https://business-analytics-dashboard-navy-grass.reflex.run/",
       "hidden": false,
       "reflex_build": true
     },
     {
       "name": "space_dashboard",
       "description": "A space dashboard app",
+      "demo_url": "https://space-dashboard-blue-ocean.reflex.run/",
       "hidden": false,
       "reflex_build": true
     },
     {
       "name": "account_management_dashboard",
       "description": "An account management dashboard app",
+      "demo_url": "https://account-management-dashboard-neon-star.reflex.run/",
       "hidden": false,
       "reflex_build": true
     },
     {
       "name": "stock_market_dashboard",
       "description": "A stock market dashboard app",
+      "demo_url": "https://stock-market-dashboard-lime-wood.reflex.run/",
       "hidden": false,
       "reflex_build": true
     },
     {
       "name": "manufacturing_dashboard",
       "description": "A manufacturing dashboard app",
+      "demo_url": "https://manufacturing-dashboard-gold-apple.reflex.run/",
       "hidden": false,
       "reflex_build": true
     },
     {
       "name": "company_dashboard",
       "description": "A company dashboard app",
+      "demo_url": "https://company-dashboard-navy-book.reflex.run/",
       "hidden": false,
       "reflex_build": true
-    },
+    }
   ]
 }
