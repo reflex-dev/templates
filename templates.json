@@ -81,6 +81,23 @@
       "reflex_build": false
     },
     {
+      "name": "retail_analytics_dashbaord",
+      "description": "A retail analytics dashboard app.",
+      "hidden": false,
+      "reflex_build": false
+    },
+    {
+      "name": "table_dashboard",
+      "description": "A table dashboard app.",
+      "hidden": false,
+      "reflex_build": false
+    },
+    {
+      "name": "retention_dashboard",
+      "description": "A retention dashboard app.",
+      "hidden": false,
+      "reflex_build": false
+    },
       "name": "business_analytics_dashboard",
       "description": "A business analytics dashboard.",
       "hidden": false,
@@ -115,6 +132,6 @@
       "description": "A company dashboard app",
       "hidden": false,
       "reflex_build": true
-    }
+    },
   ]
 }
