@@ -87,6 +87,12 @@
       "reflex_build": false
     },
     {
+      "name": "account_management_dashboard",
+      "description": "An account management dashboard app",
+      "hidden": false,
+      "reflex_build": false
+    },
+    {
       "name": "stock_market_dashboard",
       "description": "A stock market dashboard app",
       "hidden": false,
