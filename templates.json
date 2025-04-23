@@ -75,6 +75,12 @@
       "hidden": false
     },
     {
+      "name": "admin_dashboard",
+      "description": "An admin dashboard",
+      "hidden": false,
+      "reflex_build": false
+    },
+    {
       "name": "business_analytics_dashboard",
       "description": "A business analytics dashboard.",
       "hidden": false,
