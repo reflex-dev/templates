@@ -38,6 +38,9 @@ jobs:
                 account_management_dashboard)
                   echo "EXTRA_ARGS=" >> $GITHUB_ENV
                   ;;
+                stock_market_dashboard)
+                  echo "EXTRA_ARGS=" >> $GITHUB_ENV
+                  ;;
                 business_analytics_dashboard)
                   echo "EXTRA_ARGS=" >> $GITHUB_ENV
                   ;;
