@@ -38,6 +38,9 @@ jobs:
                 company_dashboard)
                   echo "EXTRA_ARGS=" >> $GITHUB_ENV
                   ;;
+                manufacturing_dashboard)
+                  echo "EXTRA_ARGS=" >> $GITHUB_ENV
+                  ;;
                 customer_data_app)
                   cat .deploy/temporary_db.py >> ${{ matrix.folder }}/customer_data/customer_data.py
                   echo "EXTRA_ARGS=--vmtype ${{ vars.CUSTOMER_DATA_VM_TYPE }}" >> $GITHUB_ENV

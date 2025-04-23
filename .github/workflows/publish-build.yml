@@ -1,0 +1,58 @@
+name: Publish Templates
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Choose deployment environment'
+        required: true
+        type: choice
+        options:
+        - development
+        - staging
+        - production
+      release_tag:
+        description: 'Release tag (leave empty for latest)'
+        required: false
+        type: string
+
+jobs:
+  prepare-release-info:
+    runs-on: ubuntu-latest
+    outputs:
+      release_info: ${{ steps.get-release.outputs.result }}
+    steps:
+    - name: Get release info
+      id: get-release
+      uses: actions/github-script@v6
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        result-encoding: json
+        script: |
+          let release;
+          if ('${{ github.event.inputs.release_tag }}') {
+            release = await github.rest.repos.getReleaseByTag({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag: '${{ github.event.inputs.release_tag }}'
+            });
+          } else {
+            release = await github.rest.repos.getLatestRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+          }
+          console.log(release.data.tag_name);
+          return release.data.tag_name;
+
+  trigger-second-repo:
+    needs: prepare-release-info
+    runs-on: ubuntu-latest
+    steps:
+    - name: Trigger second repo
+      uses: peter-evans/repository-dispatch@v2
+      with:
+        token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        repository: reflex-dev/flexgen
+        event-type: release
+        client-payload: '{"release": ${{ needs.prepare-release-info.outputs.release_info }}, "environment": "${{ github.event.inputs.environment }}"}'
