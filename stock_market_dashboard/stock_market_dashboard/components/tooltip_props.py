@@ -1,5 +1,3 @@
-import reflex as rx
-
 TOOLTIP_PROPS = {
     "separator": ": ",
     "cursor": False,

@@ -1,4 +1,5 @@
 import reflex as rx
+
 from stock_market_dashboard.states.trading_state import TradingState
 
 
@@ -19,12 +20,9 @@ def main_header() -> rx.Component:
                     tabs,
                     lambda tab: rx.el.button(
                         tab,
-                        on_click=TradingState.set_active_main_tab(
-                            tab
-                        ),
+                        on_click=TradingState.set_active_main_tab(tab),
                         class_name=rx.cond(
-                            TradingState.active_main_tab
-                            == tab,
+                            TradingState.active_main_tab == tab,
                             "px-3 py-2 text-sm font-medium text-white border-b-2 border-green-500",
                             "px-3 py-2 text-sm font-medium text-gray-400 hover:text-white hover:border-b-2 hover:border-gray-500",
                         ),
@@ -49,9 +47,7 @@ def main_header() -> rx.Component:
                 ),
                 rx.el.div(
                     rx.el.select(
-                        rx.el.option(
-                            "Individual", value="individual"
-                        ),
+                        rx.el.option("Individual", value="individual"),
                         default_value="individual",
                         class_name="bg-gray-700 text-white text-xs rounded border-0 focus:ring-0 mr-3 py-1",
                     ),

@@ -1,10 +1,11 @@
 import reflex as rx
-from stock_market_dashboard.states.trading_state import TradingState
-from stock_market_dashboard.components.main_header import main_header
+
 from stock_market_dashboard.components.line_chart import trading_line_chart
+from stock_market_dashboard.components.main_header import main_header
 from stock_market_dashboard.components.options_table import options_table
 from stock_market_dashboard.components.orders_table import orders_table
 from stock_market_dashboard.components.positions_table import positions_table
+from stock_market_dashboard.states.trading_state import TradingState
 
 
 def index() -> rx.Component:

@@ -1,7 +1,7 @@
 import reflex as rx
-from typing import List
-from stock_market_dashboard.states.trading_state import TradingState, StockInfo
+
 from stock_market_dashboard.components.tooltip_props import TOOLTIP_PROPS
+from stock_market_dashboard.states.trading_state import StockInfo, TradingState
 
 
 def stock_info_header(stock: StockInfo) -> rx.Component:
@@ -103,9 +103,7 @@ def trading_line_chart() -> rx.Component:
         f"Math.max(...{TradingState.chart_data.to_string()}.map(p => p.price))"
     ).to(int)
     padding = (max_price - min_price) * 0.1
-    y_domain = rx.Var.create(
-        f"[{min_price} - {padding}, {max_price} + {padding}]"
-    )
+    y_domain = rx.Var.create(f"[{min_price} - {padding}, {max_price} + {padding}]")
     return rx.el.div(
         stock_info_header(TradingState.stock_info),
         rx.recharts.line_chart(

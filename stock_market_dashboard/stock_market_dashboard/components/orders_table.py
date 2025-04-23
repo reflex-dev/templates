@@ -1,5 +1,6 @@
 import reflex as rx
-from stock_market_dashboard.states.trading_state import TradingState, Order
+
+from stock_market_dashboard.states.trading_state import Order, TradingState
 
 
 def get_status_color(status: rx.Var[str]) -> rx.Var[str]:
@@ -14,9 +15,7 @@ def get_status_color(status: rx.Var[str]) -> rx.Var[str]:
 
 
 def get_side_color(side: rx.Var[str]) -> rx.Var[str]:
-    return rx.cond(
-        side == "Buy", "text-green-400", "text-red-400"
-    )
+    return rx.cond(side == "Buy", "text-green-400", "text-red-400")
 
 
 def render_order_row(order: Order) -> rx.Component:
@@ -96,12 +95,8 @@ def orders_table() -> rx.Component:
                 rx.el.thead(
                     rx.el.tr(
                         rx.foreach(
-                            list(
-                                zip(headers, header_classes)
-                            ),
-                            lambda item: rx.el.th(
-                                item[0], class_name=item[1]
-                            ),
+                            list(zip(headers, header_classes)),
+                            lambda item: rx.el.th(item[0], class_name=item[1]),
                         ),
                         class_name="sticky top-0 bg-gray-800 z-10",
                     )

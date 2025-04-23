@@ -1,6 +1,6 @@
 import reflex as rx
-from stock_market_dashboard.states.trading_state import TradingState, Option
-from typing import List
+
+from stock_market_dashboard.states.trading_state import TradingState
 
 
 def options_header(
@@ -51,9 +51,7 @@ def options_sub_tabs() -> rx.Component:
             tabs,
             lambda tab: rx.el.button(
                 tab,
-                on_click=TradingState.set_active_sub_tab(
-                    tab
-                ),
+                on_click=TradingState.set_active_sub_tab(tab),
                 class_name=rx.cond(
                     TradingState.active_sub_tab == tab,
                     "text-xs text-white bg-gray-700 px-3 py-1 rounded",
@@ -219,9 +217,7 @@ def render_combined_option_row(
             call_option,
             rx.fragment(
                 *[
-                    render_option_cell(
-                        call_option[key], cn, *fmt
-                    )
+                    render_option_cell(call_option[key], cn, *fmt)
                     for key, cn, *fmt in call_headers_config
                 ]
             ),
@@ -247,9 +243,7 @@ def render_combined_option_row(
             put_option,
             rx.fragment(
                 *[
-                    render_option_cell(
-                        put_option[key], cn, *fmt
-                    )
+                    render_option_cell(put_option[key], cn, *fmt)
                     for key, cn, *fmt in put_headers_config
                 ]
             ),
