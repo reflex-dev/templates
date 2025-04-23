@@ -38,7 +38,19 @@ jobs:
                 space_dashboard)
                   echo "EXTRA_ARGS=" >> $GITHUB_ENV
                   ;;
+                account_management_dashboard)
+                  echo "EXTRA_ARGS=" >> $GITHUB_ENV
+                  ;;
+                admin_dashboard)
+                  echo "EXTRA_ARGS=" >> $GITHUB_ENV
+                  ;;
+                stock_market_dashboard)
+                  echo "EXTRA_ARGS=" >> $GITHUB_ENV
+                  ;;
                 business_analytics_dashboard)
+                  echo "EXTRA_ARGS=" >> $GITHUB_ENV
+                  ;;
+                manufacturing_dashboard)
                   echo "EXTRA_ARGS=" >> $GITHUB_ENV
                   ;;
                 customer_data_app)

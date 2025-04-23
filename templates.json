@@ -75,6 +75,12 @@
       "hidden": false
     },
     {
+      "name": "admin_dashboard",
+      "description": "An admin dashboard",
+      "hidden": false,
+      "reflex_build": false
+    },
+    {
       "name": "business_analytics_dashboard",
       "description": "A business analytics dashboard.",
       "hidden": false,
@@ -85,6 +91,24 @@
       "description": "A space dashboard app",
       "hidden": false,
       "reflex_build": false
-    }
+    },
+    {
+      "name": "account_management_dashboard",
+      "description": "An account management dashboard app",
+      "hidden": false,
+      "reflex_build": false
+    },
+    {
+      "name": "stock_market_dashboard",
+      "description": "A stock market dashboard app",
+      "hidden": false,
+      "reflex_build": false,
+    },
+    {
+      "name": "manufacturing_dashboard",
+      "description": "A manufacturing dashboard app",
+      "hidden": false,
+      "reflex_build": false
+    },
   ]
 }
