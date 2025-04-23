@@ -113,7 +113,7 @@ def account_category_section(
     total_balance_str = rx.cond(
         category["total_balance"] >= 0,
         category["total_balance"],
-        (category["total_balance"] * -1),
+        category["total_balance"] * -1,
     )
     one_month_change_str = rx.cond(
         category["one_month_change"] >= 0,

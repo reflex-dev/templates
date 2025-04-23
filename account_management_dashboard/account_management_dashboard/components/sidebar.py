@@ -24,32 +24,8 @@ def sidebar() -> rx.Component:
     """The sidebar component for navigation."""
     return rx.el.div(
         rx.el.div(
-            rx.el.div(
-                rx.icon(
-                    tag="activity",
-                    class_name="w-8 h-8 text-orange-500",
-                ),
-                class_name="mb-8",
-            ),
-            rx.el.div(
-                rx.icon(
-                    tag="search",
-                    class_name="w-5 h-5 text-gray-500 cursor-pointer hover:text-gray-700",
-                ),
-                rx.icon(
-                    tag="bell",
-                    class_name="w-5 h-5 text-gray-500 cursor-pointer hover:text-gray-700",
-                ),
-                rx.icon(
-                    tag="settings",
-                    class_name="w-5 h-5 text-gray-500 cursor-pointer hover:text-gray-700",
-                ),
-                rx.icon(
-                    tag="layout_list",
-                    class_name="w-5 h-5 text-gray-500 cursor-pointer hover:text-gray-700",
-                ),
-                class_name="flex items-center space-x-4 px-4 mb-6",
-            ),
+            rx.el.h2("Account Management", class_name="text-md font-bold"),
+            class_name="p-4",
         ),
         rx.el.nav(
             rx.el.div(
