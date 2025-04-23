@@ -91,7 +91,7 @@ def account_row(account: rx.Var[AccountDetail], index: rx.Var[int]) -> rx.Compon
             ),
             class_name="w-32 text-right ml-4",
         ),
-        class_name="flex items-center justify-between py-3 px-4 hover:bg-gray-50 transition-colors duration-150 border-t border-gray-100",
+        class_name="flex items-center justify-between py-3 px-4 hover:bg-gray-50 transition-colors duration-150 border-tb border-gray-100",
     )
 
 
@@ -162,7 +162,12 @@ def account_category_section(
                 class_name="text-sm font-semibold text-gray-900",
             ),
             on_click=lambda: AccountState.toggle_account_category(index),
-            class_name="flex items-center justify-between w-full px-4 py-3 bg-white hover:bg-gray-50 transition-colors duration-150 rounded-t-lg border border-b-0 border-gray-200",
+            class_name=rx.cond(
+                is_open,
+                "flex items-center justify-between w-full px-4 py-3 bg-white hover:bg-gray-50 transition-colors duration-150 rounded-t-lg border border-b-0 border-gray-200",
+                "flex items-center justify-between w-full px-4 py-3 bg-white hover:bg-gray-50 transition-colors duration-150 rounded-lg border border-b border-gray-200",
+            ),
+            # class_name=
         ),
         rx.cond(
             is_open,
