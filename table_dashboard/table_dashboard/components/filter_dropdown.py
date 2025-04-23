@@ -106,14 +106,12 @@ def costs_filter_dropdown() -> rx.Component:
         rx.el.div(
             rx.el.input(
                 placeholder="Min cost",
-                type="number",
                 on_change=DashboardState.set_temp_min_cost,
                 class_name="w-full p-2 border border-gray-300 rounded text-sm mb-2 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500",
                 default_value=DashboardState.temp_min_cost_str,
             ),
             rx.el.input(
                 placeholder="Max cost",
-                type="number",
                 on_change=DashboardState.set_temp_max_cost,
                 class_name="w-full p-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500",
                 default_value=DashboardState.temp_max_cost_str,

@@ -43,8 +43,8 @@ def header() -> rx.Component:
                         "Costs",
                         on_click=DashboardState.toggle_costs_filter,
                         is_active=DashboardState.show_costs_filter,
-                        has_filter=(DashboardState.min_cost != None)
-                        | (DashboardState.max_cost != None),
+                        has_filter=DashboardState.min_cost
+                                   | DashboardState.max_cost,
                     ),
                     costs_filter_dropdown(),
                     class_name="relative",
@@ -70,8 +70,8 @@ def header() -> rx.Component:
                     disabled=(DashboardState.search_owner == "")
                     & (DashboardState.selected_statuses.length() == 0)
                     & (DashboardState.selected_regions.length() == 0)
-                    & (DashboardState.min_cost == None)
-                    & (DashboardState.max_cost == None),
+                    & (DashboardState.min_cost is None)
+                    & (DashboardState.max_cost is None),
                 ),
                 class_name="flex items-center space-x-2 flex-wrap gap-y-2",
             ),

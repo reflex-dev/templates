@@ -2,184 +2,21 @@ import datetime
 import io
 from typing import (
     List,
-    Literal,
     Optional,
     Set,
-    TypedDict,
 )
 
 import pandas as pd
 import reflex as rx
 
-
-class DetailEntry(TypedDict):
-    id: int
-    owner: str
-    status: Literal["Live", "Inactive", "Archived"]
-    region: str
-    stability: int
-    costs: float
-    last_edited: str
+from table_dashboard.models.entry import DetailEntry
+from table_dashboard.states.data import raw_data
 
 
 class DashboardState(rx.State):
     """State for the dashboard page."""
 
-    _data: List[DetailEntry] = [
-        {
-            "id": 1,
-            "owner": "John Doe",
-            "status": "Live",
-            "region": "US-West 1",
-            "stability": 99,
-            "costs": 5422.35,
-            "last_edited": "23/08/2023 13:00",
-        },
-        {
-            "id": 2,
-            "owner": "Jane Smith",
-            "status": "Live",
-            "region": "US-East 2",
-            "stability": 91,
-            "costs": 6087.11,
-            "last_edited": "22/08/2023 10:45",
-        },
-        {
-            "id": 3,
-            "owner": "Alejandro Garcia",
-            "status": "Live",
-            "region": "EU-West 1",
-            "stability": 12,
-            "costs": 7234.56,
-            "last_edited": "17/05/2021 08:32",
-        },
-        {
-            "id": 4,
-            "owner": "Wei Zhang",
-            "status": "Inactive",
-            "region": "US-West 2",
-            "stability": 0,
-            "costs": 0.0,
-            "last_edited": "10/11/2022 15:24",
-        },
-        {
-            "id": 5,
-            "owner": "Maria Rossi",
-            "status": "Live",
-            "region": "US-East 1",
-            "stability": 8,
-            "costs": 8190.77,
-            "last_edited": "05/06/2023 12:16",
-        },
-        {
-            "id": 6,
-            "owner": "Nina Müller",
-            "status": "Archived",
-            "region": "EU-North 1",
-            "stability": 20,
-            "costs": 7609.32,
-            "last_edited": "23/01/2022 11:11",
-        },
-        {
-            "id": 7,
-            "owner": "Liam O'Sullivan",
-            "status": "Live",
-            "region": "US-West 1",
-            "stability": 18,
-            "costs": 5204.98,
-            "last_edited": "14/03/2023 14:45",
-        },
-        {
-            "id": 8,
-            "owner": "Amir Fleischlin",
-            "status": "Inactive",
-            "region": "EU-Central 1",
-            "stability": 0,
-            "costs": 0.0,
-            "last_edited": "12/02/2023 09:12",
-        },
-        {
-            "id": 9,
-            "owner": "Yuki Tanaka",
-            "status": "Live",
-            "region": "US-East 1",
-            "stability": 6,
-            "costs": 9874.56,
-            "last_edited": "18/08/2022 16:03",
-        },
-        {
-            "id": 10,
-            "owner": "Fatima Al-Farsi",
-            "status": "Live",
-            "region": "EU-West 1",
-            "stability": 12,
-            "costs": 5486.99,
-            "last_edited": "29/11/2021 17:25",
-        },
-        {
-            "id": 11,
-            "owner": "Olga Ivanova",
-            "status": "Live",
-            "region": "US-West 2",
-            "stability": 9,
-            "costs": 8120.45,
-            "last_edited": "07/12/2023 07:14",
-        },
-        {
-            "id": 12,
-            "owner": "Pierre Dubois",
-            "status": "Live",
-            "region": "EU-Central 1",
-            "stability": 15,
-            "costs": 4834.11,
-            "last_edited": "28/04/2023 10:45",
-        },
-        {
-            "id": 13,
-            "owner": "Sara Johansson",
-            "status": "Live",
-            "region": "US-East 2",
-            "stability": 97,
-            "costs": 5302.22,
-            "last_edited": "03/10/2022 08:33",
-        },
-        {
-            "id": 14,
-            "owner": "Ahmed Hassan",
-            "status": "Live",
-            "region": "US-West 1",
-            "stability": 11,
-            "costs": 6221.54,
-            "last_edited": "22/07/2022 14:16",
-        },
-        {
-            "id": 15,
-            "owner": "Emily Brown",
-            "status": "Archived",
-            "region": "EU-North 1",
-            "stability": 22,
-            "costs": 6129.99,
-            "last_edited": "18/01/2022 12:45",
-        },
-        {
-            "id": 16,
-            "owner": "Carlos Sanchez",
-            "status": "Live",
-            "region": "US-East 1",
-            "stability": 13,
-            "costs": 4850.33,
-            "last_edited": "05/06/2021 18:33",
-        },
-        {
-            "id": 17,
-            "owner": "Hannah Kim",
-            "status": "Live",
-            "region": "US-West 1",
-            "stability": 91,
-            "costs": 7902.11,
-            "last_edited": "11/05/2023 11:00",
-        },
-    ]
+    _data: List[DetailEntry] = raw_data
     column_names: List[str] = [
         "Owner",
         "Status",
@@ -210,12 +47,12 @@ class DashboardState(rx.State):
     @rx.var
     def unique_statuses(self) -> List[str]:
         """Get unique statuses from the data."""
-        return sorted(list(set((item["status"] for item in self._data))))
+        return sorted({item["status"] for item in self._data})
 
     @rx.var
     def unique_regions(self) -> List[str]:
         """Get unique regions from the data."""
-        return sorted(list(set((item["region"] for item in self._data))))
+        return sorted({item["region"] for item in self._data})
 
     @rx.var
     def filtered_data(self) -> List[DetailEntry]:
@@ -254,29 +91,28 @@ class DashboardState(rx.State):
                 internal_key = sort_key_map.get(self.sort_column)
                 if internal_key:
                     if self.sort_column == "Last edited":
-                        key_func = lambda item: datetime.datetime.strptime(
-                            item[internal_key],
-                            "%d/%m/%Y %H:%M",
-                        )
+
+                        def key_func(item):
+                            return datetime.datetime.strptime(
+                                item[internal_key],
+                                "%d/%m/%Y %H:%M",
+                            )
                     else:
-                        key_func = lambda item: item[internal_key]
+
+                        def key_func(item):
+                            return item[internal_key]
+
                     data_to_sort = sorted(
                         data_to_sort,
                         key=key_func,
                         reverse=not self.sort_ascending,
                     )
                 else:
-                    print(
-                        f"Warning: Sort column '{self.sort_column}' not found in key map."
-                    )
+                    pass
             except KeyError:
-                print(
-                    f"Warning: Internal sort key error for column '{self.sort_column}'."
-                )
+                pass
             except ValueError:
-                print(
-                    f"Warning: Could not convert values in column '{self.sort_column}' for sorting."
-                )
+                pass
         return data_to_sort
 
     @rx.var
@@ -430,15 +266,15 @@ class DashboardState(rx.State):
         new_min_cost = None
         new_max_cost = None
         try:
-            if self.temp_min_cost_str.strip():
+            if self.temp_min_cost_str:
                 new_min_cost = float(self.temp_min_cost_str)
         except ValueError:
-            print(f"Invalid min cost value: {self.temp_min_cost_str}")
+            pass
         try:
-            if self.temp_max_cost_str.strip():
+            if self.temp_max_cost_str:
                 new_max_cost = float(self.temp_max_cost_str)
         except ValueError:
-            print(f"Invalid max cost value: {self.temp_max_cost_str}")
+            pass
         self.min_cost = new_min_cost
         self.max_cost = new_max_cost
         self.show_costs_filter = False
