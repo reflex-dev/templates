@@ -1,8 +1,9 @@
-import reflex as rx
-from typing import TypedDict, List, Dict, Any
-import random
-from faker import Faker
 import datetime
+import random
+from typing import List, TypedDict
+
+import reflex as rx
+from faker import Faker
 
 fake = Faker()
 

@@ -1,12 +1,13 @@
 import reflex as rx
-from company_dashboard.components.sidebar import sidebar
-from company_dashboard.components.header import header_bar
-from company_dashboard.components.key_metrics import key_metrics_section
-from company_dashboard.components.visitors_chart import (
-    visitors_chart_section,
-)
+
 from company_dashboard.components.documents_table import (
     documents_table_section,
+)
+from company_dashboard.components.header import header_bar
+from company_dashboard.components.key_metrics import key_metrics_section
+from company_dashboard.components.sidebar import sidebar
+from company_dashboard.components.visitors_chart import (
+    visitors_chart_section,
 )
 from company_dashboard.states.dashboard_state import DashboardState
 

@@ -1,7 +1,8 @@
 import reflex as rx
+
 from company_dashboard.states.dashboard_state import (
-    DashboardState,
     TOOLTIP_PROPS,
+    DashboardState,
 )
 
 

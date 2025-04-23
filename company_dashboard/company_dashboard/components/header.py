@@ -6,7 +6,7 @@ def header_bar() -> rx.Component:
     return rx.el.div(
         rx.el.div(
             rx.el.label(
-                "reflex › build › ",
+                "reflex > build > ",
                 class_name="text-sm font-semibold text-gray-500",
             ),
             rx.el.label(

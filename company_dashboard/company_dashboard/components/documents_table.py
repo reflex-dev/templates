@@ -1,7 +1,7 @@
 import reflex as rx
+
 from company_dashboard.states.dashboard_state import (
     DashboardState,
-    DocumentRow,
 )
 
 
@@ -37,7 +37,6 @@ def status_badge(status: rx.Var[str]) -> rx.Component:
                 ("Pending", "alert-circle"),
                 "help-circle",
             ),
-            # size=10,
             class_name="mr-1.5 size-4",
         ),
         status,
