@@ -101,7 +101,7 @@
       "description": "A retention dashboard app.",
       "demo_url": "https://retention-dashboard-lime-panda.reflex.run/",
       "hidden": false,
-      "reflex_build": false
+      "reflex_build": true
     },
     {
       "name": "business_analytics_dashboard",
