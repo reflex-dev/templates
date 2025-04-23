@@ -1,0 +1,11 @@
+.states
+assets/external/
+*.db
+*.py[cod]
+.venv/
+venv/
+.vscode/
+.web
+__pycache__/
+.DS_Store
+.idea/
