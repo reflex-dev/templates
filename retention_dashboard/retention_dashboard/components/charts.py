@@ -1,5 +1,6 @@
+from typing import Dict, List, Union
+
 import reflex as rx
-from typing import List, Dict, Union
 
 TooltipPropValue = Union[str, int, float, dict, bool]
 TOOLTIP_PROPS: Dict[str, Dict[str, TooltipPropValue]] = {
@@ -47,15 +48,9 @@ def donut_chart(
         ),
         rx.el.div(
             rx.recharts.pie_chart(
-                rx.recharts.graphing_tooltip(
-                    **TOOLTIP_PROPS
-                ),
+                rx.recharts.graphing_tooltip(**TOOLTIP_PROPS),
                 rx.recharts.pie(
-                    rx.recharts.cell(
-                        fill=rx.Var.create(
-                            f"{data[0]['fill']}"
-                        )
-                    ),
+                    rx.recharts.cell(fill=rx.Var.create(f"{data[0]['fill']}")),
                     data=data,
                     data_key=data_key,
                     name_key=name_key,

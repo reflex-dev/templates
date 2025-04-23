@@ -1,18 +1,15 @@
 import reflex as rx
-from retention_dashboard.states.dashboard_state import DashboardState
+
 from retention_dashboard.components.retention import retention_component
 from retention_dashboard.components.workflow import workflow_component
+from retention_dashboard.states.dashboard_state import DashboardState
 
 
-def nav_button(
-    text: str, is_active: rx.Var[bool]
-) -> rx.Component:
+def nav_button(text: str, is_active: rx.Var[bool]) -> rx.Component:
     """Creates a navigation button."""
     return rx.el.button(
         text,
-        on_click=lambda: DashboardState.set_active_tab(
-            text
-        ),
+        on_click=lambda: DashboardState.set_active_tab(text),
         class_name=rx.cond(
             is_active,
             "px-4 py-2 text-sm font-medium text-blue-700 bg-blue-100 rounded-md",
@@ -67,8 +64,7 @@ def layout() -> rx.Component:
                 ),
                 nav_button(
                     "Retention",
-                    DashboardState.active_tab
-                    == "Retention",
+                    DashboardState.active_tab == "Retention",
                 ),
                 nav_button(
                     "Workflow",

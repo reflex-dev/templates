@@ -43,8 +43,7 @@ def header() -> rx.Component:
                         "Costs",
                         on_click=DashboardState.toggle_costs_filter,
                         is_active=DashboardState.show_costs_filter,
-                        has_filter=DashboardState.min_cost
-                                   | DashboardState.max_cost,
+                        has_filter=DashboardState.min_cost | DashboardState.max_cost,
                     ),
                     costs_filter_dropdown(),
                     class_name="relative",

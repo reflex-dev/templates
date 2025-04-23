@@ -1,6 +1,7 @@
 import reflex as rx
-from retention_dashboard.states.workflow_state import WorkflowState
+
 from retention_dashboard.components.charts import donut_chart
+from retention_dashboard.states.workflow_state import WorkflowState
 
 
 def workflow_component() -> rx.Component:
@@ -30,15 +31,11 @@ def workflow_component() -> rx.Component:
                 ),
                 rx.el.div(
                     rx.el.span(
-                        "Current: "
-                        + WorkflowState.test_quota.to_string()
-                        + "%",
+                        "Current: " + WorkflowState.test_quota.to_string() + "%",
                         class_name="text-xs text-gray-500",
                     ),
                     rx.el.span(
-                        "Scenario: "
-                        + WorkflowState.test_quota.to_string()
-                        + "%",
+                        "Scenario: " + WorkflowState.test_quota.to_string() + "%",
                         class_name="text-xs text-gray-500",
                     ),
                     class_name="flex justify-between mt-1",
@@ -56,12 +53,8 @@ def workflow_component() -> rx.Component:
                         lambda dept: rx.el.label(
                             rx.el.input(
                                 type="checkbox",
-                                checked=WorkflowState.excluded_departments[
-                                    dept
-                                ],
-                                on_change=lambda: WorkflowState.toggle_department(
-                                    dept
-                                ),
+                                checked=WorkflowState.excluded_departments[dept],
+                                on_change=lambda: WorkflowState.toggle_department(dept),
                                 class_name="mr-2 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer",
                             ),
                             dept,
@@ -85,16 +78,8 @@ def workflow_component() -> rx.Component:
                     data_key="value",
                     name_key="name",
                     title="",
-                    total_value=WorkflowState.completed_cases_data[
-                        0
-                    ][
-                        "value"
-                    ],
-                    percentage=WorkflowState.completed_cases_data[
-                        0
-                    ][
-                        "percentage"
-                    ],
+                    total_value=WorkflowState.completed_cases_data[0]["value"],
+                    percentage=WorkflowState.completed_cases_data[0]["percentage"],
                 ),
                 class_name="w-full md:w-1/3 p-4 border-r border-gray-200",
             ),
@@ -108,16 +93,8 @@ def workflow_component() -> rx.Component:
                     data_key="value",
                     name_key="name",
                     title="Tested Cases",
-                    total_value=WorkflowState.test_results_data_tested[
-                        0
-                    ][
-                        "value"
-                    ],
-                    percentage=WorkflowState.test_results_data_tested[
-                        0
-                    ][
-                        "percentage"
-                    ],
+                    total_value=WorkflowState.test_results_data_tested[0]["value"],
+                    percentage=WorkflowState.test_results_data_tested[0]["percentage"],
                 ),
                 rx.el.div(class_name="my-4"),
                 donut_chart(
@@ -125,14 +102,8 @@ def workflow_component() -> rx.Component:
                     data_key="value",
                     name_key="name",
                     title="Untested Cases",
-                    total_value=WorkflowState.test_results_data_untested[
-                        0
-                    ][
-                        "value"
-                    ],
-                    percentage=WorkflowState.test_results_data_untested[
-                        0
-                    ][
+                    total_value=WorkflowState.test_results_data_untested[0]["value"],
+                    percentage=WorkflowState.test_results_data_untested[0][
                         "percentage"
                     ],
                 ),
@@ -148,16 +119,8 @@ def workflow_component() -> rx.Component:
                     data_key="value",
                     name_key="name",
                     title="Error-free Cases",
-                    total_value=WorkflowState.impact_data_error_free[
-                        0
-                    ][
-                        "value"
-                    ],
-                    percentage=WorkflowState.impact_data_error_free[
-                        0
-                    ][
-                        "percentage"
-                    ],
+                    total_value=WorkflowState.impact_data_error_free[0]["value"],
+                    percentage=WorkflowState.impact_data_error_free[0]["percentage"],
                 ),
                 rx.el.div(class_name="my-4"),
                 donut_chart(
@@ -165,16 +128,8 @@ def workflow_component() -> rx.Component:
                     data_key="value",
                     name_key="name",
                     title="Corrected Cases",
-                    total_value=WorkflowState.impact_data_corrected[
-                        0
-                    ][
-                        "value"
-                    ],
-                    percentage=WorkflowState.impact_data_corrected[
-                        0
-                    ][
-                        "percentage"
-                    ],
+                    total_value=WorkflowState.impact_data_corrected[0]["value"],
+                    percentage=WorkflowState.impact_data_corrected[0]["percentage"],
                 ),
                 class_name="w-full md:w-1/3 p-4",
             ),

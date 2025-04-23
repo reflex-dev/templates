@@ -1,8 +1,6 @@
 import reflex as rx
+
 from retention_dashboard.components.layout import layout
-from retention_dashboard.states.dashboard_state import DashboardState
-from retention_dashboard.states.retention_state import RetentionState
-from retention_dashboard.states.workflow_state import WorkflowState
 
 
 def index() -> rx.Component:

@@ -1,4 +1,5 @@
 import reflex as rx
+
 from retention_dashboard.states.retention_state import (
     RetentionState,
     RetentionWeekData,
@@ -40,33 +41,30 @@ def retention_cell(
     return rx.el.td(
         rx.el.div(
             rx.cond(
-            percentage.is_not_none(),
-            rx.el.div(
-                rx.el.p(
-                    percentage.to_string() + "%",
-                    class_name="text-sm font-medium",
+                percentage.is_not_none(),
+                rx.el.div(
+                    rx.el.p(
+                        percentage.to_string() + "%",
+                        class_name="text-sm font-medium",
+                    ),
+                    rx.el.p(count.to_string(), class_name="text-xs"),
+                    class_name="flex flex-col items-center justify-center h-full",
                 ),
-                rx.el.p(
-                    count.to_string(), class_name="text-xs"
+                rx.el.div(
+                    rx.el.p(
+                        "-",
+                        class_name="text-sm font-medium text-gray-400",
+                    ),
+                    rx.el.p(
+                        "- -",
+                        class_name="text-sm font-medium text-gray-400",
+                    ),
+                    class_name="flex flex-col items-center justify-center h-full",
                 ),
-                class_name="flex flex-col items-center justify-center h-full",
             ),
-            rx.el.div(
-                rx.el.p(
-                    "-",
-                    class_name="text-sm font-medium text-gray-400",
-                ),
-                rx.el.p(
-                    "- -",
-                    class_name="text-sm font-medium text-gray-400",
-                ),
-                class_name="flex flex-col items-center justify-center h-full",
-            ),
+            class_name=base_classes + color_class,
         ),
-        class_name=base_classes + color_class,
-        ),
-        class_name="p-[2px]"
-        
+        class_name="p-[2px]",
     )
 
 
@@ -93,7 +91,7 @@ def retention_component() -> rx.Component:
                                 class_name="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
                             ),
                         ),
-                        class_name="border-none"
+                        class_name="border-none",
                     )
                 ),
                 rx.el.tbody(
@@ -110,7 +108,7 @@ def retention_component() -> rx.Component:
                                     week_data, week_index
                                 ),
                             ),
-                            class_name="border-none"
+                            class_name="border-none",
                         ),
                     ),
                     class_name="bg-white divide-y divide-gray-200",

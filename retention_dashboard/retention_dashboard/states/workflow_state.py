@@ -1,5 +1,6 @@
+from typing import Dict, List, TypedDict
+
 import reflex as rx
-from typing import TypedDict, List, Dict
 
 
 class ChartData(TypedDict):
@@ -21,9 +22,7 @@ class WorkflowState(rx.State):
         "Account Management",
         "Sales Support",
     ]
-    excluded_departments: Dict[str, bool] = {
-        dept: False for dept in departments
-    }
+    excluded_departments: Dict[str, bool] = {dept: False for dept in departments}
     completed_cases_data: list[ChartData] = [
         {
             "name": "Completed",
@@ -73,6 +72,4 @@ class WorkflowState(rx.State):
     @rx.event
     def toggle_department(self, dept_name: str):
         """Toggles the exclusion status of a department."""
-        self.excluded_departments[dept_name] = (
-            not self.excluded_departments[dept_name]
-        )
+        self.excluded_departments[dept_name] = not self.excluded_departments[dept_name]
