@@ -27,4 +27,5 @@ TOOLTIP_PROPS = {
         "background": rx.color("gray", 1),
         "borderColor": rx.color("gray", 4),
     },
+    "label_style": {"color": rx.color("gray", 11)},
 }

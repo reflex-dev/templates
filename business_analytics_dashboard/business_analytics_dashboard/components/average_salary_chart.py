@@ -1,8 +1,7 @@
 import reflex as rx
 import reflex.components.recharts as recharts
-
-from business_analytics_dashboard.components.tooltip_props import TOOLTIP_PROPS
 from business_analytics_dashboard.states.dashboard_state import DashboardState
+from business_analytics_dashboard.components.tooltip_props import TOOLTIP_PROPS
 
 
 def average_salary_bar_chart() -> rx.Component:
@@ -19,9 +18,12 @@ def average_salary_bar_chart() -> rx.Component:
                 class_name="text-gray-500 text-center",
             ),
             rx.cond(
-                DashboardState.average_salary_by_department.length() > 0,
+                DashboardState.average_salary_by_department.length()
+                > 0,
                 recharts.bar_chart(
-                    recharts.graphing_tooltip(**TOOLTIP_PROPS),
+                    recharts.graphing_tooltip(
+                        **TOOLTIP_PROPS
+                    ),
                     recharts.cartesian_grid(
                         horizontal=True,
                         vertical=False,
@@ -33,7 +35,9 @@ def average_salary_bar_chart() -> rx.Component:
                             DashboardState.average_salary_by_department,
                             lambda data_point, index: recharts.cell(
                                 fill=DashboardState.department_color_map.get(
-                                    data_point["department"],
+                                    data_point[
+                                        "department"
+                                    ],
                                     "#8884d8",
                                 )
                             ),
@@ -75,7 +79,8 @@ def average_salary_bar_chart() -> rx.Component:
                 ),
                 rx.el.p(
                     rx.cond(
-                        DashboardState.selected_department != "All",
+                        DashboardState.selected_department
+                        != "All",
                         f"No salary data available for the '{DashboardState.selected_department}' department.",
                         "No salary data available to display the chart.",
                     ),
