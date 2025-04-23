@@ -160,7 +160,7 @@ def table_header(
     col_name = col_data[0]
     column_key = col_data[1]
     return rx.cond(
-        column_key is not None,
+        column_key,
         sortable_table_header(col_name, column_key.to(SortColumn)),
         non_sortable_table_header(col_name),
     )
@@ -261,8 +261,8 @@ def table_row(customer: CustomerData) -> rx.Component:
         on_click=lambda: DashboardState.select_customer(customer["id"]),
         class_name=rx.cond(
             DashboardState.selected_customer_id == customer["id"],
-            "bg-emerald-50 border-l-4 border-emerald-500 cursor-pointer hover:bg-emerald-100 transition-colors duration-150 ease-in-out",
-            "border-b border-gray-200 cursor-pointer hover:bg-gray-50 transition-colors duration-150 ease-in-out",
+            "w-full bg-emerald-50 border-l-4 border-emerald-500 cursor-pointer hover:bg-emerald-100 transition-colors duration-150 ease-in-out",
+            "w-full border-b border-gray-200 cursor-pointer hover:bg-gray-50 transition-colors duration-150 ease-in-out",
         ),
     )
 
@@ -295,7 +295,7 @@ def data_table() -> rx.Component:
                             DashboardState.column_data,
                             table_header,
                         ),
-                        class_name="bg-gray-50 border-b border-gray-200",
+                        class_name="bg-gray-50 border-b border-gray-200 whitespace-nowrap",
                     )
                 ),
                 rx.el.tbody(
