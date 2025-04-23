@@ -21,7 +21,7 @@ def index() -> rx.Component:
             ),
             class_name="w-full p-8 overflow-y-auto bg-slate-900 text-slate-100 min-h-screen lg:ml-64",
         ),
-        class_name="flex min-h-screen w-full",
+        class_name="flex max-h-screen w-full",
     )
 
 
