@@ -84,7 +84,13 @@
       "name": "stock_market_dashboard",
       "description": "A stock market dashboard app",
       "hidden": false,
+      "reflex_build": false,
+    },
+    {
+      "name": "manufacturing_dashboard",
+      "description": "A manufacturing dashboard app",
+      "hidden": false,
       "reflex_build": false
-    }
+    },
   ]
 }
