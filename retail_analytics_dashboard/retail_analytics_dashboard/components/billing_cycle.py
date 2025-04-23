@@ -1,4 +1,5 @@
 import reflex as rx
+
 from retail_analytics_dashboard.components.progress_bar import (
     cost_progress_bar,
     progress_bar,

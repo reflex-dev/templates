@@ -1,11 +1,9 @@
 from typing import List
 
 import reflex as rx
-from retail_analytics_dashboard.states.dashboard_state import (
-    TOOLTIP_PROPS,
-    ChartDataPoint,
-    OverviewMetric,
-)
+
+from retail_analytics_dashboard.models.models import ChartDataPoint, OverviewMetric
+from retail_analytics_dashboard.states.data import TOOLTIP_PROPS
 
 
 def overview_chart(
