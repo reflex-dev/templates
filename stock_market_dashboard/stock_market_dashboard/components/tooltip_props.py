@@ -1,0 +1,30 @@
+TOOLTIP_PROPS = {
+    "separator": ": ",
+    "cursor": False,
+    "is_animation_active": False,
+    "label_style": {
+        "fontWeight": "500",
+        "color": "#cbd5e1",
+    },
+    "item_style": {
+        "color": "#e5e7eb",
+        "display": "flex",
+        "paddingBottom": "0px",
+        "justifyContent": "space-between",
+        "textTransform": "capitalize",
+    },
+    "content_style": {
+        "backgroundColor": "rgba(31, 41, 55, 0.8)",
+        "borderColor": "#4b5563",
+        "borderWidth": "1px",
+        "borderRadius": "5px",
+        "boxShadow": "0px 4px 6px rgba(0, 0, 0, 0.1)",
+        "fontFamily": "inherit",
+        "fontSize": "0.75rem",
+        "lineHeight": "1rem",
+        "fontWeight": "500",
+        "minWidth": "8rem",
+        "padding": "0.375rem 0.625rem",
+        "position": "relative",
+    },
+}
