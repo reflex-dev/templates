@@ -1,5 +1,4 @@
 import reflex as rx
-
 from admin_dashboard.states.navigation_state import NavigationState
 
 
@@ -25,7 +24,9 @@ def navigation() -> rx.Component:
                 class_name="h-8 w-auto mr-4",
                 alt="App Logo",
             ),
-            navigation_item("Sales Pipeline", "/sales-pipeline"),
+            navigation_item(
+                "Sales Pipeline", "/sales-pipeline"
+            ),
             navigation_item("Customer Admin Panel", "/"),
             navigation_item("HR Portal", "/hr-portal"),
             navigation_item(

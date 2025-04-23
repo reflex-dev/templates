@@ -1,25 +1,31 @@
 import reflex as rx
 import reflex.components.recharts as recharts
-
 from admin_dashboard.states.dashboard_state import (
-    CustomerData,
     DashboardState,
+    CustomerData,
 )
+from typing import Optional
 
 
-def detail_item(label: str, value: rx.Var[str]) -> rx.Component:
+def detail_item(
+    label: str, value: rx.Var[str]
+) -> rx.Component:
     """Displays a single detail item with label and value."""
     return rx.el.div(
         rx.el.dt(
             label,
             class_name="text-sm font-medium text-gray-500",
         ),
-        rx.el.dd(value, class_name="mt-1 text-sm text-gray-900"),
+        rx.el.dd(
+            value, class_name="mt-1 text-sm text-gray-900"
+        ),
         class_name="py-2",
     )
 
 
-def license_stat(label: str, value: rx.Var[int], change: rx.Var[int]) -> rx.Component:
+def license_stat(
+    label: str, value: rx.Var[int], change: rx.Var[int]
+) -> rx.Component:
     """Displays a license statistic card."""
     return rx.el.div(
         rx.el.p(
@@ -33,7 +39,9 @@ def license_stat(label: str, value: rx.Var[int], change: rx.Var[int]) -> rx.Comp
             ),
             rx.el.span(
                 rx.icon(
-                    rx.cond(change > 0, "arrow-up", "arrow-down"),
+                    rx.cond(
+                        change > 0, "arrow-up", "arrow-down"
+                    ),
                     size=16,
                     class_name="mr-1",
                 ),
@@ -57,7 +65,11 @@ def customer_details_panel(
     """Panel showing detailed information about a selected customer."""
     usage_percentage = rx.cond(
         customer["licenses"] > 0,
-        round(customer["active_licenses"] * 100 / customer["licenses"]).to(int),
+        round(
+            customer["active_licenses"]
+            * 100
+            / customer["licenses"]
+        ).to(int),
         0,
     )
     return rx.el.div(
@@ -89,8 +101,12 @@ def customer_details_panel(
                     "Revenue",
                     "$" + customer["revenue"].to_string(),
                 ),
-                detail_item("Platform Type", customer["platform"]),
-                detail_item("Industry", customer["industry"]),
+                detail_item(
+                    "Platform Type", customer["platform"]
+                ),
+                detail_item(
+                    "Industry", customer["industry"]
+                ),
             ),
             class_name="mb-6 p-4 bg-white rounded-lg border border-gray-200 divide-y divide-gray-200 shadow-sm",
         ),
@@ -167,7 +183,9 @@ def customer_details() -> rx.Component:
     return rx.el.div(
         rx.cond(
             DashboardState.selected_customer,
-            customer_details_panel(DashboardState.selected_customer),
+            customer_details_panel(
+                DashboardState.selected_customer
+            ),
             rx.el.div(
                 rx.el.p(
                     "Select a customer to see details.",
