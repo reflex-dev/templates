@@ -1,11 +1,12 @@
+from typing import Optional, Tuple
+
 import reflex as rx
+
 from admin_dashboard.states.dashboard_state import (
+    CustomerData,
     DashboardState,
     SortColumn,
-    SortOrder,
-    CustomerData,
 )
-from typing import Optional, List, Tuple
 
 
 def platform_tag(platform: rx.Var[str]) -> rx.Component:
@@ -56,12 +57,12 @@ def industry_tag(industry: rx.Var[str]) -> rx.Component:
 
 def sort_icon(column_key: SortColumn) -> rx.Component:
     """Displays sort direction icon or a neutral sortable indicator."""
-    icon_base_class = "ml-1 inline-block w-3 h-3 transition-colors duration-150 ease-in-out"
+    icon_base_class = (
+        "ml-1 inline-block w-3 h-3 transition-colors duration-150 ease-in-out"
+    )
     active_icon_class = f"{icon_base_class} text-gray-700"
     inactive_icon_class = f"{icon_base_class} text-gray-400 group-hover:text-gray-600"
-    is_active_column = (
-        DashboardState.sort_column == column_key
-    )
+    is_active_column = DashboardState.sort_column == column_key
     return rx.cond(
         is_active_column,
         rx.cond(
@@ -85,9 +86,7 @@ def sort_icon(column_key: SortColumn) -> rx.Component:
     )
 
 
-def sortable_table_header(
-    col_name: str, column_key: SortColumn
-) -> rx.Component:
+def sortable_table_header(col_name: str, column_key: SortColumn) -> rx.Component:
     """Renders a sortable table header cell."""
     base_class = "px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider group"
     sortable_class = f"{base_class} cursor-pointer"
@@ -124,7 +123,9 @@ def non_sortable_table_header(
     col_name: str,
 ) -> rx.Component:
     """Renders a non-sortable table header cell."""
-    base_class = "px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+    base_class = (
+        "px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+    )
     text_align_class = rx.match(
         col_name,
         ("Revenue", "text-right"),
@@ -159,17 +160,13 @@ def table_header(
     col_name = col_data[0]
     column_key = col_data[1]
     return rx.cond(
-        column_key != None,
-        sortable_table_header(
-            col_name, column_key.to(SortColumn)
-        ),
+        column_key is not None,
+        sortable_table_header(col_name, column_key.to(SortColumn)),
         non_sortable_table_header(col_name),
     )
 
 
-def get_cell_content(
-    col_name: rx.Var[str], customer: CustomerData
-) -> rx.Component:
+def get_cell_content(col_name: rx.Var[str], customer: CustomerData) -> rx.Component:
     """Gets the appropriate component for a specific cell based on column name."""
     base_class = "px-4 py-3 whitespace-nowrap text-sm"
     return rx.match(
@@ -224,9 +221,7 @@ def get_cell_content(
                     "+",
                     "",
                 )
-                + customer[
-                    "active_license_growth"
-                ].to_string()
+                + customer["active_license_growth"].to_string()
                 + "%",
                 class_name=rx.cond(
                     customer["active_license_growth"] > 0,
@@ -261,16 +256,11 @@ def table_row(customer: CustomerData) -> rx.Component:
     return rx.el.tr(
         rx.foreach(
             DashboardState.column_data,
-            lambda col_data: get_cell_content(
-                col_data[0], customer
-            ),
+            lambda col_data: get_cell_content(col_data[0], customer),
         ),
-        on_click=lambda: DashboardState.select_customer(
-            customer["id"]
-        ),
+        on_click=lambda: DashboardState.select_customer(customer["id"]),
         class_name=rx.cond(
-            DashboardState.selected_customer_id
-            == customer["id"],
+            DashboardState.selected_customer_id == customer["id"],
             "bg-emerald-50 border-l-4 border-emerald-500 cursor-pointer hover:bg-emerald-100 transition-colors duration-150 ease-in-out",
             "border-b border-gray-200 cursor-pointer hover:bg-gray-50 transition-colors duration-150 ease-in-out",
         ),
@@ -290,9 +280,7 @@ def data_table() -> rx.Component:
                 rx.el.input(
                     placeholder="Search by customer name...",
                     default_value=DashboardState.search_term,
-                    on_change=DashboardState.set_search_term.debounce(
-                        300
-                    ),
+                    on_change=DashboardState.set_search_term.debounce(300),
                     class_name="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm text-gray-800 placeholder-gray-500",
                 ),
                 class_name="relative flex-grow",
@@ -334,8 +322,7 @@ def data_table() -> rx.Component:
         ),
         rx.el.div(
             rx.el.p(
-                DashboardState.result_count.to_string()
-                + " results",
+                DashboardState.result_count.to_string() + " results",
                 class_name="text-sm text-gray-500 mt-4",
             ),
             class_name="flex justify-end",

@@ -1,8 +1,9 @@
 import reflex as rx
-from admin_dashboard.components.navigation import navigation
-from admin_dashboard.components.data_table import data_table
-from admin_dashboard.components.customer_details import customer_details
 import reflex.components.radix.themes as rdxt
+
+from admin_dashboard.components.customer_details import customer_details
+from admin_dashboard.components.data_table import data_table
+from admin_dashboard.components.navigation import navigation
 
 
 def index() -> rx.Component:
@@ -61,12 +62,8 @@ def customer_success_hub_page() -> rx.Component:
     return mock_page("Customer Success Hub")
 
 
-app = rx.App(
-    theme=rx.theme(appearance="light"), stylesheets=[]
-)
+app = rx.App(theme=rx.theme(appearance="light"), stylesheets=[])
 app.add_page(index, route="/")
 app.add_page(sales_pipeline_page, route="/sales-pipeline")
 app.add_page(hr_portal_page, route="/hr-portal")
-app.add_page(
-    customer_success_hub_page, route="/customer-success-hub"
-)
+app.add_page(customer_success_hub_page, route="/customer-success-hub")
