@@ -21,7 +21,7 @@ def navigation() -> rx.Component:
     return rx.el.div(
         rx.el.div(
             rx.el.img(
-                src="/favicon.ico",
+                src="https://avatars.githubusercontent.com/u/104714959?s=200&v=4",
                 class_name="h-8 w-auto mr-4",
                 alt="App Logo",
             ),
