@@ -1,9 +1,10 @@
 import reflex as rx
-from space_dashboard.states.dashboard_state import (
-    DashboardState,
-    ComData,
-)
+
 from space_dashboard.components.section_wrapper import section_wrapper
+from space_dashboard.states.dashboard_state import (
+    ComData,
+    DashboardState,
+)
 
 
 def hq_com_item(data: ComData) -> rx.Component:

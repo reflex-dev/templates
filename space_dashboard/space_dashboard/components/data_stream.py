@@ -1,9 +1,10 @@
 import reflex as rx
+
+from space_dashboard.components.section_wrapper import section_wrapper
 from space_dashboard.states.dashboard_state import (
     DashboardState,
     StreamData,
 )
-from space_dashboard.components.section_wrapper import section_wrapper
 
 
 def data_stream_item(data: StreamData) -> rx.Component:

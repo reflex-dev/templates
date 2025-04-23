@@ -1,9 +1,10 @@
 import reflex as rx
+
+from space_dashboard.components.section_wrapper import section_wrapper
 from space_dashboard.states.dashboard_state import (
     DashboardState,
     PosData,
 )
-from space_dashboard.components.section_wrapper import section_wrapper
 
 
 def pos_tracking_item(data: PosData) -> rx.Component:

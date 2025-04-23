@@ -1,5 +1,6 @@
+from typing import List, TypedDict
+
 import reflex as rx
-from typing import TypedDict, List, Dict
 
 
 class EnvData(TypedDict):

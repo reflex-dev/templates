@@ -1,9 +1,10 @@
 import reflex as rx
+
+from space_dashboard.components.section_wrapper import section_wrapper
 from space_dashboard.states.dashboard_state import (
     DashboardState,
     PlanetData,
 )
-from space_dashboard.components.section_wrapper import section_wrapper
 
 
 def planet_item(data: PlanetData) -> rx.Component:
