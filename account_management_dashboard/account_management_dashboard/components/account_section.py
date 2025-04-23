@@ -2,12 +2,12 @@ from typing import List
 
 import reflex as rx
 
-from account_management_dashboard.states.account_state import (
+from account_management_dashboard.models.models import (
     AccountCategory,
     AccountDetail,
-    AccountState,
     SparklinePoint,
 )
+from account_management_dashboard.states.account_state import AccountState
 
 try:
     import reflex.components.recharts as recharts
