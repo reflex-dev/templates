@@ -2,7 +2,7 @@ from typing import List, Optional, TypedDict
 
 import reflex as rx
 
-from retention_dashboard.retention_dashboard.states.data import retention_data_raw
+from retention_dashboard.states.data import retention_data_raw
 
 
 class RetentionWeekData(TypedDict):
