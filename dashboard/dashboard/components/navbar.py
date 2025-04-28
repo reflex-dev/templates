@@ -3,6 +3,7 @@
 import reflex as rx
 
 from dashboard import styles
+from dashboard.templates.template import ALL_PAGES
 
 
 def menu_item_icon(icon: str) -> rx.Component:
@@ -104,9 +105,6 @@ def navbar_footer() -> rx.Component:
 
 
 def menu_button() -> rx.Component:
-    # Get all the decorated pages and add them to the menu.
-    from reflex.page import get_decorated_pages
-
     # The ordered page routes.
     ordered_page_routes = [
         "/",
@@ -116,12 +114,9 @@ def menu_button() -> rx.Component:
         "/settings",
     ]
 
-    # Get the decorated pages.
-    pages = get_decorated_pages()
-
     # Include all pages even if they are not in the ordered_page_routes.
     ordered_pages = sorted(
-        pages,
+        ALL_PAGES,
         key=lambda page: (
             ordered_page_routes.index(page["route"])
             if page["route"] in ordered_page_routes
