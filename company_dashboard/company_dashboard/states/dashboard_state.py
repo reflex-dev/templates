@@ -38,6 +38,7 @@ class DashboardState(rx.State):
 
     key_metrics: List[Metric] = []
     visitor_data: List[VisitorDataPoint] = []
+    displayed_visitor_data: List[VisitorDataPoint] = []
     document_data: List[DocumentRow] = []
     selected_visitor_timeframe: str = "Last 3 months"
     selected_document_tab: str = "Outline"
@@ -102,6 +103,7 @@ class DashboardState(rx.State):
                     "series2": fake.random_int(min=50, max=300),
                 }
             )
+        self.displayed_visitor_data = self.visitor_data
         self.visitor_data.reverse()
         statuses = ["Done", "In Process", "Pending"]
         section_types = [
@@ -179,6 +181,15 @@ class DashboardState(rx.State):
     @rx.event
     def set_visitor_timeframe(self, timeframe: str):
         self.selected_visitor_timeframe = timeframe
+
+        if timeframe == "Last 3 months":
+            self.displayed_visitor_data = self.visitor_data
+
+        if timeframe == "Last 30 days":
+            self.displayed_visitor_data = self.visitor_data[-30:]
+
+        if timeframe == "Last 7 days":
+            self.displayed_visitor_data = self.visitor_data[-7:]
 
     @rx.event
     def set_document_tab(self, tab: str):
