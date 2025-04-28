@@ -39,7 +39,7 @@ def visitors_chart_section() -> rx.Component:
                 time_range_button("Last 7 days"),
                 class_name="flex items-center space-x-2",
             ),
-            class_name="flex items-center justify-between mb-4",
+            class_name="flex flex-wrap items-center justify-between mb-4 gap-y-2",
         ),
         rx.recharts.area_chart(
             rx.recharts.cartesian_grid(
@@ -133,10 +133,10 @@ def visitors_chart_section() -> rx.Component:
                     y2="1",
                 ),
             ),
-            data=DashboardState.visitor_data,
-            height=300,
+            data=DashboardState.displayed_visitor_data,
+            height=360,
             margin={
-                "top": 10,
+                "top": 25,
                 "right": 0,
                 "left": 0,
                 "bottom": 0,
