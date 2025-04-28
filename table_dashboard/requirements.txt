@@ -1,2 +1,2 @@
 pandas
-reflex>=0.7.8a1
+reflex>=0.7.8
