@@ -140,8 +140,8 @@ def template(
         ALL_PAGES.append(
             {
                 "route": route,
-                "title": title,
             }
+            | ({"title": title} if title is not None else {})
         )
 
         return theme_wrap
