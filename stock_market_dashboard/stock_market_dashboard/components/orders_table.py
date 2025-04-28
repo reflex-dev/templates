@@ -111,5 +111,5 @@ def orders_table() -> rx.Component:
             ),
             class_name="overflow-y-auto max-h-[200px]",
         ),
-        class_name="bg-gray-800 p-3 rounded-lg border border-gray-700",
+        class_name="bg-gray-800 p-3 rounded-lg border border-gray-700 lg:col-span-2",
     )
