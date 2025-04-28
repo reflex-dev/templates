@@ -2,8 +2,6 @@
 
 import reflex as rx
 
-from dashboard.templates.template import ALL_PAGES
-
 from .. import styles
 
 
@@ -133,6 +131,8 @@ def sidebar() -> rx.Component:
         The sidebar component.
 
     """
+    from dashboard.templates.template import ALL_PAGES
+
     # The ordered page routes.
     ordered_page_routes = [
         "/",

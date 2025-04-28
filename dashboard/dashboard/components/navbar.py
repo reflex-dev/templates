@@ -3,7 +3,6 @@
 import reflex as rx
 
 from dashboard import styles
-from dashboard.templates.template import ALL_PAGES
 
 
 def menu_item_icon(icon: str) -> rx.Component:
@@ -105,6 +104,8 @@ def navbar_footer() -> rx.Component:
 
 
 def menu_button() -> rx.Component:
+    from dashboard.templates.template import ALL_PAGES
+
     # The ordered page routes.
     ordered_page_routes = [
         "/",

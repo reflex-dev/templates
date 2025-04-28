@@ -2,8 +2,6 @@
 
 import reflex as rx
 
-from cijob.templates.template import ALL_PAGES
-
 from .. import styles
 
 
@@ -104,6 +102,8 @@ def navbar_footer() -> rx.Component:
 
 
 def menu_button() -> rx.Component:
+    from cijob.templates.template import ALL_PAGES
+
     # The ordered page routes.
     ordered_page_routes = [
         "/",
