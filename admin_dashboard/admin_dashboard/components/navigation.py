@@ -10,8 +10,8 @@ def navigation_item(text: str, href: str) -> rx.Component:
         href=href,
         class_name=rx.cond(
             NavigationState.current_page == href,
-            "px-4 py-2 text-sm font-medium text-white bg-emerald-700 rounded-md shadow-sm",
-            "px-4 py-2 text-sm font-medium text-emerald-100 hover:bg-emerald-600 hover:text-white rounded-md transition-colors duration-150 ease-in-out",
+            "px-4 py-2 text-sm font-medium text-white bg-emerald-700 rounded-md shadow-sm whitespace-nowrap sm:whitespace-normal",
+            "px-4 py-2 text-sm font-medium text-emerald-100 hover:bg-emerald-600 hover:text-white rounded-md transition-colors duration-150 ease-in-out whitespace-nowrap sm:whitespace-normal",
         ),
     )
 
@@ -22,7 +22,7 @@ def navigation() -> rx.Component:
         rx.el.div(
             rx.el.img(
                 src="https://avatars.githubusercontent.com/u/104714959?s=200&v=4",
-                class_name="h-8 w-auto mr-4",
+                class_name="h-8 w-auto mr-4 max-md:hidden",
                 alt="App Logo",
             ),
             navigation_item("Sales Pipeline", "/sales-pipeline"),
@@ -32,7 +32,7 @@ def navigation() -> rx.Component:
                 "Customer Success Hub",
                 "/customer-success-hub",
             ),
-            class_name="flex items-center space-x-2",
+            class_name="flex items-center space-x-2 overflow-x-auto w-full",
         ),
         class_name="bg-emerald-800 px-6 py-2 shadow-md sticky top-0 left-0 w-full z-50 h-[56px]",
     )

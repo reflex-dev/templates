@@ -12,14 +12,11 @@ def index() -> rx.Component:
         rx.el.div(
             navigation(),
             rx.el.div(
-                rx.el.div(
-                    data_table(),
-                    class_name="flex-grow p-6 overflow-y-auto",
-                ),
+                data_table(),
                 customer_details(),
-                class_name="flex flex-row h-[calc(100vh-56px)] overflow-hidden",
+                class_name="grid grid-cols-1 md:grid-cols-3",
             ),
-            class_name="bg-gray-100 h-screen overflow-hidden",
+            class_name="bg-gray-100 w-full h-screen",
         ),
         appearance="light",
     )
