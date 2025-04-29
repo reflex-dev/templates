@@ -1,10 +1,10 @@
 import reflex as rx
+
 from futuristic_dashboard.states.dashboard_state import (
     DashboardState,
     QuickActionData,
     ResourceAllocationData,
 )
-from typing import Dict, Any
 
 
 def system_time_section() -> rx.Component:
@@ -149,7 +149,6 @@ def resource_allocation_section() -> rx.Component:
 def right_sidebar() -> rx.Component:
     return rx.el.aside(
         system_time_section(),
-        # quick_actions_section(),
         resource_allocation_section(),
         class_name="w-72 px-4 pt-4 pb-10 sm:p-6 flex-shrink-0 overflow-y-auto hidden lg:block h-screen sticky top-0 right-0",
     )

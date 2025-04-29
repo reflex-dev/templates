@@ -1,9 +1,11 @@
+from typing import Dict
+
 import reflex as rx
+
 from futuristic_dashboard.states.dashboard_state import (
     DashboardState,
     SystemStatusData,
 )
-from typing import Dict
 
 
 def navigation_item(item: Dict[str, str]) -> rx.Component:

@@ -1,11 +1,12 @@
 import reflex as rx
+
+from futuristic_dashboard.components.charts import (
+    performance_line_chart,
+    stat_card_chart,
+)
 from futuristic_dashboard.states.dashboard_state import (
     DashboardState,
     StatCardData,
-)
-from futuristic_dashboard.components.charts import (
-    stat_card_chart,
-    performance_line_chart,
 )
 
 

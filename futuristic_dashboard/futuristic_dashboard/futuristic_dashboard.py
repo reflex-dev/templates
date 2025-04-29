@@ -1,8 +1,9 @@
 import reflex as rx
-from futuristic_dashboard.components.sidebar import sidebar
+
 from futuristic_dashboard.components.header import dashboard_header
 from futuristic_dashboard.components.main_content import main_content
 from futuristic_dashboard.components.right_sidebar import right_sidebar
+from futuristic_dashboard.components.sidebar import sidebar
 from futuristic_dashboard.states.dashboard_state import DashboardState
 
 

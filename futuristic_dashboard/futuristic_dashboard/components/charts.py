@@ -1,9 +1,10 @@
+from typing import Dict, List
+
 import reflex as rx
+
 from futuristic_dashboard.states.dashboard_state import (
-    DashboardState,
     PerformanceChartData,
 )
-from typing import List, Dict
 
 TOOLTIP_PROPS = {
     "cursor": {"fill": "rgba(200, 200, 200, 0.1)"},
