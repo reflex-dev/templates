@@ -121,5 +121,5 @@ def sidebar() -> rx.Component:
             ),
             class_name="border-t border-gray-200",
         ),
-        class_name="w-64 border-r border-gray-200 flex flex-col h-screen",
+        class_name="w-full max-w-[250px] border-r border-gray-200 flex flex-col h-screen sticky top-0 left-0 max-lg:hidden",
     )
