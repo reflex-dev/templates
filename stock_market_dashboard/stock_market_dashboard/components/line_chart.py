@@ -42,27 +42,30 @@ def stock_info_header(stock: StockInfo) -> rx.Component:
                 "Sell",
                 class_name="bg-red-500 hover:bg-red-600 text-white text-xs font-bold py-1 px-4 rounded",
             ),
-            rx.el.span(
-                stock["open"].to_string(),
-                class_name="text-xs text-gray-400 ml-4",
+            rx.el.div(
+                rx.el.span(
+                    stock["open"].to_string(),
+                    class_name="text-xs text-gray-400 ml-4",
+                ),
+                rx.el.span(
+                    stock["high"].to_string(),
+                    class_name="text-xs text-gray-400 ml-2",
+                ),
+                rx.el.span(
+                    stock["low"].to_string(),
+                    class_name="text-xs text-gray-400 ml-2",
+                ),
+                rx.el.span(
+                    stock["close"].to_string(),
+                    class_name="text-xs text-gray-400 ml-2",
+                ),
+                rx.el.span(
+                    f"V {stock['volume']}",
+                    class_name="text-xs text-gray-400 ml-2",
+                ),
+                class_name="flex flex-row items-center max-md:hidden",
             ),
-            rx.el.span(
-                stock["high"].to_string(),
-                class_name="text-xs text-gray-400 ml-2",
-            ),
-            rx.el.span(
-                stock["low"].to_string(),
-                class_name="text-xs text-gray-400 ml-2",
-            ),
-            rx.el.span(
-                stock["close"].to_string(),
-                class_name="text-xs text-gray-400 ml-2",
-            ),
-            rx.el.span(
-                f"V {stock['volume']}",
-                class_name="text-xs text-gray-400 ml-2",
-            ),
-            class_name="flex items-center mt-1",
+            class_name="flex flex-wrap items-center mt-1",
         ),
         class_name="mb-3",
     )
@@ -91,7 +94,7 @@ def chart_controls() -> rx.Component:
             ),
             class_name="flex items-center",
         ),
-        class_name="flex justify-between items-center mt-2 px-2",
+        class_name="flex justify-between items-center mt-2 px-2 max-md:hidden",
     )
 
 
@@ -155,5 +158,5 @@ def trading_line_chart() -> rx.Component:
             width="100%",
         ),
         chart_controls(),
-        class_name="bg-gray-800 p-4 rounded-lg border border-gray-700 flex-grow",
+        class_name="bg-gray-800 p-4 rounded-lg border border-gray-700 flex-grow lg:col-span-1",
     )

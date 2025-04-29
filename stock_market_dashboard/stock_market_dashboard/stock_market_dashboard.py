@@ -13,17 +13,11 @@ def index() -> rx.Component:
     return rx.el.div(
         main_header(),
         rx.el.main(
-            rx.el.div(
-                trading_line_chart(),
-                options_table(),
-                class_name="flex flex-col lg:flex-row gap-4 mb-4",
-            ),
-            rx.el.div(
-                orders_table(),
-                positions_table(),
-                class_name="grid grid-cols-1 lg:grid-cols-2 gap-4",
-            ),
-            class_name="p-4",
+            trading_line_chart(),
+            options_table(),
+            orders_table(),
+            positions_table(),
+            class_name="grid grid-cols-1 lg:grid-cols-3 gap-4 p-4",
         ),
         class_name="min-h-screen bg-gray-900 text-gray-300 font-sans",
         on_mount=TradingState.start_simulation,

@@ -104,9 +104,8 @@ def navbar_footer() -> rx.Component:
 
 
 def menu_button() -> rx.Component:
-    from dashboard.templates.template import ALL_PAGES
+    from reflex.page import DECORATED_PAGES
 
-    # The ordered page routes.
     ordered_page_routes = [
         "/",
         "/table",
@@ -115,9 +114,14 @@ def menu_button() -> rx.Component:
         "/settings",
     ]
 
-    # Include all pages even if they are not in the ordered_page_routes.
+    pages = [
+        page_dict
+        for page_list in DECORATED_PAGES.values()
+        for _, page_dict in page_list
+    ]
+
     ordered_pages = sorted(
-        ALL_PAGES,
+        pages,
         key=lambda page: (
             ordered_page_routes.index(page["route"])
             if page["route"] in ordered_page_routes

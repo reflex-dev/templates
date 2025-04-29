@@ -342,7 +342,7 @@ def options_table() -> rx.Component:
                 ),
                 class_name="w-full border-collapse text-gray-300 text-xs",
             ),
-            class_name="overflow-y-auto max-h-[280px]",
+            class_name="overflow-y-auto h-full",
         ),
-        class_name="bg-gray-800 p-3 rounded-lg border border-gray-700 flex-grow lg:min-w-[600px]",
+        class_name="bg-gray-800 p-3 rounded-lg border border-gray-700 flex-grow lg:col-span-2",
     )
