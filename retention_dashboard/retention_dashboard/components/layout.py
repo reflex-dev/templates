@@ -74,7 +74,7 @@ def layout() -> rx.Component:
                     "Agents",
                     DashboardState.active_tab == "Agents",
                 ),
-                class_name="flex space-x-4 px-6 py-3 border-b border-gray-200",
+                class_name="flex space-x-4 px-6 py-3 border-b border-gray-200 overflow-x-auto w-[90%]",
             ),
             rx.el.div(
                 rx.match(
