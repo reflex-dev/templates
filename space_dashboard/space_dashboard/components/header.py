@@ -23,7 +23,7 @@ def header() -> rx.Component:
                 DashboardState.live_status,
                 class_name="text-green-500 text-xs font-bold",
             ),
-            class_name="flex items-center",
+            class_name="flex items-center max-md:hidden",
         ),
         class_name="flex justify-between items-center w-full px-6 py-4 border-b border-blue-800/50",
     )
