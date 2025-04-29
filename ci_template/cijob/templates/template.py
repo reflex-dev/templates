@@ -46,6 +46,9 @@ class ThemeState(rx.State):
     scaling: str = "100%"
 
 
+ALL_PAGES = []
+
+
 def template(
     route: str | None = None,
     title: str | None = None,
@@ -133,6 +136,13 @@ def template(
                 radius=ThemeState.radius,
                 scaling=ThemeState.scaling,
             )
+
+        ALL_PAGES.append(
+            {
+                "route": route,
+            }
+            | ({"title": title} if title is not None else {})
+        )
 
         return theme_wrap
 

@@ -68,7 +68,7 @@ def documents_table_section() -> rx.Component:
                 document_tab_button("Past Performance", 3),
                 document_tab_button("Key Personnel", 2),
                 document_tab_button("Focus Documents"),
-                class_name="flex items-center space-x-2 border-b border-gray-200 pb-2 mb-4",
+                class_name="flex flex-row flex-wrap items-center gap-2 justify-start pb-2",
             ),
             rx.el.div(
                 rx.el.button(
@@ -93,7 +93,7 @@ def documents_table_section() -> rx.Component:
                 ),
                 class_name="flex items-center space-x-3",
             ),
-            class_name="flex items-center justify-between mb-4",
+            class_name="flex flex-wrap items-center justify-between mb-4",
         ),
         rx.el.div(
             rx.el.table(
@@ -158,7 +158,7 @@ def documents_table_section() -> rx.Component:
                 ),
                 class_name="min-w-full divide-y divide-gray-200",
             ),
-            class_name="overflow-hidden border border-gray-200 rounded-lg shadow-sm",
+            class_name="overflow-x-auto border border-gray-200 rounded-lg shadow-sm",
         ),
         class_name="p-5 bg-white border border-gray-200 rounded-lg shadow-sm mt-5",
     )

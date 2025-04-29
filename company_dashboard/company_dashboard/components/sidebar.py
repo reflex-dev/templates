@@ -63,5 +63,5 @@ def sidebar() -> rx.Component:
                 class_name="space-y-1",
             ),
         ),
-        class_name="flex flex-col justify-between w-64 h-screen px-2 bg-white border-r border-gray-200 fixed",
+        class_name="max-md:hidden flex flex-col justify-between w-[280px] h-screen px-2 bg-white border-r border-gray-200 sticky",
     )

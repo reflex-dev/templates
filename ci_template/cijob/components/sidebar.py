@@ -129,8 +129,7 @@ def sidebar() -> rx.Component:
         The sidebar component.
 
     """
-    # Get all the decorated pages and add them to the sidebar.
-    from reflex.page import get_decorated_pages
+    from cijob.templates.template import ALL_PAGES
 
     # The ordered page routes.
     ordered_page_routes = [
@@ -138,12 +137,10 @@ def sidebar() -> rx.Component:
         "/about",
         "/settings",
     ]
-    # Get the decorated pages.
-    pages = get_decorated_pages()
 
     # Include all pages even if they are not in the ordered_page_routes.
     ordered_pages = sorted(
-        pages,
+        ALL_PAGES,
         key=lambda page: (
             ordered_page_routes.index(page["route"])
             if page["route"] in ordered_page_routes

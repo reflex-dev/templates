@@ -24,9 +24,9 @@ def index() -> rx.Component:
                 documents_table_section(),
                 class_name="p-6 space-y-6",
             ),
-            class_name="ml-64 w-full h-[100vh] overflow-y-auto",
+            class_name="w-full h-[100vh] overflow-y-auto",
         ),
-        class_name="flex bg-gray-50 h-[100vh] w-full overflow-hidden",
+        class_name="flex flex-row bg-gray-50 h-[100vh] w-full overflow-hidden",
         on_mount=DashboardState.load_initial_data,
     )
 
