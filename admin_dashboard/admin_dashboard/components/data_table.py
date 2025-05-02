@@ -327,5 +327,5 @@ def data_table() -> rx.Component:
             ),
             class_name="flex justify-end",
         ),
-        class_name="bg-white p-6 rounded-lg shadow-md",
+        class_name="bg-white p-6 rounded-lg shadow-md col-span-1 md:col-span-2",
     )

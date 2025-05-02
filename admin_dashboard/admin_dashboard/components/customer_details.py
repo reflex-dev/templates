@@ -176,5 +176,5 @@ def customer_details() -> rx.Component:
                 class_name="flex items-center justify-center h-[100vh] p-5 bg-gray-50 rounded-lg shadow-inner",
             ),
         ),
-        class_name="w-1/3 flex-shrink-0 h-[100vh] overflow-hidden sticky top-0 right-0 border-l border-gray-200",
+        class_name="col-span-1",
     )
