@@ -31,5 +31,5 @@ def sidebar() -> rx.Component:
             sidebar_link("Marketing Analytics", "#", False),
             class_name="flex flex-col space-y-2 p-2",
         ),
-        class_name="w-64 border-r-1 border-gray-200 h-screen fixed top-0 left-0",
+        class_name="w-full max-w-[250px] border-r-1 border-gray-200 h-screen sticky top-0 left-0 max-lg:hidden",
     )

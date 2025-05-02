@@ -76,5 +76,5 @@ def department_pie_chart() -> rx.Component:
                 ),
             ),
         ),
-        class_name="bg-white p-6 rounded-lg h-auto min-h-[24rem]",
+        class_name="bg-white p-6 rounded-lg h-auto min-h-[32rem]",
     )

@@ -30,10 +30,10 @@ def index() -> rx.Component:
                 class_name="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6",
             ),
             account_executive_metrics_table(),
-            class_name="ml-64 p-8 bg-gray-100 min-h-screen w-full",
+            class_name="p-4 bg-gray-100 h-[100vh] w-full overflow-y-auto",
             on_mount=DashboardState.fetch_dashboard_data,
         ),
-        class_name="flex w-full",
+        class_name="flex w-full min-h-screen",
     )
 
 
