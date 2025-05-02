@@ -26,7 +26,7 @@ def header_component() -> rx.Component:
                 on_click=AccountState.add_account,
                 class_name="flex items-center px-4 py-2 text-sm font-medium text-white bg-orange-500 border border-transparent rounded-md shadow-sm hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition",
             ),
-            class_name="flex items-center space-x-3",
+            class_name="flex items-center space-x-3 max-md:hidden",
         ),
-        class_name="flex items-center justify-between pb-6 border-b border-gray-200 mb-6",
+        class_name="w-full flex items-center justify-between pb-6 border-b border-gray-200 mb-6",
     )

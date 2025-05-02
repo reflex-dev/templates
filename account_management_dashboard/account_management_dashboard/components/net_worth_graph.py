@@ -68,7 +68,7 @@ def net_worth_graph_component() -> rx.Component:
                     on_change=AccountState.set_graph_range,
                     class_name="text-sm border border-gray-300 rounded-md px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500",
                 ),
-                class_name="flex space-x-3 mb-4",
+                class_name="flex flex-wrap space-x-3 mb-4 gap-y-2",
             ),
             rx.cond(
                 recharts_available,
@@ -131,5 +131,5 @@ def net_worth_graph_component() -> rx.Component:
             ),
             class_name="p-4 bg-white border border-gray-200 rounded-lg shadow-sm",
         ),
-        class_name="mb-8",
+        class_name="mb-8 w-full",
     )

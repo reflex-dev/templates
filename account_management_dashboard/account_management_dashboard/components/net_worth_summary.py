@@ -54,7 +54,7 @@ def net_worth_summary() -> rx.Component:
                 ),
                 class_name="flex items-center",
             ),
-            class_name="flex items-baseline",
+            class_name="flex flex-wrap items-baseline gap-y-2",
         ),
         class_name="mb-6",
     )

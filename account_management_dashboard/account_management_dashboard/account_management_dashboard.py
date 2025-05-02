@@ -38,9 +38,9 @@ def index() -> rx.Component:
                 class_name="flex flex-col lg:flex-row",
             ),
             rx.toast.provider(),
-            class_name="ml-64 p-8 flex-grow",
+            class_name="p-8 flex flex-col w-full min-h-[100vh] overflow-y-auto",
         ),
-        class_name="flex bg-gray-50 min-h-screen",
+        class_name="flex flex-row bg-gray-50 min-h-screen w-full",
     )
 
 

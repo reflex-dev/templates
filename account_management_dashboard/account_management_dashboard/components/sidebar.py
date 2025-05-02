@@ -69,5 +69,5 @@ def sidebar() -> rx.Component:
             ),
             class_name="px-4 pb-4",
         ),
-        class_name="flex flex-col w-64 h-screen bg-white border-r border-gray-200 fixed left-0 top-0",
+        class_name="flex flex-col w-full max-w-[250px] h-screen bg-white border-r border-gray-200 sticky left-0 top-0 max-lg:hidden",
     )
