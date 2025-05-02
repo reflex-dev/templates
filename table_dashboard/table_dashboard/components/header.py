@@ -49,28 +49,31 @@ def header() -> rx.Component:
                     class_name="relative",
                 ),
                 rx.el.div(
-                    rx.icon(
-                        tag="search",
-                        size=18,
-                        class_name="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400",
+                    rx.el.div(
+                        rx.icon(
+                            tag="search",
+                            size=18,
+                            class_name="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400",
+                        ),
+                        rx.el.input(
+                            placeholder="Search by owner...",
+                            on_change=DashboardState.set_search_owner.debounce(300),
+                            class_name="pl-10 pr-4 py-1.5 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500",
+                            default_value=DashboardState.search_owner,
+                        ),
+                        class_name="relative flex items-center -ml-2 sm:ml-0",
                     ),
-                    rx.el.input(
-                        placeholder="Search by owner...",
-                        on_change=DashboardState.set_search_owner.debounce(300),
-                        class_name="pl-10 pr-4 py-1.5 border border-gray-300 rounded w-64 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500",
-                        default_value=DashboardState.search_owner,
+                    rx.el.button(
+                        "Reset All",
+                        on_click=DashboardState.reset_all_filters,
+                        class_name="px-3 py-1.5 border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50",
+                        disabled=(DashboardState.search_owner == "")
+                        & (DashboardState.selected_statuses.length() == 0)
+                        & (DashboardState.selected_regions.length() == 0)
+                        & (DashboardState.min_cost is None)
+                        & (DashboardState.max_cost is None),
                     ),
-                    class_name="relative flex items-center",
-                ),
-                rx.el.button(
-                    "Reset All",
-                    on_click=DashboardState.reset_all_filters,
-                    class_name="px-3 py-1.5 border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50",
-                    disabled=(DashboardState.search_owner == "")
-                    & (DashboardState.selected_statuses.length() == 0)
-                    & (DashboardState.selected_regions.length() == 0)
-                    & (DashboardState.min_cost is None)
-                    & (DashboardState.max_cost is None),
+                    class_name="flex flex-row items-center justify-start gap-x-2",
                 ),
                 class_name="flex items-center space-x-2 flex-wrap gap-y-2",
             ),
