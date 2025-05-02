@@ -144,6 +144,13 @@
       "demo_url": "https://company-dashboard-navy-book.reflex.run/",
       "hidden": false,
       "reflex_build": true
+    },
+    {
+      "name": "futuristic_dashboard",
+      "description": "A futuristic dashboard app",
+      "demo_url": "https://company-dashboard-navy-book.reflex.run/",
+      "hidden": false,
+      "reflex_build": true
     }
   ]
 }
