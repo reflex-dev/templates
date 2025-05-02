@@ -37,7 +37,7 @@ def index() -> rx.Component:
                     data_stream_section(),
                     class_name="flex flex-col gap-6",
                 ),
-                class_name="grid grid-cols-1 md:grid-cols-3 gap-6 p-6 flex-grow",
+                class_name="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6 flex-grow",
             ),
             class_name="flex flex-col flex-grow",
         ),
