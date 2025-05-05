@@ -1,6 +1,7 @@
 import reflex as rx
+
 from chat_app.components.typing_indicator import typing_indicator
-from chat_app.states.chat_state import ChatState
+
 
 def ai_bubble(message: str, is_last: bool = False) -> rx.Component:
     return rx.el.div(

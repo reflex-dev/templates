@@ -1,5 +1,7 @@
 import reflex as rx
+
 from chat_app.states.chat_state import ChatState
+
 
 def input_area() -> rx.Component:
     return rx.el.div(

@@ -1,6 +1,7 @@
 import reflex as rx
-from chat_app.components.message_bubble import message_bubble
+
 from chat_app.components.input_area import input_area
+from chat_app.components.message_bubble import message_bubble
 from chat_app.components.preset_cards import preset_cards
 from chat_app.states.chat_state import ChatState
 
@@ -16,8 +17,7 @@ def chat_interface() -> rx.Component:
                     lambda m, i: message_bubble(
                         m["text"],
                         m["is_ai"],
-                        i
-                        == ChatState.messages.length() - 1,
+                        i == ChatState.messages.length() - 1,
                     ),
                 ),
                 class_name="flex flex-col gap-4 pb-24 pt-6",

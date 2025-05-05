@@ -1,5 +1,7 @@
 import reflex as rx
+
 from chat_app.states.chat_state import ChatState
+
 
 def card(icon: str, title: str, description: str, color: str) -> rx.Component:
     return rx.el.button(

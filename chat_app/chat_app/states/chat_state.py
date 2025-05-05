@@ -1,7 +1,8 @@
-import reflex as rx
-from typing import List, TypedDict
 import asyncio
 import os
+from typing import List, TypedDict
+
+import reflex as rx
 
 
 class Message(TypedDict):
@@ -27,12 +28,8 @@ class ChatState(rx.State):
             return
         message = form_data["message"].strip()
         if message:
-            self.messages.append(
-                {"text": message, "is_ai": False}
-            )
-            self.messages.append(
-                {"text": "", "is_ai": True}
-            )
+            self.messages.append({"text": message, "is_ai": False})
+            self.messages.append({"text": "", "is_ai": True})
             self.typing = True
             yield ChatState.generate_response
 
@@ -53,9 +50,7 @@ class ChatState(rx.State):
                 current_text += char
                 async with self:
                     if self.messages:
-                        self.messages[-1][
-                            "text"
-                        ] = current_text
+                        self.messages[-1]["text"] = current_text
                 await asyncio.sleep(0.02)
             async with self:
                 self.typing = False
@@ -72,12 +67,8 @@ class ChatState(rx.State):
             async with self:
                 messages_to_send = self.messages[:-1]
             for msg in messages_to_send:
-                role = (
-                    "assistant" if msg["is_ai"] else "user"
-                )
-                api_messages.append(
-                    {"role": role, "content": msg["text"]}
-                )
+                role = "assistant" if msg["is_ai"] else "user"
+                api_messages.append({"role": role, "content": msg["text"]})
             try:
                 stream = client.chat.completions.create(
                     model="gpt-4o-mini",
@@ -92,25 +83,16 @@ class ChatState(rx.State):
                 for chunk in stream:
                     if not self.typing:
                         break
-                    if (
-                        chunk.choices[0].delta.content
-                        is not None
-                    ):
-                        current_text += chunk.choices[
-                            0
-                        ].delta.content
+                    if chunk.choices[0].delta.content is not None:
+                        current_text += chunk.choices[0].delta.content
                         async with self:
                             if self.messages:
-                                self.messages[-1][
-                                    "text"
-                                ] = current_text
+                                self.messages[-1]["text"] = current_text
             except Exception as e:
                 async with self:
                     if self.messages:
-                        self.messages[-1][
-                            "text"
-                        ] = f"Error: {str(e)}"
-                print(f"OpenAI API error: {e}")
+                        self.messages[-1]["text"] = f"Error: {e!s}"
+
             finally:
                 async with self:
                     self.typing = False
