@@ -40,7 +40,7 @@ class EntityInfo(TypedDict):
 class Segment(TypedDict):
     id: int
     text: str
-    label_name: Optional[str]
+    label_name: str
     bg_color: Optional[str]
     text_color: Optional[str]
 
