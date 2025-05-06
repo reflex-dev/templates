@@ -1,4 +1,5 @@
 import reflex as rx
+
 from text_annotation_app.components.ner_display import ner_component
 from text_annotation_app.states.ner_state import NerState
 

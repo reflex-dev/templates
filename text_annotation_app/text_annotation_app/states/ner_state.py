@@ -1,14 +1,13 @@
-import reflex as rx
-import re
 import json
+import re
 from typing import (
-    TypedDict,
     List,
-    Tuple,
     Optional,
-    Dict,
-    Any,
+    Tuple,
+    TypedDict,
 )
+
+import reflex as rx
 
 _COLOR_CYCLE: List[Tuple[str, str]] = [
     ("bg-blue-500", "text-white"),
@@ -49,7 +48,7 @@ class Segment(TypedDict):
 class NerState(rx.State):
     """State for the Named Entity Recognition display."""
 
-    _raw_text: str = 'Sia Kate Isobelle Furler (/\'siːə/ SEE-ə; born 18 December 1975) is an Australian singer, songwriter, record producer and music video director.[1] She started her career as a singer in the acid jazz band Crisp in the mid-1990s in Adelaide. In 1997, when Crisp disbanded, she released her debut studio album titled OnlySee in Australia. She moved to London, England, and provided lead vocals for the British duo Zero 7. In 2000, Sia released her second studio album, Healing Is Difficult, on the Columbia label the following year, and her third studio album, Colour the Small One, in 2004, but all of these struggled to connect with a mainstream audience. Sia relocated to New York City in 2005 and toured in the United States. Her fourth and fifth studio albums, Some People Have Real Problems and We Are Born, were released in 2008 and 2010, respectively. Each was certified gold by the Australian Recording Industry Association and attracted wider notice than her earlier albums. Uncomfortable with her growing fame, Sia took a hiatus from performing, during which she focused on songwriting for other artists, producing successful collaborations "Titanium" (with David Guetta), "Diamonds" (with Rihanna) and "Wild Ones" (with Flo Rida).'
+    _raw_text: str = 'Sia Kate Isobelle Furler (/\'siːə/ SEE-ə; born 18 December 1975) is an Australian singer, songwriter, record producer and music video director.[1] She started her career as a singer in the acid jazz band Crisp in the mid-1990s in Adelaide. In 1997, when Crisp disbanded, she released her debut studio album titled OnlySee in Australia. She moved to London, England, and provided lead vocals for the British duo Zero 7. In 2000, Sia released her second studio album, Healing Is Difficult, on the Columbia label the following year, and her third studio album, Colour the Small One, in 2004, but all of these struggled to connect with a mainstream audience. Sia relocated to New York City in 2005 and toured in the United States. Her fourth and fifth studio albums, Some People Have Real Problems and We Are Born, were released in 2008 and 2010, respectively. Each was certified gold by the Australian Recording Industry Association and attracted wider notice than her earlier albums. Uncomfortable with her growing fame, Sia took a hiatus from performing, during which she focused on songwriting for other artists, producing successful collaborations "Titanium" (with David Guetta), "Diamonds" (with Rihanna) and "Wild Ones" (with Flo Rida).'  # noqa: RUF001
     entities: List[EntityInfo] = [
         {
             "name": "PERSON",
@@ -105,18 +104,18 @@ class NerState(rx.State):
         """Processes the raw text to identify and segment entities based on current labels."""
         self._reset_segment_ids()
         initial_parts = re.split("(\\s+|\\b)", self._raw_text)
-        initial_segments: List[Segment] = []
-        for part in initial_parts:
-            if part:
-                initial_segments.append(
-                    {
-                        "id": self._get_next_segment_id(),
-                        "text": part,
-                        "label_name": None,
-                        "bg_color": None,
-                        "text_color": None,
-                    }
-                )
+        initial_segments: List[Segment] = [
+            {
+                "id": self._get_next_segment_id(),
+                "text": part,
+                "label_name": None,
+                "bg_color": None,
+                "text_color": None,
+            }
+            for part in initial_parts
+            if part
+        ]
+
         for entity in self.entities:
             for keyword in entity["keywords"]:
                 keyword_segments = re.split("(\\s+|\\b)", keyword)

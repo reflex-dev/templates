@@ -1,10 +1,12 @@
+from typing import Tuple
+
 import reflex as rx
+
 from text_annotation_app.states.ner_state import (
-    NerState,
     EntityInfo,
+    NerState,
     Segment,
 )
-from typing import Optional, Tuple
 
 
 def entity_button(entity: EntityInfo) -> rx.Component:
@@ -22,7 +24,7 @@ def entity_button(entity: EntityInfo) -> rx.Component:
             on_click=lambda: NerState.select_label(entity["name"]),
         ),
         rx.el.button(
-            "×",
+            "X",
             on_click=lambda: NerState.remove_label(entity["name"]),
             class_name="ml-1 text-xs font-bold text-black/50 hover:text-black p-0.5 rounded-full w-4 h-4 flex items-center justify-center leading-none bg-white/40 hover:bg-white/70 transition-colors flex-shrink-0",
             title=f"Remove {entity['name']} label",
@@ -114,7 +116,7 @@ def header_bar() -> rx.Component:
                 rx.el.p(
                     "Click a label below to select it, then click words in the text to apply/remove the label.",
                     class_name=rx.cond(
-                        NerState.selected_label_name == None,
+                        NerState.selected_label_name is None,
                         "text-sm text-gray-600 mb-2 px-4",
                         "hidden",
                     ),
@@ -124,7 +126,7 @@ def header_bar() -> rx.Component:
                     rx.el.strong(NerState.selected_label_name),
                     " (Click words below to apply/remove)",
                     class_name=rx.cond(
-                        NerState.selected_label_name == None,
+                        NerState.selected_label_name is None,
                         "hidden",
                         "text-sm text-blue-700 font-semibold mb-2 px-4",
                     ),
@@ -150,7 +152,7 @@ def header_bar() -> rx.Component:
 
 def render_segment(segment: Segment) -> rx.Component:
     """Renders a single text segment, making it clickable if a label is selected."""
-    is_label_selected = NerState.selected_label_name != None
+    is_label_selected = NerState.selected_label_name is not None
     is_whitespace = segment["text"].strip() == ""
     base_component = rx.el.span(segment["text"])
     labeled_class = (
@@ -173,7 +175,7 @@ def render_segment(segment: Segment) -> rx.Component:
         class_name="hover:bg-gray-200 rounded-sm px-px cursor-pointer transition-colors",
     )
     styled_component = rx.cond(
-        segment["label_name"] != None,
+        segment["label_name"] is not None,
         labeled_component,
         rx.cond(
             is_label_selected & ~is_whitespace,
@@ -189,7 +191,7 @@ def render_segment(segment: Segment) -> rx.Component:
     clickable_component = rx.el.span(
         styled_component,
         on_click=on_click_event,
-        class_name=rx.cond(segment["label_name"] != None, "", "inline"),
+        class_name=rx.cond(segment["label_name"] is not None, "", "inline"),
     )
     return clickable_component
 
