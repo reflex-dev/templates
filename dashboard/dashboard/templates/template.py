@@ -55,7 +55,7 @@ def template(
     description: str | None = None,
     meta: str | None = None,
     script_tags: list[rx.Component] | None = None,
-    on_load: rx.EventHandler | list[rx.EventHandler] | None = None,
+    on_load: rx.event.EventType[()] | None = None,
 ) -> Callable[[Callable[[], rx.Component]], rx.Component]:
     """The template for each page of the app.
 
