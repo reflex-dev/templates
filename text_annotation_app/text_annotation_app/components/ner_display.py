@@ -159,20 +159,20 @@ def render_segment(segment: Segment) -> rx.Component:
         segment["bg_color"]
         + " "
         + segment["text_color"]
-        + " px-1 py-0.5 rounded-sm mx-px cursor-pointer"
+        + " py-0.5 rounded-sm cursor-pointer"
     )
     labeled_component = rx.el.span(
         segment["text"],
         rx.el.span(
             segment["label_name"],
-            class_name="text-[0.6rem] font-bold ml-1 opacity-70 align-super",
+            class_name="text-[0.6rem] font-bold opacity-70 align-super",
         ),
         class_name=labeled_class,
         title=segment["label_name"],
     )
     hoverable_component = rx.el.span(
         segment["text"],
-        class_name="hover:bg-gray-200 rounded-sm px-px cursor-pointer transition-colors",
+        class_name="hover:bg-gray-200 rounded-sm cursor-pointer transition-colors",
     )
     styled_component = rx.cond(
         segment["label_name"] is not None,
@@ -201,7 +201,7 @@ def text_display() -> rx.Component:
     return rx.el.div(
         rx.el.p(
             rx.foreach(NerState.display_segments, render_segment),
-            class_name="text-lg leading-relaxed text-gray-800 whitespace-pre-wrap",
+            class_name="text-lg text-gray-800 whitespace-pre-wrap",
         ),
         class_name="p-6 bg-white border border-gray-300 border-t-0 rounded-b-lg shadow-inner",
     )
