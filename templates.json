@@ -155,7 +155,7 @@
     {
       "name": "chat_app",
       "description": "A chat app",
-      "demo_url": "https://company-dashboard-navy-book.reflex.run/",
+      "demo_url": "https://chat-app-gold-book.reflex.run/",
       "hidden": false,
       "reflex_build": true
     }
