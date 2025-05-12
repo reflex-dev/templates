@@ -148,7 +148,7 @@
     {
       "name": "futuristic_dashboard",
       "description": "A futuristic dashboard app",
-      "demo_url": "https://company-dashboard-navy-book.reflex.run/",
+      "demo_url": "https://futuristic-dashboard-gold-orca.reflex.run",
       "hidden": false,
       "reflex_build": true
     },
