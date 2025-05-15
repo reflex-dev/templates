@@ -31,6 +31,17 @@ TOOLTIP_PROPS = {
 }
 
 
+def live_indicator_dot() -> rx.Component:
+    """Creates a pulsing green dot to indicate live market activity."""
+    return rx.el.span(
+        rx.el.span(
+            class_name="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"
+        ),
+        rx.el.span(class_name="relative inline-flex rounded-full h-2 w-2 bg-green-500"),
+        class_name="relative flex h-2 w-2",
+    )
+
+
 def search_bar_component() -> rx.Component:
     return rx.el.form(
         rx.el.input(
@@ -86,13 +97,18 @@ def stock_header_component() -> rx.Component:
                 class_name="flex-grow pb-3 w-full sm:w-auto",
             ),
             rx.el.div(
-                rx.el.p(
-                    StockState.current_price_display_val,
+                rx.el.div(
+                    rx.cond(
+                        StockState.is_market_currently_active
+                        & StockState.has_data_to_display,
+                        rx.el.div(live_indicator_dot(), class_name="mr-2 self-center"),
+                    ),
+                    rx.el.span(StockState.current_price_display_val),
                     rx.el.span(
                         StockState.company_info.get("currency", ""),
                         class_name="text-neutral-400 text-base sm:text-lg ml-1 self-baseline",
                     ),
-                    class_name="text-2xl sm:text-3xl md:text-4xl font-bold text-white text-left sm:text-right",
+                    class_name="flex items-baseline text-2xl sm:text-3xl md:text-4xl font-bold text-white text-left sm:text-right",
                 ),
                 rx.el.p(
                     "Market Cap: ",

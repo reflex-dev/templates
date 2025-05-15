@@ -193,6 +193,14 @@ class StockState(rx.State):
         return format_market_cap(self.company_info.get("marketCap"))
 
     @rx.var
+    def is_market_currently_active(self) -> bool:
+        """Determines if the market is currently in an active trading session (regular, pre, or post)."""
+        market_state = self.company_info.get("marketState", "").upper()
+        # Active states include regular market, pre-market, and post-market trading
+        active_states = ["REGULAR", "PRE", "POST", "POSTPOST"]
+        return market_state in active_states
+
+    @rx.var
     def _after_hours_data(self) -> tuple[float | None, float | None, str]:
         info = self.company_info
         market_state = info.get("marketState")
