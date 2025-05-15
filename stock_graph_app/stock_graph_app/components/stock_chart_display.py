@@ -210,7 +210,7 @@ def chart_component() -> rx.Component:
                 tick_margin=8,
                 min_tick_gap=32,
                 interval="equidistantPreserveStart",
-                class_name="text-neutral-400 text-sm",
+                class_name="text-neutral-400 text-xs",
             ),
             rx.recharts.area(
                 data_key="price",
