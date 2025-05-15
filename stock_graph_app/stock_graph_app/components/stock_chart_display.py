@@ -38,18 +38,18 @@ def search_bar_component() -> rx.Component:
             placeholder="Enter Ticker (e.g., AAPL, MSFT)",
             value=StockState.search_ticker_input,
             on_change=StockState.set_search_ticker_input,
-            class_name="bg-[#2d2e30] text-white placeholder-neutral-400 border border-neutral-600 rounded-lg p-3 flex-grow focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-shadow shadow-sm hover:shadow-md focus:shadow-lg",
+            class_name="bg-[#2d2e30] text-white placeholder-neutral-400 border border-neutral-600 rounded-lg p-2 text-sm w-full sm:flex-grow focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-shadow shadow-sm hover:shadow-md focus:shadow-lg",
         ),
         rx.el.button(
             "Get Data",
             type="submit",
-            class_name="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold p-3 rounded-lg transition-all duration-150 ease-in-out shadow hover:shadow-md active:bg-emerald-800",
+            class_name="text-nowrap bg-emerald-600 hover:bg-emerald-700 text-white font-semibold p-2 text-sm rounded-lg transition-all duration-150 ease-in-out shadow hover:shadow-md active:bg-emerald-800 w-full sm:w-auto sm:px-3",
             is_loading=StockState.is_loading,
             on_click=lambda: StockState.fetch_stock_data(None),
         ),
         on_submit=StockState.fetch_stock_data,
         reset_on_submit=False,
-        class_name="mb-8 flex items-center space-x-3",
+        class_name="mb-8 flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-2",
     )
 
 
@@ -59,7 +59,7 @@ def stock_header_component() -> rx.Component:
             rx.el.div(
                 rx.el.h1(
                     StockState.stock_ticker,
-                    class_name="text-3xl md:text-4xl font-bold tracking-tight text-white",
+                    class_name="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-white",
                 ),
                 rx.el.div(
                     rx.cond(
@@ -75,37 +75,37 @@ def stock_header_component() -> rx.Component:
                     ),
                     rx.el.p(
                         StockState.company_name,
-                        class_name="text-base text-neutral-300 self-center",
+                        class_name="text-sm sm:text-base text-neutral-300 self-center",
                     ),
-                    class_name="flex items-center mt-1.5 mb-1",
+                    class_name="flex items-center mt-1 sm:mt-1.5 mb-1",
                 ),
                 rx.el.p(
                     StockState.exchange_info,
                     class_name="text-xs text-neutral-500",
                 ),
-                class_name="flex-grow pb-3",
+                class_name="flex-grow pb-3 w-full sm:w-auto",
             ),
             rx.el.div(
                 rx.el.p(
                     StockState.current_price_display_val,
                     rx.el.span(
                         StockState.company_info.get("currency", ""),
-                        class_name="text-neutral-400 text-lg ml-1 self-baseline",
+                        class_name="text-neutral-400 text-base sm:text-lg ml-1 self-baseline",
                     ),
-                    class_name="text-3xl md:text-4xl font-bold text-white text-right",
+                    class_name="text-2xl sm:text-3xl md:text-4xl font-bold text-white text-left sm:text-right",
                 ),
                 rx.el.p(
                     "Market Cap: ",
                     StockState.market_cap_display_val,
-                    class_name="text-xs text-neutral-500 text-right mt-0.5",
+                    class_name="text-xs text-neutral-500 text-left sm:text-right mt-0.5",
                 ),
                 rx.el.p(
                     "At Regular Market Close",
-                    class_name="text-xs text-neutral-500 text-right",
+                    class_name="text-xs text-neutral-500 text-left sm:text-right",
                 ),
-                class_name="text-right flex-shrink-0 ml-4 pb-3",
+                class_name="text-left sm:text-right flex-shrink-0 w-full sm:w-auto mt-3 sm:mt-0 sm:ml-4 pb-3",
             ),
-            class_name="flex justify-between items-start mb-2 border-b border-neutral-700",
+            class_name="flex flex-col sm:flex-row justify-between items-stretch sm:items-start mb-2 border-b border-neutral-700",
         ),
         rx.cond(
             StockState.show_after_hours_section,
@@ -120,15 +120,15 @@ def stock_header_component() -> rx.Component:
                     ),
                     rx.el.span(
                         StockState.company_info.get("currency", ""),
-                        class_name="text-neutral-400 text-sm ml-1 self-baseline",
+                        class_name="text-neutral-400 text-xs sm:text-sm ml-1 self-baseline",
                     ),
-                    class_name="text-lg md:text-xl font-semibold text-white text-right",
+                    class_name="text-base sm:text-lg md:text-xl font-semibold text-white text-left sm:text-right",
                 ),
                 rx.el.p(
                     StockState.after_hours_label,
-                    class_name="text-xs text-neutral-500 text-right mt-0.5",
+                    class_name="text-xs text-neutral-500 text-left sm:text-right mt-0.5",
                 ),
-                class_name="mt-3 mb-1",
+                class_name="mt-3 mb-1 w-full text-left sm:text-right",
             ),
         ),
         class_name="mb-5",
@@ -144,13 +144,13 @@ def time_range_selector_component() -> rx.Component:
                 on_click=lambda: StockState.set_time_range(time_range),
                 class_name=rx.cond(
                     StockState.selected_time_range == time_range,
-                    "bg-emerald-600 text-white font-semibold px-3 py-1.5 rounded-md text-sm mx-1 shadow-md",
-                    "bg-[#2d2e30] text-neutral-300 hover:bg-neutral-700 hover:text-white px-3 py-1.5 rounded-md text-sm mx-1 transition-colors duration-150 ease-in-out shadow-sm hover:shadow-md",
+                    "bg-emerald-600 text-white font-semibold px-2.5 py-1.5 rounded-md text-xs sm:text-sm mx-0.5 sm:mx-1 my-1 min-w-[3rem] text-center shadow-md",
+                    "bg-[#2d2e30] text-neutral-300 hover:bg-neutral-700 hover:text-white px-2.5 py-1.5 rounded-md text-xs sm:text-sm mx-0.5 sm:mx-1 my-1 min-w-[3rem] text-center transition-colors duration-150 ease-in-out shadow-sm hover:shadow-md",
                 ),
                 disabled=StockState.is_loading,
             ),
         ),
-        class_name="flex flex-wrap justify-center md:justify-start items-center my-6 md:my-8 pb-4 border-b border-neutral-700",
+        class_name="flex flex-wrap justify-center md:justify-start items-center my-4 md:my-6 pb-3 sm:pb-4 border-b border-neutral-700",
     )
 
 
@@ -272,6 +272,6 @@ def stock_graph_page() -> rx.Component:
                 rx.cond(~StockState.error_message, no_data_component(), rx.el.div()),
             ),
         ),
-        class_name="bg-gradient-to-br from-[#202123] to-[#2a2b2f] text-white p-4 sm:p-6 md:p-8 rounded-xl shadow-2xl font-sans w-full max-w-3xl mx-auto my-8",
+        class_name="bg-gradient-to-br from-[#202123] to-[#2a2b2f] text-white p-3 sm:p-4 md:p-6 rounded-lg sm:rounded-xl shadow-xl sm:shadow-2xl w-full max-w-3xl mx-auto my-4 sm:my-8",
         on_mount=StockState.on_load_fetch,
     )

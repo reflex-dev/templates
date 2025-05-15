@@ -38,15 +38,17 @@ class StockState(rx.State):
     }
     _DEFAULT_PERIOD_INTERVAL = {"period": "1y", "interval": "1d"}
 
+    @rx.event
     def on_load_fetch(self):
         """Fetch initial data when the page loads."""
         if not self.company_info:  # Fetch only if no data yet
-            self.fetch_stock_data()
+            yield StockState.fetch_stock_data()
 
     def _determine_period_interval(self, time_range: str) -> dict:
         """Determines yfinance period and interval from UI time_range."""
         return self._PERIOD_INTERVAL_MAP.get(time_range, self._DEFAULT_PERIOD_INTERVAL)
 
+    @rx.event
     def fetch_stock_data(self, form_data: dict | None = None):
         """Fetch company data and historical prices using yfinance."""
         self.is_loading = True
