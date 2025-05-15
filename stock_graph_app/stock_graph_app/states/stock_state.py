@@ -222,6 +222,23 @@ class StockState(rx.State):
         )
 
     @rx.var
+    def currency_code(self) -> str:
+        """Returns the upper-cased currency code, defaulting to USD."""
+        return self.company_info.get("currency", "USD").upper()
+
+    @rx.var
+    def y_axis_label_config(self) -> dict:
+        """Provides configuration for the Y-axis label (title)."""
+        return {
+            "value": self.currency_code,
+            "angle": -90,
+            "position": "insideLeft",
+            "style": {"textAnchor": "middle", "fill": "#d4d4d4"},  # text-neutral-400
+            "dy": 70,  # Adjust as needed for vertical positioning along the axis
+            "dx": -15,  # Adjust as needed for horizontal positioning from the axis
+        }
+
+    @rx.var
     def current_stock_data_for_chart(self) -> list[dict]:
         if not self.historical_data:
             return [{"name": "N/A", "price": 0}]

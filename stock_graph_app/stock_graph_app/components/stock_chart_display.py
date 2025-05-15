@@ -105,7 +105,7 @@ def stock_header_component() -> rx.Component:
                 ),
                 class_name="text-left sm:text-right flex-shrink-0 w-full sm:w-auto mt-3 sm:mt-0 sm:ml-4 pb-3",
             ),
-            class_name="flex flex-col sm:flex-row justify-between items-stretch sm:items-start mb-2 border-b border-neutral-700",
+            class_name="flex flex-col sm:flex-row justify-between items-stretch sm:items-start mb-2 border-neutral-700",
         ),
         rx.cond(
             StockState.show_after_hours_section,
@@ -150,7 +150,7 @@ def time_range_selector_component() -> rx.Component:
                 disabled=StockState.is_loading,
             ),
         ),
-        class_name="flex flex-wrap justify-center md:justify-start items-center my-4 md:my-6 pb-3 sm:pb-4 border-b border-neutral-700",
+        class_name="flex flex-wrap justify-center md:justify-start items-center my-4 md:my-6 pb-3 sm:pb-4 border-neutral-700",
     )
 
 
@@ -197,6 +197,7 @@ def chart_component() -> rx.Component:
                 axis_line=False,
                 tick_line=False,
                 class_name="text-neutral-400 text-sm",
+                label=StockState.y_axis_label_config,
             ),
             rx.recharts.x_axis(
                 data_key="name",
@@ -208,11 +209,12 @@ def chart_component() -> rx.Component:
                 tick_size=16,
                 tick_margin=8,
                 min_tick_gap=32,
-                interval="preserveStartEnd",
+                interval="equidistantPreserveStart",
                 class_name="text-neutral-400 text-sm",
             ),
             rx.recharts.area(
                 data_key="price",
+                name=StockState.currency_code,
                 type_="monotone",
                 stroke="#16A34A",
                 fill=f"url(#{gradient_id})",
@@ -221,7 +223,7 @@ def chart_component() -> rx.Component:
                 active_dot=True,
             ),
             data=StockState.current_stock_data_for_chart,
-            height=300,
+            height=350,
             margin={
                 "top": 5,
                 "right": 0,
@@ -230,7 +232,7 @@ def chart_component() -> rx.Component:
             },
             class_name="w-full [&_.recharts-tooltip-item-unit]:text-neutral-100 [&_.recharts-tooltip-item-unit]:font-mono [&_.recharts-tooltip-item-value]:!text-neutral-100 [&_.recharts-tooltip-item-value]:!font-mono [&_.recharts-tooltip-item-value]:mr-[0.2rem] [&_.recharts-tooltip-item]:flex [&_.recharts-tooltip-item]:items-center [&_.recharts-tooltip-item]:before:content-[''] [&_.recharts-tooltip-item]:before:size-2.5 [&_.recharts-tooltip-item]:before:rounded-[2px] [&_.recharts-tooltip-item]:before:shrink-0 [&_.recharts-tooltip-item]:before:!bg-[currentColor] [&_.recharts-tooltip-item-name]:text-neutral-300 [&_.recharts-tooltip-item-list]:flex [&_.recharts-tooltip-item-list]:flex-col [&_.recharts-tooltip-item-name]:pr-[3rem] [&_.recharts-tooltip-item-name]:pl-1.5 [&_.recharts-tooltip-item-separator]:w-full [&_.recharts-tooltip-wrapper]:z-[1]",
         ),
-        class_name="w-full h-[300px] mt-4",
+        class_name="w-full h-[350px] mt-4",
     )
 
 
@@ -272,6 +274,6 @@ def stock_graph_page() -> rx.Component:
                 rx.cond(~StockState.error_message, no_data_component(), rx.el.div()),
             ),
         ),
-        class_name="bg-gradient-to-br from-[#202123] to-[#2a2b2f] text-white p-3 sm:p-4 md:p-6 rounded-lg sm:rounded-xl shadow-xl sm:shadow-2xl w-full max-w-3xl mx-auto my-4 sm:my-8",
+        class_name="bg-gradient-to-br from-[#202123] to-[#2a2b2f] text-white p-3 sm:p-4 md:p-6 rounded-lg sm:rounded-xl shadow-xl sm:shadow-2xl w-full max-w-4xl mx-auto my-4 sm:my-8",
         on_mount=StockState.on_load_fetch,
     )
