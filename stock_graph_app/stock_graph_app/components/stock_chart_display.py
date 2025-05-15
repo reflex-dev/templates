@@ -47,8 +47,6 @@ def search_bar_component() -> rx.Component:
         rx.el.input(
             name="ticker_input",
             placeholder="Enter Ticker (e.g., AAPL, MSFT)",
-            value=StockState.search_ticker_input,
-            on_change=StockState.set_search_ticker_input,
             class_name="bg-[#2d2e30] text-white placeholder-neutral-400 border border-neutral-600 rounded-lg p-2 text-sm w-full sm:flex-grow focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-shadow shadow-sm hover:shadow-md focus:shadow-lg",
         ),
         rx.el.button(
@@ -56,7 +54,6 @@ def search_bar_component() -> rx.Component:
             type="submit",
             class_name="text-nowrap bg-emerald-600 hover:bg-emerald-700 text-white font-semibold p-2 text-sm rounded-lg transition-all duration-150 ease-in-out shadow hover:shadow-md active:bg-emerald-800 w-full sm:w-auto sm:px-3",
             is_loading=StockState.is_loading,
-            on_click=lambda: StockState.fetch_stock_data(None),
         ),
         on_submit=StockState.fetch_stock_data,
         reset_on_submit=False,

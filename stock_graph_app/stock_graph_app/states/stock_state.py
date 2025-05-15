@@ -128,6 +128,7 @@ class StockState(rx.State):
         ticker_to_use = self.search_ticker_input
         if form_data and "ticker_input" in form_data and form_data["ticker_input"]:
             ticker_to_use = form_data["ticker_input"].upper()
+            self.search_ticker_input = ticker_to_use
 
         if not ticker_to_use:
             self.error_message = "Please enter a ticker symbol."
@@ -150,9 +151,6 @@ class StockState(rx.State):
         self.selected_time_range = time_range
         if self.company_info and self.company_info.get("symbol"):
             await self.fetch_stock_data()
-
-    def set_search_ticker_input(self, value: str):
-        self.search_ticker_input = value
 
     @rx.var
     def logo_url(self) -> str:

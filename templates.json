@@ -159,10 +159,17 @@
       "hidden": false,
       "reflex_build": true
     },
-        {
+    {
       "name": "text_annotation_app",
       "description": "A text annotation app",
       "demo_url": "https://company-dashboard-navy-book.reflex.run/",
+      "hidden": false,
+      "reflex_build": true
+    },
+    {
+      "name": "stock_graph_app",
+      "description": "A stock graph app",
+      "demo_url": "https://stock-graph-app-neon-ring.reflex.run/",
       "hidden": false,
       "reflex_build": true
     }
