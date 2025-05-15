@@ -85,11 +85,11 @@ class StockState(rx.State):
             params = self._determine_period_interval(self.selected_time_range)
             hist_df = ticker.history(
                 period=params["period"], interval=params["interval"]
-            )  # Direct call to history method
+            )
 
             if hist_df.empty:
                 self.historical_data = []
-                # self.error_message = f"No historical data found for {ticker_symbol_to_fetch} for the selected range."
+                self.error_message = f"No historical data found for {ticker_symbol_to_fetch} for the selected range."
             else:
                 hist_df = hist_df.reset_index()
                 if "Datetime" in hist_df.columns:
@@ -111,9 +111,8 @@ class StockState(rx.State):
 
         except Exception as e:
             self.error_message = (
-                f"Error fetching data for {ticker_symbol_to_fetch}: {str(e)}"
+                f"Error fetching data for {ticker_symbol_to_fetch}: {e!s}"
             )
-            print(f"Detailed error for {ticker_symbol_to_fetch}: {e}")
         finally:
             self.is_loading = False
 

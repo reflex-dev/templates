@@ -1,4 +1,5 @@
 import reflex as rx
+
 from stock_graph_app.components.stock_chart_display import (
     stock_graph_page,
 )

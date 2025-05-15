@@ -1,4 +1,5 @@
 import reflex as rx
+
 from stock_graph_app.states.stock_state import StockState
 
 TOOLTIP_PROPS = {
