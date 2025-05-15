@@ -247,9 +247,9 @@ class StockState(rx.State):
             "value": self.currency_code,
             "angle": -90,
             "position": "insideLeft",
-            "style": {"textAnchor": "middle", "fill": "#d4d4d4"},  # text-neutral-400
-            "dy": 70,  # Adjust as needed for vertical positioning along the axis
-            "dx": -15,  # Adjust as needed for horizontal positioning from the axis
+            "style": {"textAnchor": "middle", "fill": "#d4d4d4"},
+            "dy": 70,
+            "dx": -15,
         }
 
     @rx.var
