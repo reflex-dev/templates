@@ -104,9 +104,7 @@ class StockState(rx.State):
                     )
                     return
 
-                hist_df["price"] = hist_df["Close"].round(
-                    2
-                )
+                hist_df["price"] = hist_df["Close"].round(2)
                 self.historical_data = hist_df[["name", "price"]].to_dict("records")
 
             self.error_message = ""
