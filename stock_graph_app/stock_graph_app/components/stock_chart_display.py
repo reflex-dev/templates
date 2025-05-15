@@ -115,8 +115,7 @@ def stock_header_component() -> rx.Component:
                     " ",
                     rx.el.span(
                         StockState.after_hours_change_display_val,
-                        class_name=StockState.after_hours_change_color
-                        + " font-semibold",
+                        class_name="text-neutral-500 font-semibold",
                     ),
                     rx.el.span(
                         StockState.company_info.get("currency", ""),

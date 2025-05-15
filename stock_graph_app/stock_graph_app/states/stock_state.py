@@ -1,5 +1,12 @@
+from typing import List, TypedDict
+
 import reflex as rx
 import yfinance as yf
+
+
+class HistoricalDataPoint(TypedDict):
+    name: str
+    price: float
 
 
 def format_market_cap(cap):
@@ -19,7 +26,7 @@ class StockState(rx.State):
 
     search_ticker_input: str = "AAPL"
     company_info: dict = {}
-    historical_data: list[dict] = []
+    historical_data: List[HistoricalDataPoint] = []
 
     is_loading: bool = False
     error_message: str = ""
@@ -209,19 +216,6 @@ class StockState(rx.State):
         return price is not None and change is not None
 
     @rx.var
-    def after_hours_change_color(self) -> str:
-        _, change, _ = self._after_hours_data
-        if change is None:
-            return "text-neutral-500"
-        return (
-            "text-green-500"
-            if change > 0
-            else "text-red-500"
-            if change < 0
-            else "text-neutral-500"
-        )
-
-    @rx.var
     def currency_code(self) -> str:
         """Returns the upper-cased currency code, defaulting to USD."""
         return self.company_info.get("currency", "USD").upper()
@@ -239,7 +233,7 @@ class StockState(rx.State):
         }
 
     @rx.var
-    def current_stock_data_for_chart(self) -> list[dict]:
+    def current_stock_data_for_chart(self) -> List[HistoricalDataPoint]:
         if not self.historical_data:
             return [{"name": "N/A", "price": 0}]
         return self.historical_data
