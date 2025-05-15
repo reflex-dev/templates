@@ -273,6 +273,11 @@ def stock_graph_page() -> rx.Component:
                 rx.cond(~StockState.error_message, no_data_component(), rx.el.div()),
             ),
         ),
+        rx.moment(
+            interval=5000,
+            on_change=StockState.refresh_data.temporal,
+            class_name="hidden pointer-events-none",
+        ),
         class_name="bg-gradient-to-br from-[#202123] to-[#2a2b2f] text-white p-3 sm:p-4 md:p-6 rounded-lg sm:rounded-xl shadow-xl sm:shadow-2xl w-full max-w-4xl mx-auto my-4 sm:my-8",
         on_mount=StockState.on_load_fetch,
     )

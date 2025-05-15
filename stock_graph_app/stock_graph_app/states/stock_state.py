@@ -46,28 +46,22 @@ class StockState(rx.State):
     _DEFAULT_PERIOD_INTERVAL = {"period": "1y", "interval": "1d"}
 
     @rx.event
-    def on_load_fetch(self):
+    async def on_load_fetch(self):
         """Fetch initial data when the page loads."""
-        if not self.company_info:  # Fetch only if no data yet
-            yield StockState.fetch_stock_data()
+        if not self.company_info:
+            await self.fetch_stock_data()
 
     def _determine_period_interval(self, time_range: str) -> dict:
         """Determines yfinance period and interval from UI time_range."""
         return self._PERIOD_INTERVAL_MAP.get(time_range, self._DEFAULT_PERIOD_INTERVAL)
 
-    @rx.event
-    def fetch_stock_data(self, form_data: dict | None = None):
-        """Fetch company data and historical prices using yfinance."""
+    async def _internal_fetch_stock_data(self, ticker_symbol_to_fetch: str):
+        """Internal logic to fetch company data and historical prices."""
         self.is_loading = True
         self.error_message = ""
 
-        ticker_symbol_to_fetch = self.search_ticker_input
-        if form_data and "ticker_input" in form_data and form_data["ticker_input"]:
-            ticker_symbol_to_fetch = form_data["ticker_input"].upper()
-            self.search_ticker_input = ticker_symbol_to_fetch
-
         if not ticker_symbol_to_fetch:
-            self.error_message = "Please enter a ticker symbol."
+            self.error_message = "Ticker symbol cannot be empty."
             self.is_loading = False
             return
 
@@ -78,7 +72,7 @@ class StockState(rx.State):
                 not self.company_info
                 or self.company_info.get("symbol") != ticker_symbol_to_fetch
             ):
-                info = ticker.info  # Direct access to the info property
+                info = ticker.info
                 if (
                     not info
                     or info.get("quoteType") == "NONE"
@@ -90,6 +84,7 @@ class StockState(rx.State):
                     self.is_loading = False
                     return
                 self.company_info = info
+                self.search_ticker_input = ticker_symbol_to_fetch
 
             params = self._determine_period_interval(self.selected_time_range)
             hist_df = ticker.history(
@@ -101,35 +96,60 @@ class StockState(rx.State):
                 self.error_message = f"No historical data found for {ticker_symbol_to_fetch} for the selected range."
             else:
                 hist_df = hist_df.reset_index()
+                date_col_found = False
                 if "Datetime" in hist_df.columns:
                     hist_df["name"] = hist_df["Datetime"].dt.strftime("%b %d %Y %H:%M")
+                    date_col_found = True
                 elif "Date" in hist_df.columns:
                     hist_df["name"] = hist_df["Date"].dt.strftime("%b %d %Y")
+                    date_col_found = True
+
+                if date_col_found:
+                    hist_df["price"] = hist_df["Close"].round(2)
+                    self.historical_data = hist_df[["name", "price"]].to_dict("records")
                 else:
                     self.historical_data = []
-                    self.is_loading = False
                     self.error_message = (
                         "Date information missing from historical data."
                     )
-                    return
-
-                hist_df["price"] = hist_df["Close"].round(2)
-                self.historical_data = hist_df[["name", "price"]].to_dict("records")
-
-            self.error_message = ""
 
         except Exception as e:
             self.error_message = (
                 f"Error fetching data for {ticker_symbol_to_fetch}: {e!s}"
             )
+            if self.company_info.get("symbol") == ticker_symbol_to_fetch:
+                self.historical_data = []
         finally:
             self.is_loading = False
 
-    def set_time_range(self, time_range: str):
+    @rx.event
+    async def fetch_stock_data(self, form_data: dict | None = None):
+        """Fetch company data and historical prices using yfinance, triggered by form."""
+        ticker_to_use = self.search_ticker_input
+        if form_data and "ticker_input" in form_data and form_data["ticker_input"]:
+            ticker_to_use = form_data["ticker_input"].upper()
+
+        if not ticker_to_use:
+            self.error_message = "Please enter a ticker symbol."
+            self.is_loading = False
+            return
+
+        await self._internal_fetch_stock_data(ticker_to_use)
+
+    @rx.event
+    async def refresh_data(self):
+        """Refreshes the data for the current search_ticker_input."""
+        if self.search_ticker_input:
+            await self._internal_fetch_stock_data(self.search_ticker_input)
+        else:
+            self.error_message = "No ticker symbol to refresh."
+
+    @rx.event
+    async def set_time_range(self, time_range: str):
         """Set the time range and refetch historical data."""
         self.selected_time_range = time_range
         if self.company_info and self.company_info.get("symbol"):
-            self.fetch_stock_data()
+            await self.fetch_stock_data()
 
     def set_search_ticker_input(self, value: str):
         self.search_ticker_input = value
