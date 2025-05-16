@@ -1,7 +1,8 @@
 import reflex as rx
-from admin_panel.states.customer_state import CustomerState
-from admin_panel.components.customer_table import customer_table
+
 from admin_panel.components.customer_form import customer_edit_form
+from admin_panel.components.customer_table import customer_table
+from admin_panel.states.customer_state import CustomerState
 
 
 def index() -> rx.Component:

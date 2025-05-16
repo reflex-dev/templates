@@ -1,9 +1,8 @@
 import datetime
 import math
 import random
-from typing import List
+from typing import List, Set, TypedDict
 from typing import Optional as TypingOptional
-from typing import Set, TypedDict
 
 import pandas as pd
 import reflex as rx
@@ -200,7 +199,7 @@ class CustomerState(rx.State):
                 "Wilson",
                 "Moore",
             ]
-            for i in range(25):
+            for _ in range(25):
                 first_name = random.choice(first_names)
                 last_name = random.choice(last_names)
                 email = f"{first_name.lower()}.{last_name.lower()}{random.randint(1,99)}@example.com"
@@ -493,9 +492,9 @@ class CustomerState(rx.State):
             yield rx.toast("CSV download started.", duration=3000)
         except Exception as e:
             async with self:
-                self.error_message = f"Failed to download CSV: {str(e)}"
+                self.error_message = f"Failed to download CSV: {e!s}"
             yield rx.toast(
-                f"Error downloading CSV: {str(e)}",
+                f"Error downloading CSV: {e!s}",
                 duration=5000,
             )
         finally:
