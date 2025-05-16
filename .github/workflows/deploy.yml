@@ -74,6 +74,9 @@ jobs:
                 business_analytics_dashboard)
                   echo "EXTRA_ARGS=" >> $GITHUB_ENV
                   ;;
+                retail_dashboard)
+                  echo "EXTRA_ARGS=" >> $GITHUB_ENV
+                  ;;
                 manufacturing_dashboard)
                   echo "EXTRA_ARGS=" >> $GITHUB_ENV
                   ;;
