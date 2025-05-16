@@ -108,27 +108,24 @@ def customer_edit_form() -> rx.Component:
                 ),
                 rx.el.div(
                     rx.el.label(
-                        "Permissions:",
-                        html_for="form_permissions_select",
+                        "Role:",
+                        html_for="form_role_select",
                         class_name="block text-xs sm:text-sm font-medium text-gray-700 mb-1",
                     ),
                     rx.el.select(
                         rx.foreach(
-                            CustomerState.available_permissions,
-                            lambda permission: rx.el.option(
-                                permission, value=permission
-                            ),
+                            CustomerState.available_roles,
+                            lambda role: rx.el.option(role, value=role),
                         ),
-                        id="form_permissions_select",
-                        name="permissions",
-                        value=CustomerState.form_permissions,
-                        on_change=CustomerState.set_form_permissions,
+                        id="form_role_select",
+                        name="role",
+                        value=CustomerState.form_role,
+                        on_change=CustomerState.set_form_role,
                         class_name="mt-1 block w-full pl-3 pr-10 py-2 text-base bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-xs sm:text-sm",
                         key=rx.cond(
                             CustomerState.form_customer_id == 0,
-                            "form_permissions-new-form",
-                            CustomerState.form_customer_id.to_string()
-                            + "_permissions_form",
+                            "form_role-new-form",
+                            CustomerState.form_customer_id.to_string() + "_role_form",
                         ),
                     ),
                     class_name="mb-3 sm:mb-4",

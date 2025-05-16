@@ -16,9 +16,7 @@ class CustomerData(TypedDict):
     phone: TypingOptional[str]
     status: str
     avatar_url: str
-    circle_bg_color_start: str
-    circle_bg_color_end: str
-    permissions: str
+    role: str
     tags: List[str]
     created_at: str
     updated_at: str
@@ -36,7 +34,7 @@ class CustomerState(rx.State):
     form_email: str = ""
     form_status: str = "Active"
     form_tags: str = ""
-    form_permissions: str = ""
+    form_role: str = ""
     customer_statuses: List[str] = [
         "Active",
         "Onboarding",
@@ -45,7 +43,7 @@ class CustomerState(rx.State):
         "Suspended",
     ]
     all_selected: bool = False
-    available_permissions: List[str] = [
+    available_roles: List[str] = [
         "Administrator",
         "Accounting",
         "Product Designer",
@@ -71,7 +69,7 @@ class CustomerState(rx.State):
     total_db_customers: int = 0
     _target_customer_email_for_tags: str | None = None
     _target_customer_tag_str: str | None = None
-    _target_customer_permission: str | None = None
+    _target_customer_role: str | None = None
     _next_customer_id: int = 1
     search_query: str = ""
 
@@ -132,9 +130,6 @@ class CustomerState(rx.State):
         end_index = start_index + self.items_per_page
         return data_for_page[start_index:end_index]
 
-    def _generate_random_hex_color(self) -> str:
-        return f"#{random.randint(0, 16777215):06x}"
-
     def _parse_tags_string(self, tags_str: str | None) -> List[str]:
         if not tags_str:
             return []
@@ -168,10 +163,10 @@ class CustomerState(rx.State):
         self.all_selected = False
         target_email = self._target_customer_email_for_tags
         target_tag_str = self._target_customer_tag_str
-        target_permission = self._target_customer_permission
+        target_role = self._target_customer_role
         self._target_customer_email_for_tags = None
         self._target_customer_tag_str = None
-        self._target_customer_permission = None
+        self._target_customer_role = None
 
         if not self._all_customers_data:
             fake_customers_temp: List[CustomerData] = []
@@ -215,17 +210,17 @@ class CustomerState(rx.State):
                     num_tags = random.randint(1, min(3, len(self.available_tags)))
                     tags = random.sample(self.available_tags, num_tags)
 
-                permissions = (
-                    random.choice(self.available_permissions)
-                    if self.available_permissions
+                role = (
+                    random.choice(self.available_roles)
+                    if self.available_roles
                     else "N/A"
                 )
 
                 if target_email and email == target_email:
                     if target_tag_str is not None:
                         tags = self._parse_tags_string(target_tag_str)
-                    if target_permission is not None:
-                        permissions = target_permission
+                    if target_role is not None:
+                        role = target_role
 
                 fake_customers_temp.append(
                     CustomerData(
@@ -240,9 +235,7 @@ class CustomerState(rx.State):
                         ),
                         status=random.choice(self.customer_statuses),
                         avatar_url="/favicon.ico",
-                        circle_bg_color_start=self._generate_random_hex_color(),
-                        circle_bg_color_end=self._generate_random_hex_color(),
-                        permissions=permissions,
+                        role=role,
                         tags=tags,
                         created_at=created_at.isoformat(),
                         updated_at=updated_at.isoformat(),
@@ -259,10 +252,8 @@ class CustomerState(rx.State):
                             self._all_customers_data[i]["tags"] = (
                                 self._parse_tags_string(target_tag_str)
                             )
-                        if target_permission is not None:
-                            self._all_customers_data[i]["permissions"] = (
-                                target_permission
-                            )
+                        if target_role is not None:
+                            self._all_customers_data[i]["role"] = target_role
                         break
 
         self.total_db_customers = len(self._all_customers_data)
@@ -295,10 +286,10 @@ class CustomerState(rx.State):
             else "Active"
         )
         self.form_tags = self._format_tags_list_to_string(customer["tags"])
-        self.form_permissions = (
-            customer["permissions"]
-            if customer["permissions"] in self.available_permissions
-            else (self.available_permissions[0] if self.available_permissions else "")
+        self.form_role = (
+            customer["role"]
+            if customer["role"] in self.available_roles
+            else (self.available_roles[0] if self.available_roles else "")
         )
         self.show_edit_dialog = True
         self.error_message = ""
@@ -323,9 +314,7 @@ class CustomerState(rx.State):
         self.form_email = ""
         self.form_status = "Active"
         self.form_tags = ""
-        self.form_permissions = (
-            self.available_permissions[0] if self.available_permissions else ""
-        )
+        self.form_role = self.available_roles[0] if self.available_roles else ""
 
     @rx.event
     async def handle_edit_customer(self, form_data: dict):
@@ -343,9 +332,7 @@ class CustomerState(rx.State):
         email_from_form = form_data.get("email", "").strip()
         status = form_data.get("status", self.form_status).strip()
         tags_str_from_form = form_data.get("tags", "")
-        permissions_from_form = form_data.get(
-            "permissions", self.form_permissions
-        ).strip()
+        role_from_form = form_data.get("role", self.form_role).strip()
 
         if not first_name or not last_name or not email_from_form:
             self.error_message = "First name, last name, and email are required."
@@ -368,9 +355,7 @@ class CustomerState(rx.State):
                 phone=form_data.get("phone"),
                 status=status,
                 avatar_url="/favicon.ico",
-                circle_bg_color_start=self._generate_random_hex_color(),
-                circle_bg_color_end=self._generate_random_hex_color(),
-                permissions=permissions_from_form,
+                role=role_from_form,
                 tags=self._parse_tags_string(tags_str_from_form),
                 created_at=datetime.datetime.now().isoformat(),
                 updated_at=datetime.datetime.now().isoformat(),
@@ -387,7 +372,7 @@ class CustomerState(rx.State):
                     self._all_customers_data[i]["last_name"] = last_name
                     self._all_customers_data[i]["email"] = email_from_form
                     self._all_customers_data[i]["status"] = status
-                    self._all_customers_data[i]["permissions"] = permissions_from_form
+                    self._all_customers_data[i]["role"] = role_from_form
                     self._all_customers_data[i]["tags"] = self._parse_tags_string(
                         tags_str_from_form
                     )
@@ -403,7 +388,7 @@ class CustomerState(rx.State):
 
         self._target_customer_email_for_tags = email_from_form
         self._target_customer_tag_str = tags_str_from_form
-        self._target_customer_permission = permissions_from_form
+        self._target_customer_role = role_from_form
 
         self.show_edit_dialog = False
         self._reset_form_fields()
@@ -421,8 +406,8 @@ class CustomerState(rx.State):
         self.form_tags = tags
 
     @rx.event
-    def set_form_permissions(self, permissions: str):
-        self.form_permissions = permissions
+    def set_form_role(self, role: str):
+        self.form_role = role
 
     @rx.event
     def toggle_select_all(self):
@@ -469,7 +454,7 @@ class CustomerState(rx.State):
                         "Email": cust_data_item["email"],
                         "Phone": cust_data_item.get("phone", ""),
                         "Status": cust_data_item["status"],
-                        "Permissions": cust_data_item["permissions"],
+                        "Role": cust_data_item["role"],
                         "Tags": tags_str_repr,
                         "Created At": cust_data_item["created_at"],
                         "Updated At": cust_data_item["updated_at"],

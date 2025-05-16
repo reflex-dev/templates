@@ -54,7 +54,7 @@ def customer_table_header() -> rx.Component:
         rx.el.tr(
             sortable_table_header_cell("Name", "name", "user"),
             sortable_table_header_cell("Status", "status", "target"),
-            sortable_table_header_cell("Permissions", "permissions", "wrench"),
+            sortable_table_header_cell("Role", "role", "briefcase-business"),
             static_table_header_cell("Email", "mail"),
             static_table_header_cell("Tags", "tag"),
             class_name="border-b border-gray-200 bg-gray-50",
@@ -148,7 +148,7 @@ def customer_table_row(
             class_name="px-3 py-4 whitespace-nowrap text-sm",
         ),
         rx.el.td(
-            customer["permissions"],
+            customer["role"],
             class_name="px-3 py-4 whitespace-nowrap text-sm text-gray-500",
         ),
         rx.el.td(
