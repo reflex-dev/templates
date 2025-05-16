@@ -3,9 +3,14 @@ import reflex as rx
 from admin_panel.states.customer_state import CustomerData, CustomerState
 
 
-def sortable_table_header_cell(text: str, column_key: str) -> rx.Component:
+def sortable_table_header_cell(text: str, column_key: str, icon: str) -> rx.Component:
     return rx.el.th(
         rx.el.div(
+            rx.icon(
+                tag=icon,
+                size=16,
+                class_name="text-gray-500",
+            ),
             text,
             rx.cond(
                 CustomerState.sort_column == column_key,
@@ -16,11 +21,11 @@ def sortable_table_header_cell(text: str, column_key: str) -> rx.Component:
                         "chevron_down",
                     ),
                     size=16,
-                    class_name="ml-1 text-gray-700 w-[16px]",
+                    class_name="text-gray-700 w-[16px]",
                 ),
                 rx.fragment(),
             ),
-            class_name="flex items-center cursor-pointer hover:text-gray-900",
+            class_name="flex gap-2 items-center cursor-pointer hover:text-gray-900",
             on_click=lambda: CustomerState.sort_by_column(column_key),
         ),
         scope="col",
@@ -28,9 +33,17 @@ def sortable_table_header_cell(text: str, column_key: str) -> rx.Component:
     )
 
 
-def static_table_header_cell(text: str) -> rx.Component:
+def static_table_header_cell(text: str, icon: str) -> rx.Component:
     return rx.el.th(
-        text,
+        rx.el.div(
+            rx.icon(
+                tag=icon,
+                size=16,
+                class_name="text-gray-500",
+            ),
+            text,
+            class_name="flex flex-row items-center gap-2",
+        ),
         scope="col",
         class_name="px-3 py-3.5 text-left text-sm font-semibold text-gray-600",
     )
@@ -39,11 +52,11 @@ def static_table_header_cell(text: str) -> rx.Component:
 def customer_table_header() -> rx.Component:
     return rx.el.thead(
         rx.el.tr(
-            sortable_table_header_cell("Name", "name"),
-            sortable_table_header_cell("Status", "status"),
-            sortable_table_header_cell("Permissions", "permissions"),
-            static_table_header_cell("Email"),
-            static_table_header_cell("Tags"),
+            sortable_table_header_cell("Name", "name", "user"),
+            sortable_table_header_cell("Status", "status", "target"),
+            sortable_table_header_cell("Permissions", "permissions", "wrench"),
+            static_table_header_cell("Email", "mail"),
+            static_table_header_cell("Tags", "tag"),
             class_name="border-b border-gray-200 bg-gray-50",
         )
     )
@@ -56,7 +69,7 @@ def status_badge(status: str) -> rx.Component:
                 status,
                 (
                     "Active",
-                    "h-1.5 w-1.5 rounded-full bg-blue-500",
+                    "h-1.5 w-1.5 rounded-full bg-teal-500",
                 ),
                 (
                     "Onboarding",
@@ -82,7 +95,7 @@ def status_badge(status: str) -> rx.Component:
             status,
             (
                 "Active",
-                "inline-flex items-center gap-x-1.5 rounded-md px-2 py-1 text-xs font-medium text-blue-700 bg-blue-100 ring-1 ring-inset ring-blue-200",
+                "inline-flex items-center gap-x-1.5 rounded-md px-2 py-1 text-xs font-medium text-teal-700 bg-teal-100 ring-1 ring-inset ring-teal-200",
             ),
             (
                 "Onboarding",
@@ -118,11 +131,9 @@ def customer_table_row(
     return rx.el.tr(
         rx.el.td(
             rx.el.div(
-                rx.el.div(
-                    class_name="h-6 w-6 rounded-full mr-2 sm:mr-3",
-                    style={
-                        "background_image": f"linear-gradient(to bottom, {customer['circle_bg_color_start']}, {customer['circle_bg_color_end']})"
-                    },
+                rx.image(
+                    src=f"https://api.dicebear.com/9.x/micah/svg?seed={customer['email']}",
+                    class_name="size-8 rounded-full mr-2 sm:mr-3 border border-gray-200",
                 ),
                 rx.el.p(
                     f"{customer['first_name']} {customer['last_name']}",
@@ -189,13 +200,14 @@ def customer_table() -> rx.Component:
         rx.el.div(
             rx.el.div(
                 rx.el.div(
-                    rx.el.h1(
-                        "Users",
-                        class_name="text-xl sm:text-2xl font-semibold text-gray-900",
+                    rx.icon(
+                        tag="users",
+                        size=20,
+                        class_name="text-gray-500",
                     ),
-                    rx.el.span(
-                        CustomerState.total_users.to_string() + " users",
-                        class_name="px-2 py-0.5 sm:px-2.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700",
+                    rx.el.h1(
+                        CustomerState.total_users.to_string() + " Users",
+                        class_name="text-xl sm:text-2xl font-semibold text-gray-900",
                     ),
                     class_name="flex items-center gap-2",
                 ),
@@ -218,7 +230,7 @@ def customer_table() -> rx.Component:
                     ),
                     rx.el.span("CSV", class_name="sm:hidden"),
                     on_click=CustomerState.download_csv,
-                    class_name="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-3 py-2 sm:px-4 text-xs sm:text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 w-full sm:w-auto",
+                    class_name="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-3 py-2 sm:px-4 text-xs sm:text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 w-full sm:w-auto",
                 ),
                 rx.el.button(
                     rx.icon(
@@ -232,25 +244,33 @@ def customer_table() -> rx.Component:
                     ),
                     rx.el.span("Add", class_name="sm:hidden"),
                     on_click=CustomerState.prepare_add_customer,
-                    class_name="inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-3 py-2 sm:px-4 text-xs sm:text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 w-full sm:w-auto",
+                    class_name="inline-flex items-center justify-center rounded-md border border-transparent bg-teal-600 px-3 py-2 sm:px-4 text-xs sm:text-sm font-medium text-white shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 w-full sm:w-auto",
                 ),
                 class_name="flex items-center mt-4 md:mt-0 gap-2",
             ),
             class_name="flex flex-col md:flex-row md:justify-between md:items-start mb-4 sm:mb-6 gap-4 md:gap-0",
         ),
         rx.el.div(
-            rx.el.input(
-                placeholder="Search by name...",
-                on_change=CustomerState.set_search_query.debounce(500),
-                default_value=CustomerState.search_query,
-                class_name="w-full p-2 mb-4 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm",
+            rx.el.div(
+                rx.icon(
+                    tag="search",
+                    size=18,
+                    class_name="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none",
+                ),
+                rx.el.input(
+                    placeholder="Search by name...",
+                    on_change=CustomerState.set_search_query.debounce(500),
+                    default_value=CustomerState.search_query,
+                    class_name="pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-teal-500 focus:border-teal-500 w-full",
+                ),
+                class_name="relative flex items-center",
             ),
             class_name="mb-4",
         ),
         rx.cond(
             CustomerState.loading,
             rx.el.div(
-                rx.spinner(class_name="text-blue-600 h-8 w-8 sm:h-10 sm:w-10"),
+                rx.spinner(class_name="text-teal-600 h-8 w-8 sm:h-10 sm:w-10"),
                 class_name="flex justify-center items-center p-6 sm:p-10 h-48 sm:h-64",
             ),
             rx.el.div(
@@ -293,5 +313,5 @@ def customer_table() -> rx.Component:
                 ),
             ),
         ),
-        class_name="bg-white p-4 sm:p-6 shadow-lg rounded-lg",
+        class_name="bg-white p-4 sm:p-6 border border-gray-300 rounded-lg",
     )

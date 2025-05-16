@@ -26,7 +26,7 @@ def index() -> rx.Component:
                 ),
                 customer_table(),
                 customer_edit_form(),
-                class_name="mx-auto w-full max-w-7xl px-2 sm:px-6 lg:px-8 py-4 sm:py-8",
+                class_name="mx-auto w-full lg:p-8 p-4",
             )
         ),
         class_name="min-h-screen bg-gray-100 font-['Inter']",
