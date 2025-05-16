@@ -1,8 +1,8 @@
 import reflex as rx
-from weatherstack_app.states.weather_state import WeatherState
-from weatherstack_app.components.weather_display import weather_display
+
 from weatherstack_app.components.preset_cards import preset_cards
-from rxconfig import config
+from weatherstack_app.components.weather_display import weather_display
+from weatherstack_app.states.weather_state import WeatherState
 
 
 def index() -> rx.Component:
