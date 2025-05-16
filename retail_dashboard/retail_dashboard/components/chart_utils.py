@@ -1,5 +1,3 @@
-import reflex as rx
-
 TOOLTIP_PROPS = {
     "cursor": {"fill": "rgba(200, 200, 200, 0.1)"},
     "content_style": {

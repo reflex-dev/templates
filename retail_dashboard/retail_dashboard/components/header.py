@@ -61,8 +61,8 @@ def header() -> rx.Component:
                     disabled=(DashboardState.search_owner == "")
                     & (DashboardState.selected_statuses.length() == 0)
                     & (DashboardState.selected_countries.length() == 0)
-                    & (DashboardState.min_cost == None)
-                    & (DashboardState.max_cost == None),
+                    & (DashboardState.min_cost.is_none())
+                    & (DashboardState.max_cost.is_none()),
                 ),
                 class_name="flex items-center space-x-2.5 flex-wrap gap-y-2.5",
             ),
@@ -76,7 +76,7 @@ def header() -> rx.Component:
                     rx.el.input(
                         placeholder="Search by owner...",
                         on_change=DashboardState.set_search_owner.debounce(300),
-                        class_name=f"pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-neutral-500 focus:border-neutral-500 w-full sm:w-80",
+                        class_name="pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-neutral-500 focus:border-neutral-500 w-full sm:w-80",
                         default_value=DashboardState.search_owner,
                     ),
                     class_name="relative flex items-center",
@@ -90,7 +90,7 @@ def header() -> rx.Component:
                     "Export CSV",
                     on_click=DashboardState.download_csv,
                     disabled=DashboardState.filtered_and_sorted_data.length() <= 0,
-                    class_name=f"flex items-center px-4 py-2.5 rounded-lg text-sm font-medium text-white bg-neutral-600 hover:bg-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-500",
+                    class_name="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium text-white bg-neutral-600 hover:bg-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-500",
                 ),
                 class_name="flex items-center space-x-2.5",
             ),

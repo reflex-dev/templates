@@ -18,7 +18,7 @@ def filter_checkbox_item(
             type="checkbox",
             checked=is_checked,
             on_change=lambda: on_change(label),
-            class_name=f"mr-2.5 h-4 w-4 border-gray-300 rounded text-neutral-600 focus:ring-neutral-500 cursor-pointer",
+            class_name="mr-2.5 h-4 w-4 border-gray-300 rounded text-neutral-600 focus:ring-neutral-500 cursor-pointer",
         ),
         rx.fragment(
             rx.image(
@@ -58,7 +58,7 @@ def filter_dropdown_base(
             rx.el.button(
                 "Apply",
                 on_click=apply_action,
-                class_name=f"px-3.5 py-2 text-sm text-white bg-neutral-600 hover:bg-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-neutral-500",
+                class_name="px-3.5 py-2 text-sm text-white bg-neutral-600 hover:bg-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-neutral-500",
             ),
             class_name="flex justify-end space-x-2.5 p-2.5 border-t border-gray-200 bg-gray-50 rounded-b-lg",
         ),
@@ -118,7 +118,7 @@ def costs_filter_dropdown() -> rx.Component:
         rx.el.input(
             placeholder="Min cost",
             on_change=DashboardState.set_temp_min_cost,
-            class_name=f"w-full p-2.5 border border-gray-300 rounded-lg text-sm mb-2.5 focus:outline-none focus:ring-1 focus:ring-neutral-500 focus:border-neutral-500",
+            class_name="w-full p-2.5 border border-gray-300 rounded-lg text-sm mb-2.5 focus:outline-none focus:ring-1 focus:ring-neutral-500 focus:border-neutral-500",
             default_value=DashboardState.temp_min_cost_str,
             type="number",
             step="0.01",
@@ -126,7 +126,7 @@ def costs_filter_dropdown() -> rx.Component:
         rx.el.input(
             placeholder="Max cost",
             on_change=DashboardState.set_temp_max_cost,
-            class_name=f"w-full p-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-neutral-500 focus:border-neutral-500",
+            class_name="w-full p-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-neutral-500 focus:border-neutral-500",
             default_value=DashboardState.temp_max_cost_str,
             type="number",
             step="0.01",
@@ -150,7 +150,7 @@ def filter_button(
     has_filter: rx.Var[bool],
 ) -> rx.Component:
     """Generic filter button."""
-    base_class = f"flex items-center px-3.5 py-2 border rounded-lg text-sm font-medium focus:outline-none focus:ring-1 focus:ring-offset-1"
+    base_class = "flex items-center px-3.5 py-2 border rounded-lg text-sm font-medium focus:outline-none focus:ring-1 focus:ring-offset-1"
     active_class = f"{base_class} border-neutral-500 bg-neutral-50 text-neutral-700 ring-neutral-400"
     inactive_class = f"{base_class} border-gray-300 text-gray-700 hover:border-gray-400 hover:bg-gray-50 ring-gray-400"
     return rx.el.button(

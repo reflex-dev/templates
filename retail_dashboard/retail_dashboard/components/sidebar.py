@@ -1,4 +1,5 @@
 import reflex as rx
+
 from retail_dashboard.states.dashboard_state import DashboardState
 
 
@@ -13,7 +14,7 @@ def nav_link(
     base_class = "flex items-center px-3.5 py-2.5 text-sm rounded-lg"
     active_class = f"{base_class} font-medium text-neutral-700 bg-neutral-100"
     inactive_class = f"{base_class} text-gray-600 hover:bg-gray-100 hover:text-gray-800"
-    icon_active_class = f"text-neutral-700"
+    icon_active_class = "text-neutral-700"
     icon_inactive_class = "text-gray-400 group-hover:text-gray-500"
     link_content = rx.el.span(
         rx.icon(
@@ -50,7 +51,7 @@ def sidebar() -> rx.Component:
         rx.el.div(
             rx.el.div(
                 rx.icon(tag="store", size=20),
-                class_name=f"text-white font-bold text-lg mr-3 p-2.5 bg-neutral-600 rounded-lg",
+                class_name="text-white font-bold text-lg mr-3 p-2.5 bg-neutral-600 rounded-lg",
             ),
             rx.el.div(
                 rx.el.p(

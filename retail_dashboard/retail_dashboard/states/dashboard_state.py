@@ -40,6 +40,16 @@ class DashboardState(rx.State):
     current_page: int = 1
     rows_per_page: int = 10
 
+    def _parse_datetime_for_costs(
+        self, item: DetailEntry, input_format: str
+    ) -> Optional[tuple[datetime.datetime, float]]:
+        """Helper to parse datetime and return (datetime, costs) or None on error."""
+        try:
+            dt_obj = datetime.datetime.strptime(item["last_edited"], input_format)
+            return dt_obj, item["costs"]
+        except ValueError:
+            return None
+
     @rx.var
     def total_entries_count(self) -> int:
         """Total number of entries in the raw data."""
@@ -66,20 +76,26 @@ class DashboardState(rx.State):
     ) -> List[Dict[str, str | float]]:
         """Data for the costs trend line chart."""
         daily_costs = defaultdict(float)
+
+        input_format = "%d/%m/%Y %H:%M"
+        output_format = "%Y-%m-%d"
+        display_format = "%b %d"
+
+        valid_items = []
         for item in self._data:
-            try:
-                dt_obj = datetime.datetime.strptime(
-                    item["last_edited"], "%d/%m/%Y %H:%M"
-                )
-                date_str = dt_obj.strftime("%Y-%m-%d")
-                daily_costs[date_str] += item["costs"]
-            except ValueError:
-                continue
+            parsed_item = self._parse_datetime_for_costs(item, input_format)
+            if parsed_item:
+                valid_items.append(parsed_item)
+
+        for dt_obj, cost in valid_items:
+            date_str = dt_obj.strftime(output_format)
+            daily_costs[date_str] += cost
+
         sorted_dates = sorted(daily_costs.keys())
         chart_data: List[Dict[str, str | float]] = [
             {
-                "date": datetime.datetime.strptime(date_str, "%Y-%m-%d").strftime(
-                    "%b %d"
+                "date": datetime.datetime.strptime(date_str, output_format).strftime(
+                    display_format
                 ),
                 "total_costs": round(daily_costs[date_str], 2),
             }
@@ -90,17 +106,27 @@ class DashboardState(rx.State):
     @rx.var
     def recent_activities(self) -> List[DetailEntry]:
         """Get the 5 most recent activities based on last_edited date."""
+        # Precompute sort keys to move try-except out of the sorting process itself
+        items_with_sort_keys = [
+            (self._get_sort_key_for_recent_activities(item), item)
+            for item in self._data
+        ]
 
-        def sort_key(
-            item: DetailEntry,
-        ) -> datetime.datetime:
-            try:
-                return datetime.datetime.strptime(item["last_edited"], "%d/%m/%Y %H:%M")
-            except ValueError:
-                return datetime.datetime.min
+        # Sort based on the precomputed keys
+        items_with_sort_keys.sort(key=lambda x: x[0], reverse=True)
 
-        sorted_data = sorted(self._data, key=sort_key, reverse=True)
+        # Extract the original items in sorted order
+        sorted_data = [item for _, item in items_with_sort_keys]
         return sorted_data[:5]
+
+    def _get_sort_key_for_recent_activities(
+        self, item: DetailEntry
+    ) -> datetime.datetime:
+        """Helper to get sort key for recent activities, handling potential ValueError."""
+        try:
+            return datetime.datetime.strptime(item["last_edited"], "%d/%m/%Y %H:%M")
+        except ValueError:
+            return datetime.datetime.min
 
     @rx.var
     def unique_statuses(self) -> List[str]:
@@ -132,50 +158,57 @@ class DashboardState(rx.State):
             data = [item for item in data if item["costs"] <= self.max_cost]
         return data
 
+    def _get_sort_key_for_filtered_data(
+        self, item: DetailEntry, internal_key: str, is_date_col: bool
+    ) -> datetime.datetime | str | int | float:
+        """Helper to get sort key for filtered_and_sorted_data."""
+        try:
+            if is_date_col:
+                return datetime.datetime.strptime(item[internal_key], "%d/%m/%Y %H:%M")
+            val = item[internal_key]
+            if isinstance(val, (int, float)):
+                return val
+            return str(val).lower()
+        except (KeyError, ValueError):
+            # Return a value that will sort consistently for error cases
+            if is_date_col:
+                return datetime.datetime.min
+            return ""
+
     @rx.var
     def filtered_and_sorted_data(self) -> List[DetailEntry]:
         """Sort the filtered data."""
         data_to_sort = self.filtered_data
         if self.sort_column:
-            try:
-                sort_key_map = {
-                    "Owner": "owner",
-                    "Status": "status",
-                    "Country": "country",
-                    "Stability": "stability",
-                    "Costs": "costs",
-                    "Last edited": "last_edited",
-                }
-                internal_key = sort_key_map.get(self.sort_column)
-                if internal_key:
-                    if self.sort_column == "Last edited":
+            sort_key_map = {
+                "Owner": "owner",
+                "Status": "status",
+                "Country": "country",
+                "Stability": "stability",
+                "Costs": "costs",
+                "Last edited": "last_edited",
+            }
+            internal_key = sort_key_map.get(self.sort_column)
+            if internal_key:
+                is_date_col = self.sort_column == "Last edited"
 
-                        def key_func(
-                            item: DetailEntry,
-                        ) -> datetime.datetime:
-                            return datetime.datetime.strptime(
-                                item[internal_key],
-                                "%d/%m/%Y %H:%M",
-                            )
-
-                    else:
-
-                        def key_func(
-                            item: DetailEntry,
-                        ) -> str | int | float:
-                            val = item[internal_key]
-                            if isinstance(val, (int, float)):
-                                return val
-                            return str(val).lower()
-
-                    data_to_sort = sorted(
-                        data_to_sort,
-                        key=key_func,
-                        reverse=not self.sort_ascending,
+                # Precompute sort keys
+                items_with_sort_keys = [
+                    (
+                        self._get_sort_key_for_filtered_data(
+                            item, internal_key, is_date_col
+                        ),
+                        item,
                     )
-            except (KeyError, ValueError) as e:
-                print(f"Error sorting data: {e}")
-                pass
+                    for item in data_to_sort
+                ]
+
+                # Sort based on precomputed keys
+                items_with_sort_keys.sort(
+                    key=lambda x: x[0], reverse=not self.sort_ascending
+                )
+
+                data_to_sort = [item for _, item in items_with_sort_keys]
         return data_to_sort
 
     @rx.var
