@@ -165,6 +165,13 @@
       "demo_url": "https://company-dashboard-navy-book.reflex.run/",
       "hidden": false,
       "reflex_build": true
+    },       
+     {
+      "name": "weatherstack_app",
+      "description": "A minimal weather app",
+      "demo_url": "https://company-dashboard-navy-book.reflex.run/",
+      "hidden": false,
+      "reflex_build": true
     }
   ]
 }
