@@ -172,6 +172,20 @@
       "demo_url": "https://stock-graph-app-neon-ring.reflex.run/",
       "hidden": false,
       "reflex_build": true
+    },
+    {
+      "name": "admin_panel",
+      "description": "An admin panel app",
+      "demo_url": "https://admin-panel-lime-book.reflex.run/",
+      "hidden": false,
+      "reflex_build": true
+    },
+    {
+      "name": "retail_dashboard",
+      "description": "A retail dashboard app",
+      "demo_url": "https://retail-dashboard-navy-wood.reflex.run/",
+      "hidden": false,
+      "reflex_build": true
     }
   ]
 }
