@@ -1,0 +1,4 @@
+
+reflex==0.7.12a1
+reflex-enterprise==0.1.3a6
+plotly

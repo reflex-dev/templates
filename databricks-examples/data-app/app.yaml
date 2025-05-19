@@ -1,0 +1,16 @@
+command: [
+  "reflex", 
+  "run",
+  "--env",
+  "prod",
+  "--backend-port",
+  "$DATABRICKS_APP_PORT"
+]
+
+env:
+  - name: "DATABRICKS_WAREHOUSE_ID"
+    valueFrom: "sql_warehouse"
+  - name: TELEMETRY_ENABLED
+    value: "false"
+  - name: "HOME"
+    value: "/tmp/reflex"
