@@ -71,10 +71,16 @@ jobs:
                 admin_dashboard)
                   echo "EXTRA_ARGS=" >> $GITHUB_ENV
                   ;;
+                admin_panel)
+                  echo "EXTRA_ARGS=" >> $GITHUB_ENV
+                  ;;
                 stock_market_dashboard)
                   echo "EXTRA_ARGS=" >> $GITHUB_ENV
                   ;;
                 business_analytics_dashboard)
+                  echo "EXTRA_ARGS=" >> $GITHUB_ENV
+                  ;;
+                retail_dashboard)
                   echo "EXTRA_ARGS=" >> $GITHUB_ENV
                   ;;
                 manufacturing_dashboard)

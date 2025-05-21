@@ -159,7 +159,7 @@
       "hidden": false,
       "reflex_build": true
     },
-        {
+    {
       "name": "text_annotation_app",
       "description": "A text annotation app",
       "demo_url": "https://company-dashboard-navy-book.reflex.run/",
@@ -170,6 +170,27 @@
       "name": "weatherstack_app",
       "description": "A minimal weather app",
       "demo_url": "https://company-dashboard-navy-book.reflex.run/",
+      "hidden": false, 
+      "reflex_build": true
+    },
+    {
+      "name": "stock_graph_app",
+      "description": "A stock graph app",
+      "demo_url": "https://stock-graph-app-neon-ring.reflex.run/",
+      "hidden": false,
+      "reflex_build": true
+    },
+    {
+      "name": "admin_panel",
+      "description": "An admin panel app",
+      "demo_url": "https://admin-panel-lime-book.reflex.run/",
+      "hidden": false,
+      "reflex_build": true
+    },
+    {
+      "name": "retail_dashboard",
+      "description": "A retail dashboard app",
+      "demo_url": "https://retail-dashboard-navy-wood.reflex.run/",
       "hidden": false,
       "reflex_build": true
     }
