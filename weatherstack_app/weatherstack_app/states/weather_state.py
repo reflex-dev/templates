@@ -1,7 +1,7 @@
 from typing import List, TypedDict
 
-import reflex as rx
 import httpx
+import reflex as rx
 
 WEATHERSTACK_API_KEY = "YOUR_WEATHERSTACK_API_KEY"
 WEATHERSTACK_API_URL = "http://api.weatherstack.com/current"
