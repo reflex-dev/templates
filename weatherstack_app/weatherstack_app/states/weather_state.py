@@ -1,7 +1,7 @@
 from typing import List, TypedDict
 
 import reflex as rx
-import requests
+import httpx
 
 WEATHERSTACK_API_KEY = "YOUR_WEATHERSTACK_API_KEY"
 WEATHERSTACK_API_URL = "http://api.weatherstack.com/current"
@@ -98,14 +98,18 @@ class WeatherState(rx.State):
             self.loading = True
             self.error_message = ""
             self.weather_data = None
+
         try:
             params = {
                 "access_key": self.api_key,
                 "query": self.city,
             }
-            response = requests.get(WEATHERSTACK_API_URL, params=params)
-            response.raise_for_status()
-            data = response.json()
+
+            async with httpx.AsyncClient(timeout=10) as client:
+                response = await client.get(WEATHERSTACK_API_URL, params=params)
+                response.raise_for_status()
+                data = response.json()
+
             async with self:
                 if "error" in data:
                     self.error_message = data["error"].get(
@@ -119,7 +123,8 @@ class WeatherState(rx.State):
                 else:
                     self.error_message = "Unexpected API response format."
                     self.weather_data = None
-        except requests.exceptions.RequestException as e:
+
+        except httpx.RequestError as e:
             async with self:
                 self.error_message = f"Network error: {e}"
                 self.weather_data = None
