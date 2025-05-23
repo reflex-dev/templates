@@ -162,7 +162,7 @@
     {
       "name": "text_annotation_app",
       "description": "A text annotation app",
-      "demo_url": "https://company-dashboard-navy-book.reflex.run/",
+      "demo_url": "https://text-annotation-app-aqua-grass.reflex.run/",
       "hidden": false,
       "reflex_build": true
     },
