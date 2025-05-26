@@ -186,6 +186,13 @@
       "demo_url": "https://retail-dashboard-navy-wood.reflex.run/",
       "hidden": false,
       "reflex_build": true
+    },
+    {
+      "name": "weatherstack_app",
+      "description": "A weather forecast app",
+      "demo_url": "https://retail-dashboard-navy-wood.reflex.run/",
+      "hidden": false,
+      "reflex_build": true
     }
   ]
 }

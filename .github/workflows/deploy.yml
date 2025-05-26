@@ -6,121 +6,124 @@ on:
     types: [published]
 
 jobs:
-    list-templates:
-      uses: ./.github/workflows/list-templates.yml
+  list-templates:
+    uses: ./.github/workflows/list-templates.yml
 
-    deploy:
-        # Can't deploy on a non-published release, so publish the release first.
-        if: ${{ !contains(github.event.release.tag_name, 'dev') }}
-        needs: list-templates
-        runs-on: ubuntu-latest
-        environment: Cloud Deploy
-        strategy:
-            matrix:
-                folder: ${{ fromJSON(needs.list-templates.outputs.templates) }}
-                exclude:
-                  # No deploy due to missing service dependencies.
-                  - folder: reflex-llamaindex-template
-            fail-fast: false
-        steps:
-            - uses: actions/checkout@v4
-              with:
-                submodules: recursive
-            - name: Set reflex version for deploy
-              run: sed -e "s/^reflex[ >=].*$/reflex==${{ github.event.release.tag_name }}/" -i ${{ matrix.folder }}/requirements.txt
-            - name: Set environment variables
-              id: set-env
-              run: |
-                case ${{ matrix.folder }} in
-                ai_image_gen)
-                  echo "EXTRA_ARGS=--env REPLICATE_API_TOKEN=${{ secrets.REPLICATE_API_TOKEN }}" >> $GITHUB_ENV
-                  ;;
-                text_annotation_app)
-                  echo "EXTRA_ARGS=" >> $GITHUB_ENV
-                  ;;
-                chat_app)
-                  echo "EXTRA_ARGS=" >> $GITHUB_ENV
-                  ;;
-                futuristic_dashboard)
-                  echo "EXTRA_ARGS=" >> $GITHUB_ENV
-                  ;;
-                retention_dashboard)
-                  echo "EXTRA_ARGS=" >> $GITHUB_ENV
-                  ;;
-                retail_analytics_dashboard)
-                  echo "EXTRA_ARGS=" >> $GITHUB_ENV
-                  ;;
-                table_dashboard)
-                  echo "EXTRA_ARGS=" >> $GITHUB_ENV
-                  ;;
-                space_dashboard)
-                  echo "EXTRA_ARGS=" >> $GITHUB_ENV
-                  ;;
-                company_dashboard)
-                  echo "EXTRA_ARGS=" >> $GITHUB_ENV
-                  ;;
-                account_management_dashboard)
-                  echo "EXTRA_ARGS=" >> $GITHUB_ENV
-                  ;;
-                stock_graph_app)
-                  echo "EXTRA_ARGS=" >> $GITHUB_ENV
-                  ;;
-                admin_dashboard)
-                  echo "EXTRA_ARGS=" >> $GITHUB_ENV
-                  ;;
-                admin_panel)
-                  echo "EXTRA_ARGS=" >> $GITHUB_ENV
-                  ;;
-                stock_market_dashboard)
-                  echo "EXTRA_ARGS=" >> $GITHUB_ENV
-                  ;;
-                business_analytics_dashboard)
-                  echo "EXTRA_ARGS=" >> $GITHUB_ENV
-                  ;;
-                retail_dashboard)
-                  echo "EXTRA_ARGS=" >> $GITHUB_ENV
-                  ;;
-                manufacturing_dashboard)
-                  echo "EXTRA_ARGS=" >> $GITHUB_ENV
-                  ;;
-                customer_data_app)
-                  cat .deploy/temporary_db.py >> ${{ matrix.folder }}/customer_data/customer_data.py
-                  echo "EXTRA_ARGS=--vmtype ${{ vars.CUSTOMER_DATA_VM_TYPE }}" >> $GITHUB_ENV
-                  ;;
-                api_admin_panel)
-                  echo "EXTRA_ARGS=--vmtype ${{ vars.ADMIN_PANEL_VM_TYPE }}" >> $GITHUB_ENV
-                  ;;
-                sales)
-                  echo "EXTRA_ARGS=--env OPENAI_API_KEY=${{ secrets.OPEN_AI_KEY }}" >> $GITHUB_ENV
-                  cat .deploy/temporary_db.py >> ${{ matrix.folder }}/${{ matrix.folder }}/${{ matrix.folder }}.py
-                  ;;
-                reflex-chat)
-                  echo "EXTRA_ARGS=--env OPENAI_API_KEY=${{ secrets.OPEN_AI_KEY }} --vmtype ${{ vars.CHAT_VM_TYPE }}" >> $GITHUB_ENV
-                  echo "OPENAI_API_KEY=${{ secrets.OPEN_AI_KEY }}" >> $GITHUB_ENV
-                  ;;
-                nba)
-                  echo "EXTRA_ARGS=--vmtype ${{ vars.NBA_VM_TYPE }}" >> $GITHUB_ENV
-                  ;;
-                dashboard)
-                  echo "EXTRA_ARGS=--vmtype ${{ vars.DASHBOARD_VM_TYPE }}" >> $GITHUB_ENV
-                  ;;
-                ci_template)
-                  echo "EXTRA_ARGS=--vmtype ${{ vars.CIJOB_VM_TYPE }}" >> $GITHUB_ENV
-                  ;;
-                dalle)
-                  echo "EXTRA_ARGS=--env OPENAI_API_KEY=${{ secrets.OPEN_AI_KEY }}" >> $GITHUB_ENV
-                  echo "EXTRA_ARGS=--vmtype ${{ vars.DALLE_VM_TYPE }}" >> $GITHUB_ENV
-                  ;;
-                *)
-                  echo "EXTRA_ARGS=" >> $GITHUB_ENV
-                  ;;
-                esac
-            - name: Deploy to ReflexCloud
-              uses: reflex-dev/reflex-deploy-action@v2
-              with:
-                auth_token: ${{ secrets.REFLEX_AUTH_TOKEN }}
-                project_id: ${{ secrets.REFLEX_PROJECT_ID }}
-                app_directory: ${{ matrix.folder }}
-                extra_args: ${{ env.EXTRA_ARGS }}
-                dry_run: ${{ vars.DRY_RUN }}
-                skip_checkout: "true"
+  deploy:
+    # Can't deploy on a non-published release, so publish the release first.
+    if: ${{ !contains(github.event.release.tag_name, 'dev') }}
+    needs: list-templates
+    runs-on: ubuntu-latest
+    environment: Cloud Deploy
+    strategy:
+      matrix:
+        folder: ${{ fromJSON(needs.list-templates.outputs.templates) }}
+        exclude:
+          # No deploy due to missing service dependencies.
+          - folder: reflex-llamaindex-template
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Set reflex version for deploy
+        run: sed -e "s/^reflex[ >=].*$/reflex==${{ github.event.release.tag_name }}/" -i ${{ matrix.folder }}/requirements.txt
+      - name: Set environment variables
+        id: set-env
+        run: |
+          case ${{ matrix.folder }} in
+          weatherstack_app)
+            echo "EXTRA_ARGS=--env REPLICATE_API_TOKEN=${{ secrets.REPLICATE_API_TOKEN }}" >> $GITHUB_ENV
+            ;;
+          ai_image_gen)
+            echo "EXTRA_ARGS=--env REPLICATE_API_TOKEN=${{ secrets.REPLICATE_API_TOKEN }}" >> $GITHUB_ENV
+            ;;
+          text_annotation_app)
+            echo "EXTRA_ARGS=" >> $GITHUB_ENV
+            ;;
+          chat_app)
+            echo "EXTRA_ARGS=" >> $GITHUB_ENV
+            ;;
+          futuristic_dashboard)
+            echo "EXTRA_ARGS=" >> $GITHUB_ENV
+            ;;
+          retention_dashboard)
+            echo "EXTRA_ARGS=" >> $GITHUB_ENV
+            ;;
+          retail_analytics_dashboard)
+            echo "EXTRA_ARGS=" >> $GITHUB_ENV
+            ;;
+          table_dashboard)
+            echo "EXTRA_ARGS=" >> $GITHUB_ENV
+            ;;
+          space_dashboard)
+            echo "EXTRA_ARGS=" >> $GITHUB_ENV
+            ;;
+          company_dashboard)
+            echo "EXTRA_ARGS=" >> $GITHUB_ENV
+            ;;
+          account_management_dashboard)
+            echo "EXTRA_ARGS=" >> $GITHUB_ENV
+            ;;
+          stock_graph_app)
+            echo "EXTRA_ARGS=" >> $GITHUB_ENV
+            ;;
+          admin_dashboard)
+            echo "EXTRA_ARGS=" >> $GITHUB_ENV
+            ;;
+          admin_panel)
+            echo "EXTRA_ARGS=" >> $GITHUB_ENV
+            ;;
+          stock_market_dashboard)
+            echo "EXTRA_ARGS=" >> $GITHUB_ENV
+            ;;
+          business_analytics_dashboard)
+            echo "EXTRA_ARGS=" >> $GITHUB_ENV
+            ;;
+          retail_dashboard)
+            echo "EXTRA_ARGS=" >> $GITHUB_ENV
+            ;;
+          manufacturing_dashboard)
+            echo "EXTRA_ARGS=" >> $GITHUB_ENV
+            ;;
+          customer_data_app)
+            cat .deploy/temporary_db.py >> ${{ matrix.folder }}/customer_data/customer_data.py
+            echo "EXTRA_ARGS=--vmtype ${{ vars.CUSTOMER_DATA_VM_TYPE }}" >> $GITHUB_ENV
+            ;;
+          api_admin_panel)
+            echo "EXTRA_ARGS=--vmtype ${{ vars.ADMIN_PANEL_VM_TYPE }}" >> $GITHUB_ENV
+            ;;
+          sales)
+            echo "EXTRA_ARGS=--env OPENAI_API_KEY=${{ secrets.OPEN_AI_KEY }}" >> $GITHUB_ENV
+            cat .deploy/temporary_db.py >> ${{ matrix.folder }}/${{ matrix.folder }}/${{ matrix.folder }}.py
+            ;;
+          reflex-chat)
+            echo "EXTRA_ARGS=--env OPENAI_API_KEY=${{ secrets.OPEN_AI_KEY }} --vmtype ${{ vars.CHAT_VM_TYPE }}" >> $GITHUB_ENV
+            echo "OPENAI_API_KEY=${{ secrets.OPEN_AI_KEY }}" >> $GITHUB_ENV
+            ;;
+          nba)
+            echo "EXTRA_ARGS=--vmtype ${{ vars.NBA_VM_TYPE }}" >> $GITHUB_ENV
+            ;;
+          dashboard)
+            echo "EXTRA_ARGS=--vmtype ${{ vars.DASHBOARD_VM_TYPE }}" >> $GITHUB_ENV
+            ;;
+          ci_template)
+            echo "EXTRA_ARGS=--vmtype ${{ vars.CIJOB_VM_TYPE }}" >> $GITHUB_ENV
+            ;;
+          dalle)
+            echo "EXTRA_ARGS=--env OPENAI_API_KEY=${{ secrets.OPEN_AI_KEY }}" >> $GITHUB_ENV
+            echo "EXTRA_ARGS=--vmtype ${{ vars.DALLE_VM_TYPE }}" >> $GITHUB_ENV
+            ;;
+          *)
+            echo "EXTRA_ARGS=" >> $GITHUB_ENV
+            ;;
+          esac
+      - name: Deploy to ReflexCloud
+        uses: reflex-dev/reflex-deploy-action@v2
+        with:
+          auth_token: ${{ secrets.REFLEX_AUTH_TOKEN }}
+          project_id: ${{ secrets.REFLEX_PROJECT_ID }}
+          app_directory: ${{ matrix.folder }}
+          extra_args: ${{ env.EXTRA_ARGS }}
+          dry_run: ${{ vars.DRY_RUN }}
+          skip_checkout: "true"
