@@ -3,7 +3,7 @@
 A repository of Reflex template apps.
 
 
-# How to deployed templates
+# How to deploy templates
 If this a template for build, you must include a `preview.png` or `preview.webp` which will be used as the preview image.
 
 To get a url for your app, you must make a release with a valid reflex version. This can be difficult since part of the reflex opensource deployment pipeline is to create a release for every version to make sure that all templates work with it. So to get around this you must do a few things:
