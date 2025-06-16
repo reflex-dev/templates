@@ -2,5 +2,5 @@ import reflex as rx
 
 config = rx.Config(
     app_name="business_analytics_dashboard",
-    tailwind=None,
+    plugins=[rx.plugins.TailwindV3Plugin()],
 )
