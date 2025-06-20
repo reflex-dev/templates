@@ -1,5 +1,4 @@
 import reflex as rx
-import reflex_chakra as rc
 
 from api_admin_panel.components.drawer import render_drawer
 from api_admin_panel.states.queries import QueryAPI
@@ -38,12 +37,11 @@ def create_pagination():
                 width="100px",
                 weight="bold",
             ),
-            rc.button_group(
+            rx.hstack(
                 rx.icon(
                     tag="chevron-left", on_click=QueryAPI.previous, cursor="pointer"
                 ),
                 rx.icon(tag="chevron-right", on_click=QueryAPI.next, cursor="pointer"),
-                is_attached=True,
             ),
             align_items="center",
             spacing="1",
