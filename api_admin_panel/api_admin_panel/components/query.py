@@ -1,5 +1,4 @@
 import reflex as rx
-import reflex_chakra as rc
 
 from api_admin_panel.states.base import BaseState
 from api_admin_panel.states.queries import QueryAPI, QueryState
@@ -9,7 +8,6 @@ from api_admin_panel.styles import text
 def item_title(title: str):
     return rx.hstack(
         rx.text(title, font_size="var(--chakra-fontSizes-sm)", **text),
-        rc.accordion_icon(),
         width="100%",
         justify_content="space-between",
     )
@@ -60,16 +58,16 @@ def form_item_entry(data: dict[str, str]):
 def form_item(
     title: str, state: list[dict[str, str]], func: callable, event_trigger: callable
 ):
-    return rc.accordion(
-        rc.accordion_item(
-            rc.accordion_button(item_title(title)),
-            rc.accordion_panel(
+    return rx.accordion.root(
+        rx.accordion.item(
+            rx.accordion.header(rx.accordion.trigger(item_title(title))),
+            rx.accordion.content(
                 item_add_event(event_trigger),
                 width="100%",
                 display="flex",
                 justify_content="end",
             ),
-            rc.accordion_panel(
+            rx.accordion.content(
                 rx.vstack(rx.foreach(state, func), width="100%", spacing="1")
             ),
         ),
@@ -82,10 +80,10 @@ def form_item(
 def form_body_param_item(
     state: list[dict[str, str]], func: callable, event_trigger: callable
 ):
-    return rc.accordion(
-        rc.accordion_item(
-            rc.accordion_button(item_title("Body")),
-            rc.accordion_panel(
+    return rx.accordion.root(
+        rx.accordion.item(
+            rx.accordion.header(rx.accordion.trigger(item_title("Body"))),
+            rx.accordion.content(
                 rx.match(
                     QueryState.current_req,
                     (
@@ -125,10 +123,10 @@ def form_body_param_item(
 
 
 def form_request_item():
-    return rc.accordion(
-        rc.accordion_item(
-            rc.accordion_button(item_title("Requests")),
-            rc.accordion_panel(
+    return rx.accordion.root(
+        rx.accordion.item(
+            rx.accordion.header(rx.accordion.trigger(item_title("Requests"))),
+            rx.accordion.content(
                 rx.hstack(
                     rx.select(
                         QueryState.req_methods,
