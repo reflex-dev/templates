@@ -2,6 +2,12 @@ name: Zip and Publish Subfolders
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag for the artifacts'
+        required: true
+        type: string
 jobs:
   zip-and-publish:
     runs-on: ubuntu-latest
@@ -32,44 +38,29 @@ jobs:
   upload-artifacts:
     needs: zip-and-publish
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        file: ${{ fromJson(needs.zip-and-publish.outputs.files) }}
+    permissions:
+      contents: write
     steps:
       - name: Download zip files
         uses: actions/download-artifact@v4
         with:
           name: zip-files
-      - name: Debug output (file existence check)
-        run: |
-          if [ -e "${{ matrix.file }}" ]; then
-            echo "File '${{ matrix.file }}' exists."
-          else
-            echo "File '${{ matrix.file }}' does not exist."
-          fi
-        shell: bash
-      - name: Upload artifact
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+      - name: Upload release assets
+        uses: softprops/action-gh-release@v2
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./${{ matrix.file }}
-          asset_name: ${{ matrix.file }}
-          asset_content_type: application/zip
+          files: "*.zip"
+          tag_name: ${{ github.event.inputs.version || github.ref_name }}
 
   upload-templates-json:
     needs: upload-artifacts
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Upload templates.json as release asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        uses: softprops/action-gh-release@v2
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./templates.json
-          asset_name: templates.json
-          asset_content_type: application/json
+          files: templates.json
+          tag_name: ${{ github.event.inputs.version || github.ref_name }}
