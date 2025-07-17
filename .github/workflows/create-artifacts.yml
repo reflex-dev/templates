@@ -2,6 +2,12 @@ name: Zip and Publish Subfolders
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag for the artifacts'
+        required: true
+        type: string
 jobs:
   zip-and-publish:
     runs-on: ubuntu-latest
@@ -43,6 +49,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: "*.zip"
+          tag_name: ${{ github.event.inputs.version || github.ref_name }}
 
   upload-templates-json:
     needs: upload-artifacts
@@ -54,3 +61,4 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: templates.json
+          tag_name: ${{ github.event.inputs.version || github.ref_name }}
