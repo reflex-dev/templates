@@ -93,6 +93,14 @@ class OptionsState(rx.State):
         self.guidance_scale = value[0]
 
     @rx.event
+    def set_selected_style(self, value: str):
+        self.selected_style = value
+
+    @rx.event
+    def set_advanced_options_open(self, value: bool):
+        self.advanced_options_open = value
+
+    @rx.event
     def randomize_prompt(self):
         self.prompt = random.choice(prompt_list)
 

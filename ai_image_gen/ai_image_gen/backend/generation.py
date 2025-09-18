@@ -32,6 +32,10 @@ class GeneratorState(rx.State):
     upscaled_image: str = ""
     is_downloading: bool = False
 
+    @rx.event
+    def set_output_image(self, value: str):
+        self.output_image = value
+
     @rx.event(background=True)
     async def generate_image(self):
         try:

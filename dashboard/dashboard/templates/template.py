@@ -53,6 +53,14 @@ class ThemeState(rx.State):
     def set_radius(self, value: str):
         self.radius = value
 
+    @rx.event
+    def set_accent_color(self, value: str):
+        self.accent_color = value
+
+    @rx.event
+    def set_gray_color(self, value: str):
+        self.gray_color = value
+
 
 ALL_PAGES = []
 
