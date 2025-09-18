@@ -18,6 +18,10 @@ class StatsState(rx.State):
     yearly_device_data = []
 
     @rx.event
+    def set_timeframe(self, value: str):
+        self.timeframe = value
+
+    @rx.event
     def set_selected_tab(self, tab: str | list[str]):
         self.selected_tab = tab if isinstance(tab, str) else tab[0]
 

@@ -32,6 +32,10 @@ class GeneratorState(rx.State):
     upscaled_image: str = ""
     is_downloading: bool = False
 
+    @rx.event
+    def set_output_image(self, value: str):
+        self.output_image = value
+
     @rx.event(background=True)
     async def generate_image(self):
         try:
@@ -240,7 +244,7 @@ class GeneratorState(rx.State):
             )
             if image_url == DEFAULT_IMAGE:
                 image_url = (
-                    self.router.page.full_raw_path + DEFAULT_IMAGE[1:]
+                    self.router.url.removesuffix("/") + DEFAULT_IMAGE
                 )  # Remove the /
             yield rx.set_clipboard(image_url)
         except Exception as e:

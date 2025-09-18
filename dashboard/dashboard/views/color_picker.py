@@ -41,7 +41,7 @@ def _display_primary_color(color: list) -> rx.Component:
                     style=styles.color_picker_style,
                 ),
             ),
-            on_click=ThemeState.setvar("accent_color", color[0].lower()),
+            on_click=ThemeState.set_accent_color(color[0].lower()),
         ),
         content=color[0],
     )
@@ -67,7 +67,7 @@ def _display_secondary_color(colors: list) -> rx.Component:
                     style=styles.color_picker_style,
                 ),
             ),
-            on_click=ThemeState.setvar("gray_color", colors[0].lower()),
+            on_click=ThemeState.set_gray_color(colors[0].lower()),
         ),
         content=colors[0],
     )

@@ -77,8 +77,28 @@ class OptionsState(rx.State):
         self.steps = value[0]
 
     @rx.event
+    def set_prompt(self, value: str):
+        self.prompt = value
+
+    @rx.event
+    def set_negative_prompt(self, value: str):
+        self.negative_prompt = value
+
+    @rx.event
+    def set_scheduler(self, value: str):
+        self.scheduler = value
+
+    @rx.event
     def set_guidance_scale(self, value: list):
         self.guidance_scale = value[0]
+
+    @rx.event
+    def set_selected_style(self, value: str):
+        self.selected_style = value
+
+    @rx.event
+    def set_advanced_options_open(self, value: bool):
+        self.advanced_options_open = value
 
     @rx.event
     def randomize_prompt(self):

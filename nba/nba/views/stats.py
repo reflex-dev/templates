@@ -15,6 +15,10 @@ class StatsState(rx.State):
     def toggle_areachart(self):
         self.area_toggle = not self.area_toggle
 
+    @rx.event
+    def set_stats_view(self, value: str):
+        self.stats_view = value
+
 
 def _age_salary_chart() -> rx.Component:
     return rx.cond(
