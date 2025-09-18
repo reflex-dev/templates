@@ -37,6 +37,14 @@ class State(rx.State):
     def set_salary(self, value: list[int | float]):
         self.salary = (int(value[0]), int(value[1]))
 
+    @rx.event
+    def set_sort_value(self, value: str):
+        self.sort_value = value
+
+    @rx.event
+    def set_search_value(self, value: str):
+        self.search_value = value
+
     @rx.var(cache=True)
     def filtered_sorted_players(self) -> list[Player]:
         players = self.players

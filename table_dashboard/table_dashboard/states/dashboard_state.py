@@ -162,11 +162,13 @@ class DashboardState(rx.State):
             return False
         return self.page_item_ids.issubset(self.selected_rows)
 
+    @rx.event
     def set_search_owner(self, value: str):
         """Update the search owner filter."""
         self.search_owner = value
         self.current_page = 1
 
+    @rx.event
     def toggle_sort(self, column_name: str):
         """Toggle sorting for a column."""
         if self.sort_column == column_name:
@@ -175,21 +177,25 @@ class DashboardState(rx.State):
             self.sort_column = column_name
             self.sort_ascending = True
 
+    @rx.event
     def go_to_page(self, page_number: int):
         """Navigate to a specific page."""
         if 1 <= page_number <= self.total_pages:
             self.current_page = page_number
 
+    @rx.event
     def next_page(self):
         """Go to the next page."""
         if self.current_page < self.total_pages:
             self.current_page += 1
 
+    @rx.event
     def previous_page(self):
         """Go to the previous page."""
         if self.current_page > 1:
             self.current_page -= 1
 
+    @rx.event
     def toggle_row_selection(self, row_id: int):
         """Toggle selection state for a single row using its ID."""
         if row_id in self.selected_rows:
@@ -197,6 +203,7 @@ class DashboardState(rx.State):
         else:
             self.selected_rows.add(row_id)
 
+    @rx.event
     def toggle_select_all_on_page(self):
         """Select or deselect all rows on the current page."""
         page_ids = self.page_item_ids
@@ -205,6 +212,7 @@ class DashboardState(rx.State):
         else:
             self.selected_rows.update(page_ids)
 
+    @rx.event
     def toggle_status_filter(self):
         is_opening = not self.show_status_filter
         self.show_status_filter = is_opening
@@ -213,6 +221,7 @@ class DashboardState(rx.State):
         if is_opening:
             self.temp_selected_statuses = self.selected_statuses.copy()
 
+    @rx.event
     def toggle_region_filter(self):
         is_opening = not self.show_region_filter
         self.show_region_filter = is_opening
@@ -221,6 +230,7 @@ class DashboardState(rx.State):
         if is_opening:
             self.temp_selected_regions = self.selected_regions.copy()
 
+    @rx.event
     def toggle_costs_filter(self):
         is_opening = not self.show_costs_filter
         self.show_costs_filter = is_opening
@@ -234,34 +244,41 @@ class DashboardState(rx.State):
                 str(self.max_cost) if self.max_cost is not None else ""
             )
 
+    @rx.event
     def toggle_temp_status(self, status: str):
         if status in self.temp_selected_statuses:
             self.temp_selected_statuses.remove(status)
         else:
             self.temp_selected_statuses.add(status)
 
+    @rx.event
     def toggle_temp_region(self, region: str):
         if region in self.temp_selected_regions:
             self.temp_selected_regions.remove(region)
         else:
             self.temp_selected_regions.add(region)
 
+    @rx.event
     def set_temp_min_cost(self, value: str):
         self.temp_min_cost_str = value
 
+    @rx.event
     def set_temp_max_cost(self, value: str):
         self.temp_max_cost_str = value
 
+    @rx.event
     def apply_status_filter(self):
         self.selected_statuses = self.temp_selected_statuses.copy()
         self.show_status_filter = False
         self.current_page = 1
 
+    @rx.event
     def apply_region_filter(self):
         self.selected_regions = self.temp_selected_regions.copy()
         self.show_region_filter = False
         self.current_page = 1
 
+    @rx.event
     def apply_costs_filter(self):
         new_min_cost = None
         new_max_cost = None
@@ -280,18 +297,21 @@ class DashboardState(rx.State):
         self.show_costs_filter = False
         self.current_page = 1
 
+    @rx.event
     def reset_status_filter(self):
         self.temp_selected_statuses = set()
         self.selected_statuses = set()
         self.show_status_filter = False
         self.current_page = 1
 
+    @rx.event
     def reset_region_filter(self):
         self.temp_selected_regions = set()
         self.selected_regions = set()
         self.show_region_filter = False
         self.current_page = 1
 
+    @rx.event
     def reset_costs_filter(self):
         self.temp_min_cost_str = ""
         self.temp_max_cost_str = ""
@@ -300,6 +320,7 @@ class DashboardState(rx.State):
         self.show_costs_filter = False
         self.current_page = 1
 
+    @rx.event
     def reset_all_filters(self):
         """Reset all filters and search."""
         self.search_owner = ""
@@ -319,6 +340,7 @@ class DashboardState(rx.State):
         self.sort_column = None
         self.sort_ascending = True
 
+    @rx.event
     def close_filter_dropdowns(self):
         self.show_status_filter = False
         self.show_region_filter = False

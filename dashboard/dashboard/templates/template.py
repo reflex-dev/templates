@@ -45,6 +45,14 @@ class ThemeState(rx.State):
 
     scaling: str = "100%"
 
+    @rx.event
+    def set_scaling(self, value: str):
+        self.scaling = value
+
+    @rx.event
+    def set_radius(self, value: str):
+        self.radius = value
+
 
 ALL_PAGES = []
 
