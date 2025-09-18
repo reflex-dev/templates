@@ -1,0 +1,10 @@
+[project]
+name = "templates"
+version = "0.0.1"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "reflex @ git+https://github.com/reflex-dev/reflex@main",
+    "reflex-enterprise>=0.3.4",
+    "pre-commit>=3.7.0",
+]
