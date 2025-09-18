@@ -240,7 +240,7 @@ class GeneratorState(rx.State):
             )
             if image_url == DEFAULT_IMAGE:
                 image_url = (
-                    self.router.page.full_raw_path + DEFAULT_IMAGE[1:]
+                    self.router.url.removesuffix("/") + DEFAULT_IMAGE
                 )  # Remove the /
             yield rx.set_clipboard(image_url)
         except Exception as e:
