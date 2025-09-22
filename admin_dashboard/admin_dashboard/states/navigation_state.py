@@ -7,4 +7,4 @@ class NavigationState(rx.State):
     @rx.var
     def current_page(self) -> str:
         """Get the current page route."""
-        return self.router.page.path
+        return self.router.url.path

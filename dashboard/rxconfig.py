@@ -2,5 +2,5 @@ import reflex as rx
 
 config = rx.Config(
     app_name="dashboard",
-    tailwind=None,
+    plugins=[rx.plugins.SitemapPlugin()],
 )

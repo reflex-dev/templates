@@ -139,7 +139,7 @@ def main_table() -> rx.Component:
                     rx.icon("x"),
                     justify="end",
                     cursor="pointer",
-                    on_click=State.setvar("search_value", ""),
+                    on_click=State.set_search_value(""),
                     display=rx.cond(State.search_value, "flex", "none"),
                 ),
                 value=State.search_value,

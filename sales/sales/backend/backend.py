@@ -74,6 +74,10 @@ class State(rx.State):
     sort_reverse: bool = False
 
     @rx.event
+    def set_tone(self, value: str):
+        self.tone = value
+
+    @rx.event
     def set_length(self, value: list[int | float]):
         self.length = int(value[0])
 

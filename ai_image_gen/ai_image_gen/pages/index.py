@@ -64,7 +64,7 @@ def _image_list_item(image: str) -> rx.Component:
             max_width="5em",
             cursor="pointer",
             background=rx.color("accent", 9),
-            on_click=GeneratorState.setvar("output_image", image),
+            on_click=GeneratorState.set_output_image(image),
         ),
         loading=GeneratorState.is_generating | GeneratorState.is_upscaling,
     )

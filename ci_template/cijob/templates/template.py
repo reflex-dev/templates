@@ -45,6 +45,22 @@ class ThemeState(rx.State):
 
     scaling: str = "100%"
 
+    @rx.event
+    def set_scaling(self, value: str):
+        self.scaling = value
+
+    @rx.event
+    def set_radius(self, value: str):
+        self.radius = value
+
+    @rx.event
+    def set_accent_color(self, value: str):
+        self.accent_color = value
+
+    @rx.event
+    def set_gray_color(self, value: str):
+        self.gray_color = value
+
 
 ALL_PAGES = []
 

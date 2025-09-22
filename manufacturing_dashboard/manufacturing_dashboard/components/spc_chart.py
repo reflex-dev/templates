@@ -83,19 +83,19 @@ def spc_chart() -> rx.Component:
                     height=10,
                 ),
                 rx.recharts.reference_area(
-                    y1=DashboardState.lsl.to_string(),
-                    y2=DashboardState.usl.to_string(),
-                    stroke_opacity=0.3,
-                    fill="#0d9488",
-                    fill_opacity=0.1,
-                    stroke="#0f766e",
-                    label=rx.recharts.label(
+                    rx.recharts.label(
                         value="Spec",
                         position="insideTopRight",
                         fill="#5eead4",
                         offset=10,
                         font_size="10px",
                     ),
+                    y1=DashboardState.lsl.to_string(),
+                    y2=DashboardState.usl.to_string(),
+                    stroke_opacity=0.3,
+                    fill="#0d9488",
+                    fill_opacity=0.1,
+                    stroke="#0f766e",
                 ),
                 rx.recharts.reference_line(
                     y=DashboardState.target_mean.to_string(),

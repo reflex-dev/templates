@@ -1,6 +1,7 @@
 import uuid
 
 import httpx
+import reflex as rx
 
 from api_admin_panel.states.base import BaseState
 
@@ -43,24 +44,33 @@ class QueryState(BaseState):
     total_pages: int = 1
     formatted_headers: dict
 
+    @rx.event
+    def set_req_url(self, url: str):
+        self.req_url = url
+
+    @rx.event
     def get_request(self, method: str):
         self.current_req = method
 
+    @rx.event
     def add_header(self):
         self.headers.append(
             {"id": str(uuid.uuid4()), "identifier": "headers", "key": "", "value": ""}
         )
 
+    @rx.event
     def add_body(self):
         self.body.append(
             {"id": str(uuid.uuid4()), "identifier": "body", "key": "", "value": ""}
         )
 
+    @rx.event
     def add_cookies(self):
         self.cookies.append(
             {"id": str(uuid.uuid4()), "identifier": "cookies", "key": "", "value": ""}
         )
 
+    @rx.event
     def remove_entry(self, data: dict[str, str]):
         if data["identifier"] == "headers":
             self.headers = [item for item in self.headers if item["id"] != data["id"]]
@@ -71,6 +81,7 @@ class QueryState(BaseState):
         if data["identifier"] == "cookies":
             self.cookies = [item for item in self.cookies if item["id"] != data["id"]]
 
+    @rx.event
     async def update_attribute(self, data: dict[str, str], attribute: str, value: str):
         data[attribute] = value
 
@@ -89,9 +100,11 @@ class QueryState(BaseState):
                 data if item["id"] == data["id"] else item for item in self.cookies
             ]
 
+    @rx.event
     async def update_keyy(self, key: str, data: dict[str, str]):
         await self.update_attribute(data, "key", key)
 
+    @rx.event
     async def update_value(self, value: str, data: dict[str, str]):
         await self.update_attribute(data, "value", value)
 

@@ -28,6 +28,14 @@ class TableState(rx.State):
     offset: int = 0
     limit: int = 12  # Number of rows per page
 
+    @rx.event
+    def set_search_value(self, value: str):
+        self.search_value = value
+
+    @rx.event
+    def set_sort_value(self, value: str):
+        self.sort_value = value
+
     @rx.var(cache=True)
     def filtered_sorted_items(self) -> List[Item]:
         items = self.items
