@@ -1,7 +1,8 @@
 import reflex as rx
-
 import reflex_enterprise as rxe
 from reflex_enterprise.components.flow.types import Edge, Node
+
+from .common import demo
 
 initial_nodes: list[Node] = [
     {
@@ -34,7 +35,11 @@ def drag_handle_node():
     )
 
 
-@rx.page(route="/flow/nodes/drag-handle", title="Drag Handle Demo")
+@demo(
+    route="/nodes/drag-handle",
+    title="Drag Handle Demo",
+    description="A demo of a node with a drag handle.",
+)
 def drag_handle():
     return rx.box(
         rxe.flow(

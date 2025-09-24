@@ -1,14 +1,15 @@
 """Creating custom nodes is as easy as building a regular React component and passing it to nodeTypes.
 
-Since they’re standard React components, you can display any content and implement any functionality you need. Plus, you’ll have access to a range of props that allow you to extend and customize the default node behavior.
+Since they are standard React components, you can display any content and implement any functionality you need. Plus, you will have access to a range of props that allow you to extend and customize the default node behavior.
 For more details, check out our [Custom Nodes guide](https://reactflow.dev/learn/customization/custom-nodes)."""
 
 from typing import Any
 
 import reflex as rx
-
 import reflex_enterprise as rxe
 from reflex_enterprise.components.flow.types import Connection, Edge, Node
+
+from .common import demo
 
 
 class CustomNodeState(rx.State):
@@ -89,7 +90,7 @@ class CustomNodeState(rx.State):
 
 
 @rx.memo
-def color_selector_node(data: rx.Var[dict[str, Any]], isConnectable: rx.Var[bool]):  # noqa: N803
+def color_selector_node(data: rx.Var[dict[str, Any]], isConnectable: rx.Var[bool]):
     data = data.to(dict)
     return rx.fragment(
         rxe.flow.handle(
@@ -140,7 +141,11 @@ def node_color(node: rx.vars.ObjectVar[Node]):
     )
 
 
-@rx.page(route="/flow/nodes/custom-node", title="Custom Node Demo")
+@demo(
+    route="/nodes/custom-node",
+    title="Custom Node Demo",
+    description="Creating custom nodes is as easy as building a regular React component and passing it to nodeTypes.",
+)
 def custom_node():
     return rx.box(
         rxe.flow(

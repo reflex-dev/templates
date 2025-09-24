@@ -6,7 +6,6 @@ import uuid
 from typing import Any, Callable, Mapping
 
 import reflex as rx
-
 import reflex_enterprise as rxe
 from reflex_enterprise.components.dnd import DropTargetMonitor
 
@@ -301,8 +300,8 @@ def item_card_drop_target(item: ItemInfo):
 def item_drop_target(
     column_id: str,
     replace_position: int,
-    child_before: rx.Component = rx.fragment(),
-    child_after: rx.Component = rx.fragment(),
+    child_before: rx.Component,
+    child_after: rx.Component,
 ):
     params = rxe.dnd.DropTarget.collected_params
     dragged_item = KanbanState.item_by_id(params.item.id)
@@ -329,9 +328,7 @@ def item_drop_target(
 
 @rx.memo
 def column_drop_target(
-    replace_position: int,
-    child_before: rx.Component = rx.fragment(),
-    child_after: rx.Component = rx.fragment(),
+    replace_position: int, child_before: rx.Component, child_after: rx.Component
 ):
     params = rxe.dnd.DropTarget.collected_params
     dragged_column = KanbanState.columns.get(params.item.id.to(str), None)
@@ -434,7 +431,6 @@ def kanban_column_drop_target(col: KanbanColumn):
     on_load=KanbanState.on_load,
 )
 def kanban_page() -> rx.Component:
-    # Welcome Page (Index)
     return rx.container(
         rx.hstack(
             rx.foreach(

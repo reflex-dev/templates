@@ -1,7 +1,6 @@
 """Accordion demo page."""
 
 import reflex as rx
-
 import reflex_enterprise as rxe
 
 from .common import demo

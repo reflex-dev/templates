@@ -4,9 +4,8 @@ import datetime
 
 import faker
 import reflex as rx
-from sqlmodel import Column, DateTime, Field, func
-
 import reflex_enterprise as rxe
+from sqlmodel import Column, DateTime, Field, func
 
 from .common import demo
 

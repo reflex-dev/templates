@@ -1,7 +1,8 @@
 import reflex as rx
-
 import reflex_enterprise as rxe
 from reflex_enterprise.components.flow.types import Edge, Node
+
+from .common import demo
 
 initial_nodes: list[Node] = [
     {
@@ -50,7 +51,11 @@ class IntersectionsState(rx.State):
         self.edges = edges
 
 
-@rx.page(route="/flow/nodes/intersections", title="Intersections")
+@demo(
+    route="/nodes/intersections",
+    title="Intersections",
+    description="A demo of intersecting nodes.",
+)
 def intersections():
     return rx.box(
         rxe.flow.provider(

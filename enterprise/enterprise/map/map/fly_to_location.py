@@ -1,7 +1,6 @@
 """Map demo showing how to fly to different locations."""
 
 import reflex as rx
-
 import reflex_enterprise as rxe
 from reflex_enterprise.components.map.types import (
     LatLng,

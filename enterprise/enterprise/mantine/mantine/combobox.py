@@ -1,5 +1,4 @@
 import reflex as rx
-
 import reflex_enterprise as rxe
 
 from .common import demo
@@ -23,7 +22,6 @@ def memo_combobox():
         ),
         label="Combobox",
         placeholder="Select a value",
-        # on_change=rx.toast("Selected value: {value}"),
     )
 
 

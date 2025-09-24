@@ -1,7 +1,6 @@
 """Pivot demo for AgGrid."""
 
 import pandas as pd
-
 import reflex_enterprise as rxe
 
 from .common import demo

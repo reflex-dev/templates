@@ -1,7 +1,6 @@
 """Mantine Dates Demo"""
 
 import reflex as rx
-
 import reflex_enterprise as rxe
 
 from .common import demo
@@ -10,7 +9,6 @@ from .common import demo
 class DateState(rx.State):
     """State for the Dates demo."""
 
-    # Define any state variables you need here
     date: str = ""
 
 
@@ -40,7 +38,6 @@ def picker_grid():
             rxe.mantine.dates.date_picker_input(
                 label="Pick a Date",
                 placeholder="Pick date",
-                # value=DateState.date,
                 on_change=lambda value: rx.toast(f"Date selected: {value}"),
             ),
         ),
@@ -84,10 +81,6 @@ def picker_grid():
                 on_change=lambda value: rx.toast(f"Time selected: {value}"),
             ),
         ),
-        # rx.text("TimeGrid"),
-        # rxe.mantine.dates.time_grid(),
-        # rx.text("TimeValue"),
-        # rxe.mantine.dates.time_value(),
         columns="3",
     )
 

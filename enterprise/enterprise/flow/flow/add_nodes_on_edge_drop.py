@@ -1,7 +1,6 @@
 """You can create a new node when you drop the connection line on the pane by using the onConnectStart and onConnectEnd handlers."""
 
 import reflex as rx
-
 import reflex_enterprise as rxe
 from reflex_enterprise.components.flow.types import (
     ConnectionInProgress,
@@ -10,6 +9,8 @@ from reflex_enterprise.components.flow.types import (
     Node,
     XYPosition,
 )
+
+from .common import demo
 
 initial_nodes: list[Node] = [
     {
@@ -65,7 +66,11 @@ class AddNodesOnEdgeDropState(rx.State):
             )
 
 
-@rx.page(route="/flow/nodes/add-node-on-edge-drop", title="Add Node on Edge Drop Demo")
+@demo(
+    route="/nodes/add-node-on-edge-drop",
+    title="Add Node on Edge Drop Demo",
+    description="You can create a new node when you drop the connection line on the pane by using the onConnectStart and onConnectEnd handlers.",
+)
 def add_node_on_edge_drop():
     return rx.box(
         rxe.flow.provider(

@@ -2,8 +2,6 @@
 
 import reflex as rx
 
-import reflex_enterprise as rxe
-
 from .aligned_grids import aligned_grids_page
 from .cell_selection import cell_selection_page
 from .common import DemoState, demo

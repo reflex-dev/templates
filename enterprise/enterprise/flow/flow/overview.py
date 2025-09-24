@@ -1,9 +1,10 @@
 from typing import Any, Mapping, TypedDict
 
 import reflex as rx
-
 import reflex_enterprise as rxe
 from reflex_enterprise.components.flow.types import Edge, Node, Position
+
+from .common import demo
 
 initial_edges: list[Edge] = [
     {
@@ -185,13 +186,13 @@ initial_nodes: list[Node] = [
 @rx.memo
 def button_edge(
     id: rx.Var[str],
-    sourceX: rx.Var[float],  # noqa: N803
-    sourceY: rx.Var[float],  # noqa: N803
-    targetX: rx.Var[float],  # noqa: N803
-    targetY: rx.Var[float],  # noqa: N803
-    sourcePosition: rx.Var[Position],  # noqa: N803
-    targetPosition: rx.Var[Position],  # noqa: N803
-    markerEnd: rx.Var[str],  # noqa: N803
+    sourceX: rx.Var[float],
+    sourceY: rx.Var[float],
+    targetX: rx.Var[float],
+    targetY: rx.Var[float],
+    sourcePosition: rx.Var[Position],
+    targetPosition: rx.Var[Position],
+    markerEnd: rx.Var[str],
 ):
     bezier_path = rxe.components.flow.util.get_bezier_path(
         source_x=sourceX,
@@ -259,8 +260,8 @@ def toolbar_node(data: rx.vars.ObjectVar[Mapping[str, Any]]):
 
 @rx.memo
 def circle_node(
-    positionAbsoluteX: rx.vars.Var[float],  # noqa: N803
-    positionAbsoluteY: rx.vars.Var[float],  # noqa: N803
+    positionAbsoluteX: rx.vars.Var[float],
+    positionAbsoluteY: rx.vars.Var[float],
 ):
     label = f"Position x:{round(positionAbsoluteX.guess_type())} y:{round(positionAbsoluteY.guess_type())}"
     return rx.el.div(
@@ -430,7 +431,11 @@ class OverviewState(rx.State):
         ]
 
 
-@rx.page(route="/flow/overview", title="Feature Overview")
+@demo(
+    route="/overview",
+    title="Feature Overview",
+    description="A high-level overview of the features of the Flow component.",
+)
 def overview():
     return rx.box(
         rxe.flow(

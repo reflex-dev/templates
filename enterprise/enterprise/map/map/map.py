@@ -2,8 +2,6 @@
 
 import reflex as rx
 
-import reflex_enterprise as rxe
-
 from .common import DemoState, demo
 from .fly_to_location import fly_to_location
 from .map_controls import map_controls

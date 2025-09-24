@@ -3,9 +3,10 @@
 You can use a boolean, a number (the number of max. connections the handle should have) or a callback function that returns a boolean as an arg for the isConnectable prop of the CustomHandle component."""
 
 import reflex as rx
-
 import reflex_enterprise as rxe
 from reflex_enterprise.components.flow.types import Edge, HandleType, Node, Position
+
+from .common import demo
 
 
 class ConnectionLimitState(rx.State):
@@ -65,7 +66,11 @@ def custom_node():
     )
 
 
-@rx.page(route="/flow/nodes/connection-limit", title="Connection Limit Demo")
+@demo(
+    route="/nodes/connection-limit",
+    title="Connection Limit Demo",
+    description="This is an example of a custom node with a custom handle that can limit the amount of connections a handle can have using the isConnectable prop.",
+)
 def connection_limit():
     return rx.box(
         rxe.flow(

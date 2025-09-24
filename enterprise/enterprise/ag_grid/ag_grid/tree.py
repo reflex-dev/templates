@@ -4,9 +4,8 @@ import json
 from typing import Any
 
 import reflex as rx
-from reflex.vars.base import Var
-
 import reflex_enterprise as rxe
+from reflex.vars.base import Var
 
 from .common import demo
 

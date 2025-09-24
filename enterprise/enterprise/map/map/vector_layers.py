@@ -1,7 +1,6 @@
 """Map demo showcasing vector layers."""
 
 import reflex as rx
-
 import reflex_enterprise as rxe
 from reflex_enterprise.components.map.types import LatLng, latlng, latlng_bounds
 
