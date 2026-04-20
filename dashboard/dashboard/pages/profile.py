@@ -1,12 +1,15 @@
 """The profile page."""
 
+from dataclasses import dataclass
+
 import reflex as rx
 
 from ..components.profile_input import profile_input
 from ..templates import template
 
 
-class Profile(rx.Base):
+@dataclass
+class Profile:
     name: str = ""
     email: str = ""
     notifications: bool = True

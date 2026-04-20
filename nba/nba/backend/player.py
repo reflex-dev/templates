@@ -1,9 +1,9 @@
+from dataclasses import dataclass
 from typing import Union
 
-import reflex as rx
 
-
-class Player(rx.Base):
+@dataclass
+class Player:
     """The player class."""
 
     name: str
