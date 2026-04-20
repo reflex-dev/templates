@@ -102,8 +102,8 @@ def details_table() -> rx.Component:
                                 rx.el.input(
                                     type="checkbox",
                                     class_name="h-4 w-4 border-gray-300 rounded text-blue-600 focus:ring-blue-500 cursor-pointer",
-                                    on_change=lambda: DashboardState.toggle_row_selection(
-                                        row["id"]
+                                    on_change=lambda: (
+                                        DashboardState.toggle_row_selection(row["id"])
                                     ),
                                     checked=DashboardState.selected_rows.contains(
                                         row["id"]

@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 from typing import Union
 
@@ -30,7 +31,8 @@ class Customer(rx.Model, table=True):
     status: str
 
 
-class MonthValues(rx.Base):
+@dataclass
+class MonthValues:
     """Values for a month."""
 
     num_customers: int = 0

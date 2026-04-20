@@ -1,11 +1,13 @@
 import csv
+from dataclasses import dataclass
 from pathlib import Path
 from typing import List
 
 import reflex as rx
 
 
-class Item(rx.Base):
+@dataclass
+class Item:
     """The item class."""
 
     name: str

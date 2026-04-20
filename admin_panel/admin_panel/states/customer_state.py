@@ -197,7 +197,7 @@ class CustomerState(rx.State):
             for _ in range(25):
                 first_name = random.choice(first_names)
                 last_name = random.choice(last_names)
-                email = f"{first_name.lower()}.{last_name.lower()}{random.randint(1,99)}@example.com"
+                email = f"{first_name.lower()}.{last_name.lower()}{random.randint(1, 99)}@example.com"
                 created_at = datetime.datetime.now() - datetime.timedelta(
                     days=random.randint(0, 365)
                 )
@@ -229,7 +229,7 @@ class CustomerState(rx.State):
                         last_name=last_name,
                         email=email,
                         phone=(
-                            f"555-{random.randint(100,999)}-{random.randint(1000,9999)}"
+                            f"555-{random.randint(100, 999)}-{random.randint(1000, 9999)}"
                             if random.random() > 0.2
                             else None
                         ),
