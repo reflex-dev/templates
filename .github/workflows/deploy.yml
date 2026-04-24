@@ -27,7 +27,11 @@ jobs:
         with:
           submodules: recursive
       - name: Set reflex version for deploy
-        run: sed -e "s/^reflex[ >=].*$/reflex==${{ github.event.release.tag_name }}/" -i ${{ matrix.folder }}/requirements.txt
+        run: |
+          sed -e "s/^reflex[ >=].*$/reflex==${{ github.event.release.tag_name }}/" -i ${{ matrix.folder }}/requirements.txt
+          if [[ "${{ github.event.release.prerelease }}" == "true" ]]; then
+            sed -i '1i--pre' ${{ matrix.folder }}/requirements.txt
+          fi
       - name: Set environment variables
         id: set-env
         run: |
