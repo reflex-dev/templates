@@ -26,12 +26,21 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           submodules: recursive
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: 3.10.16
       - name: Set reflex version for deploy
+        run: sed -e "s/^reflex[ >=].*$/reflex==${{ github.event.release.tag_name }}/" -i ${{ matrix.folder }}/requirements.txt
+      - name: Freeze resolved deps for prerelease deploys
+        if: ${{ github.event.release.prerelease }}
         run: |
-          sed -e "s/^reflex[ >=].*$/reflex==${{ github.event.release.tag_name }}/" -i ${{ matrix.folder }}/requirements.txt
-          if [[ "${{ github.event.release.prerelease }}" == "true" ]]; then
-            sed -i '1i--pre' ${{ matrix.folder }}/requirements.txt
-          fi
+          cd ${{ matrix.folder }}
+          python -m venv .freeze-venv
+          source .freeze-venv/bin/activate
+          pip install --pre -r requirements.txt
+          pip freeze > requirements.txt
+          deactivate
+          rm -rf .freeze-venv
       - name: Set environment variables
         id: set-env
         run: |
@@ -119,9 +128,6 @@ jobs:
             echo "EXTRA_ARGS=" >> $GITHUB_ENV
             ;;
           esac
-      - name: Allow prerelease deps for prerelease tags
-        if: ${{ github.event.release.prerelease }}
-        run: echo "EXTRA_ARGS=$EXTRA_ARGS --prerelease=allow" >> $GITHUB_ENV
       - name: Deploy to ReflexCloud
         uses: reflex-dev/reflex-deploy-action@1e32ae30fe6d6d0e0c888d23ad2360b8abe80b5b # v2
         with:
