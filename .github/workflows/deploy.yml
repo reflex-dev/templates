@@ -119,6 +119,9 @@ jobs:
             echo "EXTRA_ARGS=" >> $GITHUB_ENV
             ;;
           esac
+      - name: Allow prerelease deps for prerelease tags
+        if: ${{ github.event.release.prerelease }}
+        run: echo "EXTRA_ARGS=$EXTRA_ARGS --prerelease=allow" >> $GITHUB_ENV
       - name: Deploy to ReflexCloud
         uses: reflex-dev/reflex-deploy-action@1e32ae30fe6d6d0e0c888d23ad2360b8abe80b5b # v2
         with:
