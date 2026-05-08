@@ -128,12 +128,12 @@ jobs:
             echo "EXTRA_ARGS=" >> $GITHUB_ENV
             ;;
           esac
+      - name: Install reflex and dependencies
+        run: pip install -r ${{ matrix.folder }}/requirements.txt
       - name: Deploy to ReflexCloud
-        uses: reflex-dev/reflex-deploy-action@1e32ae30fe6d6d0e0c888d23ad2360b8abe80b5b # v2
+        uses: reflex-dev/reflex-deploy-action@a95fd8cef473940d1e626367ce235963ab5b806f # v3.0.0
         with:
           auth_token: ${{ secrets.REFLEX_AUTH_TOKEN }}
           project_id: ${{ secrets.REFLEX_PROJECT_ID }}
           app_directory: ${{ matrix.folder }}
           extra_args: ${{ env.EXTRA_ARGS }}
-          dry_run: ${{ vars.DRY_RUN }}
-          skip_checkout: "true"
