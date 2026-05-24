@@ -1,0 +1,6 @@
+reflex>=0.8.11
+reflex-enterprise>=0.3.2
+faker==36.2.2
+pandas==2.2.3
+aiosqlite
+greenlet

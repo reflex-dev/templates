@@ -186,6 +186,13 @@
       "demo_url": "https://retail-dashboard-navy-wood.reflex.run/",
       "hidden": false,
       "reflex_build": true
+    },
+    {
+      "name": "enterprise",
+      "description": "A collection of enterprise related components",
+      "demo_url": "https://enterprise-demos.reflex.run/",
+      "hidden": false,
+      "reflex_build": false
     }
   ]
 }
