@@ -228,8 +228,7 @@ class StatsState(rx.State):
                     float(getattr(player, value_attr))
                 )
         return {
-            key: round(sum(values) / len(values), 2)
-            for key, values in grouped.items()
+            key: round(sum(values) / len(values), 2) for key, values in grouped.items()
         }
 
     @rx.var(cache=True)
