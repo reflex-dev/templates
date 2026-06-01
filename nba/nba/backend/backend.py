@@ -1,41 +1,73 @@
+import csv
+import random
+from pathlib import Path
 from typing import Dict, List
 
-import numpy as np
-import pandas as pd
 import reflex as rx
 
 from .data_items import all_items
 from .player import Player
 
-nba_csv = "nbastats.csv"
+_CSV_PATH = Path(__file__).resolve().parents[2] / "nbastats.csv"
+
+
+def _load_players() -> list[Player]:
+    """Load the player roster once from the bundled CSV.
+
+    Missing salary/college cells are kept as the string "NaN" to match the
+    original pandas-backed behavior (empty cells became NaN floats).
+
+    Returns:
+        The full list of players.
+    """
+    players: list[Player] = []
+    with _CSV_PATH.open(newline="") as f:
+        for row in csv.DictReader(f):
+            salary = row["salary"]
+            players.append(
+                Player(
+                    name=row["name"],
+                    team=row["team"],
+                    number=int(row["number"]),
+                    position=row["position"],
+                    age=int(row["age"]),
+                    height=row["height"],
+                    weight=int(row["weight"]),
+                    college=row["college"] or "NaN",
+                    salary=int(salary) if salary else "NaN",
+                )
+            )
+    return players
+
+
+# The roster is identical for every session, so load it once at import time
+# and keep it server-side instead of re-reading the CSV and stashing it in
+# per-connection state.
+PLAYERS: list[Player] = _load_players()
+
+_SEARCH_ATTRS = (
+    "name",
+    "team",
+    "number",
+    "position",
+    "age",
+    "height",
+    "weight",
+    "college",
+    "salary",
+)
 
 
 class State(rx.State):
-    """The app state."""
-
-    players: list[Player] = []
+    """Table-tab state: search, sort and pagination over the roster."""
 
     search_value: str = ""
-    sort_value: str = ""
+    sort_value: str = "name"  # Matches the "Sort By: Name" select default.
     sort_reverse: bool = False
 
-    total_items: int = 0
+    total_items: int = len(PLAYERS)
     offset: int = 0
     limit: int = 12  # Number of rows per page
-
-    selected_items: Dict[str, List] = (
-        all_items  # We add all items to the selected items by default
-    )
-    age: tuple[int, int] = (19, 40)
-    salary: tuple[int, int] = (0, 25000000)
-
-    @rx.event
-    def set_age(self, value: list[int | float]):
-        self.age = (int(value[0]), int(value[1]))
-
-    @rx.event
-    def set_salary(self, value: list[int | float]):
-        self.salary = (int(value[0]), int(value[1]))
 
     @rx.event
     def set_sort_value(self, value: str):
@@ -46,12 +78,13 @@ class State(rx.State):
         self.search_value = value
 
     @rx.var(cache=True)
-    def filtered_sorted_players(self) -> list[Player]:
-        players = self.players
+    def _filtered_sorted_players(self) -> list[Player]:
+        # Backend-only (leading underscore): the full filtered list never
+        # crosses the wire; only `get_current_page` is sent to the client.
+        players = PLAYERS
 
-        # Filter players based on selected item
         if self.sort_value:
-            if self.sort_value in ["salary", "number"]:
+            if self.sort_value in ("salary", "number"):
                 players = sorted(
                     players,
                     key=lambda player: float(getattr(player, self.sort_value)),
@@ -64,7 +97,6 @@ class State(rx.State):
                     reverse=self.sort_reverse,
                 )
 
-        # Filter players based on search value
         if self.search_value:
             search_value = self.search_value.lower()
             players = [
@@ -72,17 +104,7 @@ class State(rx.State):
                 for player in players
                 if any(
                     search_value in str(getattr(player, attr)).lower()
-                    for attr in [
-                        "name",
-                        "team",
-                        "number",
-                        "position",
-                        "age",
-                        "height",
-                        "weight",
-                        "college",
-                        "salary",
-                    ]
+                    for attr in _SEARCH_ATTRS
                 )
             ]
 
@@ -98,11 +120,9 @@ class State(rx.State):
             1 if self.total_items % self.limit else 0
         )
 
-    @rx.var(cache=True, initial_value=[])
+    @rx.var(cache=True)
     def get_current_page(self) -> list[Player]:
-        start_index = self.offset
-        end_index = start_index + self.limit
-        return self.filtered_sorted_players[start_index:end_index]
+        return self._filtered_sorted_players[self.offset : self.offset + self.limit]
 
     def prev_page(self):
         if self.page_number > 1:
@@ -118,207 +138,42 @@ class State(rx.State):
     def last_page(self):
         self.offset = (self.total_pages - 1) * self.limit
 
-    def load_entries(self):
-        df = pd.read_csv(nba_csv)
-        df = df.replace("", np.nan)  # Replace empty strings with NaN
-        self.players = [Player(**row) for _, row in df.iterrows()]
-        self.total_items = len(self.players)
-
     def toggle_sort(self):
         self.sort_reverse = not self.sort_reverse
-        self.load_entries()
 
-    @rx.var(cache=True)
-    def get_age_salary_chart_data(self) -> list[dict]:
-        age_salary_data = {}
-        age_count = {}
 
-        for player in self.players:
-            if (
-                not pd.isna(player.age)
-                and not pd.isna(player.salary)
-                and player.team in self.selected_items["teams"]
-                and player.college in self.selected_items["colleges"]
-                and player.position in self.selected_items["positions"]
-                and self.age[0] <= player.age <= self.age[1]
-                and self.salary[0] <= float(player.salary) <= self.salary[1]
-            ):
-                age = player.age
-                if age not in age_salary_data:
-                    age_salary_data[age] = 0
-                    age_count[age] = 0
+class StatsState(rx.State):
+    """Stats-tab state: selections, range filters and chart aggregations.
 
-                age_salary_data[age] += float(player.salary)
-                age_count[age] += 1
+    Kept separate from `State` so none of the chart data is computed or sent
+    to the client while the Table tab is showing.
+    """
 
-        return [
-            {
-                "age": age,
-                "average salary": round(
-                    age_salary_data.get(age, 0) / age_count.get(age, 1), 2
-                ),
-            }
-            for age in range(self.age[0], self.age[1] + 1)  # Ensure we include all ages
-        ]
+    selected_items: Dict[str, List] = all_items  # All items are selected by default.
+    age: tuple[int, int] = (19, 40)
+    salary: tuple[int, int] = (0, 25000000)
 
-    @rx.var(cache=True)
-    def get_position_salary_chart_data(self) -> list[dict]:
-        position_salary_data = {}
-        position_count = {}
+    stats_view: str = "age_salary"
+    radar_toggle: bool = False
+    area_toggle: bool = False
 
-        for player in self.players:
-            if (
-                not pd.isna(player.position)
-                and not pd.isna(player.salary)
-                and player.team in self.selected_items["teams"]
-                and player.college in self.selected_items["colleges"]
-                and player.position in self.selected_items["positions"]
-                and self.age[0] <= player.age <= self.age[1]
-                and self.salary[0] <= float(player.salary) <= self.salary[1]
-            ):
-                position = player.position
-                if position not in position_salary_data:
-                    position_salary_data[position] = 0
-                    position_count[position] = 0
+    @rx.event
+    def set_age(self, value: list[int | float]):
+        self.age = (int(value[0]), int(value[1]))
 
-                position_salary_data[position] += float(player.salary)
-                position_count[position] += 1
+    @rx.event
+    def set_salary(self, value: list[int | float]):
+        self.salary = (int(value[0]), int(value[1]))
 
-        return [
-            {
-                "position": position,
-                "average salary": round(
-                    position_salary_data[position] / position_count[position], 2
-                ),
-            }
-            for position in position_salary_data
-        ]
+    @rx.event
+    def set_stats_view(self, value: str):
+        self.stats_view = value
 
-    @rx.var(cache=True)
-    def get_team_salary_chart_data(self) -> list[dict]:
-        team_salary_data = {}
-        team_count = {}
+    def toggle_radarchart(self):
+        self.radar_toggle = not self.radar_toggle
 
-        for player in self.players:
-            if (
-                not pd.isna(player.team)
-                and not pd.isna(player.salary)
-                and player.team in self.selected_items["teams"]
-                and player.college in self.selected_items["colleges"]
-                and player.position in self.selected_items["positions"]
-                and self.age[0] <= player.age <= self.age[1]
-                and self.salary[0] <= float(player.salary) <= self.salary[1]
-            ):
-                team = player.team
-                if team not in team_salary_data:
-                    team_salary_data[team] = 0
-                    team_count[team] = 0
-
-                team_salary_data[team] += float(player.salary)
-                team_count[team] += 1
-
-        return [
-            {
-                "team": team,
-                "average salary": round(team_salary_data[team] / team_count[team], 2),
-            }
-            for team in team_salary_data
-        ]
-
-    @rx.var(cache=True)
-    def get_college_salary_chart_data(self) -> list[dict]:
-        college_salary_data = {}
-        college_count = {}
-
-        for player in self.players:
-            if (
-                not pd.isna(player.college)
-                and not pd.isna(player.salary)
-                and player.team in self.selected_items["teams"]
-                and player.college in self.selected_items["colleges"]
-                and player.position in self.selected_items["positions"]
-                and self.age[0] <= player.age <= self.age[1]
-                and self.salary[0] <= float(player.salary) <= self.salary[1]
-            ):
-                college = player.college
-                if college not in college_salary_data:
-                    college_salary_data[college] = 0
-                    college_count[college] = 0
-
-                college_salary_data[college] += float(player.salary)
-                college_count[college] += 1
-
-        return [
-            {
-                "college": college,
-                "average salary": round(
-                    college_salary_data[college] / college_count[college], 2
-                ),
-            }
-            for college in college_salary_data
-        ]
-
-    @rx.var(cache=True)
-    def get_team_age_average_data(self) -> list[dict]:
-        team_age_data = {}
-        team_count = {}
-
-        for player in self.players:
-            if (
-                not pd.isna(player.team)
-                and not pd.isna(player.age)
-                and player.team in self.selected_items["teams"]
-                and player.college in self.selected_items["colleges"]
-                and player.position in self.selected_items["positions"]
-                and self.age[0] <= player.age <= self.age[1]
-                and self.salary[0] <= float(player.salary) <= self.salary[1]
-            ):
-                team = player.team
-                if team not in team_age_data:
-                    team_age_data[team] = []
-                    team_count[team] = 0
-
-                team_age_data[team].append(player.age)
-                team_count[team] += 1
-
-        return [
-            {
-                "team": team,
-                "average age": round(sum(ages) / team_count[team], 2),
-            }
-            for team, ages in team_age_data.items()
-        ]
-
-    @rx.var(cache=True)
-    def get_position_age_average_data(self) -> list[dict]:
-        position_age_data = {}
-        position_count = {}
-
-        for player in self.players:
-            if (
-                not pd.isna(player.position)
-                and not pd.isna(player.age)
-                and player.team in self.selected_items["teams"]
-                and player.college in self.selected_items["colleges"]
-                and player.position in self.selected_items["positions"]
-                and self.age[0] <= player.age <= self.age[1]
-                and self.salary[0] <= float(player.salary) <= self.salary[1]
-            ):
-                position = player.position
-                if position not in position_age_data:
-                    position_age_data[position] = []
-                    position_count[position] = 0
-
-                position_age_data[position].append(player.age)
-                position_count[position] += 1
-
-        return [
-            {
-                "position": position,
-                "average age": round(sum(ages) / position_count[position], 2),
-            }
-            for position, ages in position_age_data.items()
-        ]
+    def toggle_areachart(self):
+        self.area_toggle = not self.area_toggle
 
     def add_selected(self, list_name: str, item: str):
         self.selected_items[list_name].append(item)
@@ -333,8 +188,92 @@ class State(rx.State):
         self.selected_items[list_name].clear()
 
     def random_selected(self, list_name: str):
-        self.selected_items[list_name] = np.random.choice(
-            all_items[list_name],
-            size=np.random.randint(1, len(all_items[list_name]) + 1),
-            replace=False,
-        ).tolist()
+        items = all_items[list_name]
+        self.selected_items[list_name] = random.sample(
+            items, random.randint(1, len(items))
+        )
+
+    def _passes_filters(self, player: Player) -> bool:
+        """Whether a player matches the current team/college/position/age/salary selection.
+
+        Args:
+            player: The player to test.
+
+        Returns:
+            True if the player should be included in the charts.
+        """
+        return (
+            player.salary != "NaN"
+            and player.team in self.selected_items["teams"]
+            and player.college in self.selected_items["colleges"]
+            and player.position in self.selected_items["positions"]
+            and self.age[0] <= player.age <= self.age[1]
+            and self.salary[0] <= float(player.salary) <= self.salary[1]
+        )
+
+    def _average_by(self, group_attr: str, value_attr: str) -> dict:
+        """Average ``value_attr`` over chart-filtered players, grouped by ``group_attr``.
+
+        Args:
+            group_attr: Player attribute to group on (e.g. "team", "age").
+            value_attr: Player attribute to average within each group.
+
+        Returns:
+            Each group value mapped to its rounded average, in first-seen order.
+        """
+        grouped: dict = {}
+        for player in PLAYERS:
+            if self._passes_filters(player):
+                grouped.setdefault(getattr(player, group_attr), []).append(
+                    float(getattr(player, value_attr))
+                )
+        return {
+            key: round(sum(values) / len(values), 2)
+            for key, values in grouped.items()
+        }
+
+    @rx.var(cache=True)
+    def get_age_salary_chart_data(self) -> list[dict]:
+        averages = self._average_by("age", "salary")
+        return [
+            # Include every age in range, even ones with no matching players.
+            {"age": age, "average salary": averages.get(age, 0)}
+            for age in range(self.age[0], self.age[1] + 1)
+        ]
+
+    @rx.var(cache=True)
+    def get_position_salary_chart_data(self) -> list[dict]:
+        return [
+            {"position": position, "average salary": avg}
+            for position, avg in self._average_by("position", "salary").items()
+        ]
+
+    @rx.var(cache=True)
+    def get_team_salary_chart_data(self) -> list[dict]:
+        return [
+            {"team": team, "average salary": avg}
+            for team, avg in self._average_by("team", "salary").items()
+        ]
+
+    @rx.var(cache=True)
+    def get_college_salary_chart_data(self) -> list[dict]:
+        # Players with no college are already dropped by `_passes_filters`
+        # (they can't be in the selected colleges list).
+        return [
+            {"college": college, "average salary": avg}
+            for college, avg in self._average_by("college", "salary").items()
+        ]
+
+    @rx.var(cache=True)
+    def get_team_age_average_data(self) -> list[dict]:
+        return [
+            {"team": team, "average age": avg}
+            for team, avg in self._average_by("team", "age").items()
+        ]
+
+    @rx.var(cache=True)
+    def get_position_age_average_data(self) -> list[dict]:
+        return [
+            {"position": position, "average age": avg}
+            for position, avg in self._average_by("position", "age").items()
+        ]

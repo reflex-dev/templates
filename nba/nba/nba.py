@@ -1,6 +1,5 @@
 import reflex as rx
 
-from .backend.backend import State
 from .views.navbar import navbar
 from .views.stats import stats_ui
 from .views.table import main_table
@@ -65,7 +64,6 @@ app = rx.App(
 )
 app.add_page(
     index,
-    on_load=State.load_entries,
     title="NBA Data",
     description="NBA Data for the 2015-2016 season.",
 )

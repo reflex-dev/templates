@@ -1,6 +1,6 @@
 import reflex as rx
 
-from ..backend.backend import State
+from ..backend.backend import StatsState
 from ..backend.data_items import college_dict, position_dict, teams_dict
 from .item_badges import _selected_item_badge, _unselected_item_badge
 
@@ -44,9 +44,9 @@ def _items_selector(item: str, items_dict: dict) -> rx.Component:
     return rx.vstack(
         rx.flex(
             rx.hstack(
-                _add_all_button(State.add_all_selected(item)),
-                _clear_button(State.clear_selected(item)),
-                _random_button(State.random_selected(item)),
+                _add_all_button(StatsState.add_all_selected(item)),
+                _clear_button(StatsState.clear_selected(item)),
+                _random_button(StatsState.random_selected(item)),
                 spacing="2",
                 justify="end",
                 width="100%",
@@ -57,7 +57,7 @@ def _items_selector(item: str, items_dict: dict) -> rx.Component:
         ),
         rx.flex(
             rx.foreach(
-                State.selected_items[item],
+                StatsState.selected_items[item],
                 lambda team: _selected_item_badge(item, items_dict, team),
             ),
             wrap="wrap",
@@ -76,7 +76,7 @@ def _items_selector(item: str, items_dict: dict) -> rx.Component:
 def _accordion_header_stat(icon: str, text: str, item: str) -> rx.Component:
     return rx.hstack(
         rx.icon(icon, size=24),
-        rx.heading(text + f" ({(State.selected_items[item].length())})", size="5"),
+        rx.heading(text + f" ({(StatsState.selected_items[item].length())})", size="5"),
         spacing="2",
         align="center",
         width="100%",
@@ -100,12 +100,12 @@ def _age_selector() -> rx.Component:
             min=19,
             variant="soft",
             max=40,
-            on_change=State.set_age,
+            on_change=StatsState.set_age,
         ),
         rx.hstack(
-            rx.badge("Min Age: ", State.age[0]),
+            rx.badge("Min Age: ", StatsState.age[0]),
             rx.spacer(),
-            rx.badge("Max Age: ", State.age[1]),
+            rx.badge("Max Age: ", StatsState.age[1]),
             width="100%",
         ),
         width="100%",
@@ -119,12 +119,12 @@ def _salary_selector() -> rx.Component:
             min=0,
             variant="soft",
             max=25000000,
-            on_value_commit=State.set_salary,
+            on_value_commit=StatsState.set_salary,
         ),
         rx.hstack(
-            rx.badge("Min Salary: ", State.salary[0]),
+            rx.badge("Min Salary: ", StatsState.salary[0]),
             rx.spacer(),
-            rx.badge("Max Salary: ", State.salary[1]),
+            rx.badge("Max Salary: ", StatsState.salary[1]),
             width="100%",
         ),
         width="100%",
