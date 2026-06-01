@@ -59,7 +59,7 @@ def customer_success_hub_page() -> rx.Component:
     return mock_page("Customer Success Hub")
 
 
-app = rx.App(theme=rx.theme(appearance="light"), stylesheets=[])
+app = rx.App(stylesheets=[])
 app.add_page(index, route="/")
 app.add_page(sales_pipeline_page, route="/sales-pipeline")
 app.add_page(hr_portal_page, route="/hr-portal")

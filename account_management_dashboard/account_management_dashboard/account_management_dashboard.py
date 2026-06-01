@@ -44,12 +44,5 @@ def index() -> rx.Component:
     )
 
 
-app = rx.App(
-    theme=rx.theme(
-        appearance="light",
-        has_background=False,
-        radius="medium",
-        accent_color="indigo",
-    )
-)
+app = rx.App()
 app.add_page(index, title="Accounts Dashboard")

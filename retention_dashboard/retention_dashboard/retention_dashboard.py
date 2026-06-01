@@ -8,5 +8,5 @@ def index() -> rx.Component:
     return layout()
 
 
-app = rx.App(theme=rx.theme(appearance="light"))
+app = rx.App()
 app.add_page(index, route="/")

@@ -14,8 +14,8 @@ _CSV_PATH = Path(__file__).resolve().parents[2] / "nbastats.csv"
 def _load_players() -> list[Player]:
     """Load the player roster once from the bundled CSV.
 
-    Missing salary/college cells are kept as the string "NaN" to match the
-    original pandas-backed behavior (empty cells became NaN floats).
+    Empty salary/college cells become None so consumers can sort, filter and
+    average on real values without special-casing a sentinel string.
 
     Returns:
         The full list of players.
@@ -33,8 +33,8 @@ def _load_players() -> list[Player]:
                     age=int(row["age"]),
                     height=row["height"],
                     weight=int(row["weight"]),
-                    college=row["college"] or "NaN",
-                    salary=int(salary) if salary else "NaN",
+                    college=row["college"] or None,
+                    salary=int(salary) if salary else None,
                 )
             )
     return players
@@ -65,7 +65,6 @@ class State(rx.State):
     sort_value: str = "name"  # Matches the "Sort By: Name" select default.
     sort_reverse: bool = False
 
-    total_items: int = len(PLAYERS)
     offset: int = 0
     limit: int = 12  # Number of rows per page
 
@@ -76,6 +75,9 @@ class State(rx.State):
     @rx.event
     def set_search_value(self, value: str):
         self.search_value = value
+        # A new search resizes the result set, so return to the first page;
+        # otherwise the old offset could land past the end of the matches.
+        self.offset = 0
 
     @rx.var(cache=True)
     def _filtered_sorted_players(self) -> list[Player]:
@@ -84,18 +86,19 @@ class State(rx.State):
         players = PLAYERS
 
         if self.sort_value:
-            if self.sort_value in ("salary", "number"):
-                players = sorted(
-                    players,
-                    key=lambda player: float(getattr(player, self.sort_value)),
-                    reverse=self.sort_reverse,
-                )
-            else:
-                players = sorted(
-                    players,
-                    key=lambda player: str(getattr(player, self.sort_value)).lower(),
-                    reverse=self.sort_reverse,
-                )
+            attr = self.sort_value
+            numeric = attr in ("salary", "number")
+
+            def sort_key(player: Player):
+                value = getattr(player, attr)
+                return value if numeric else str(value).lower()
+
+            # Players whose value is missing (None salary/college) always sort
+            # to the end, regardless of direction; the rest sort by value.
+            present = [p for p in players if getattr(p, attr) is not None]
+            missing = [p for p in players if getattr(p, attr) is None]
+            present.sort(key=sort_key, reverse=self.sort_reverse)
+            players = present + missing
 
         if self.search_value:
             search_value = self.search_value.lower()
@@ -103,7 +106,8 @@ class State(rx.State):
                 player
                 for player in players
                 if any(
-                    search_value in str(getattr(player, attr)).lower()
+                    (value := getattr(player, attr)) is not None
+                    and search_value in str(value).lower()
                     for attr in _SEARCH_ATTRS
                 )
             ]
@@ -115,10 +119,20 @@ class State(rx.State):
         return (self.offset // self.limit) + 1
 
     @rx.var(cache=True)
+    def total_items(self) -> int:
+        """Number of players matching the current search.
+
+        Derived from the filtered list so the page count and navigation can
+        never drift out of sync with what the table actually shows.
+        """
+        return len(self._filtered_sorted_players)
+
+    @rx.var(cache=True)
     def total_pages(self) -> int:
-        return (self.total_items // self.limit) + (
+        pages = (self.total_items // self.limit) + (
             1 if self.total_items % self.limit else 0
         )
+        return max(pages, 1)  # Always at least one page, even with no matches.
 
     @rx.var(cache=True)
     def get_current_page(self) -> list[Player]:
@@ -203,12 +217,12 @@ class StatsState(rx.State):
             True if the player should be included in the charts.
         """
         return (
-            player.salary != "NaN"
+            player.salary is not None
             and player.team in self.selected_items["teams"]
             and player.college in self.selected_items["colleges"]
             and player.position in self.selected_items["positions"]
             and self.age[0] <= player.age <= self.age[1]
-            and self.salary[0] <= float(player.salary) <= self.salary[1]
+            and self.salary[0] <= player.salary <= self.salary[1]
         )
 
     def _average_by(self, group_attr: str, value_attr: str) -> dict:

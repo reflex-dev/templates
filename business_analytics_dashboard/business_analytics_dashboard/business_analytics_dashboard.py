@@ -37,5 +37,5 @@ def index() -> rx.Component:
     )
 
 
-app = rx.App(theme=rx.theme(appearance="light"))
+app = rx.App()
 app.add_page(index)

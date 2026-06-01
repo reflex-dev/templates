@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Union
+from typing import Optional
 
 
 @dataclass
@@ -13,5 +13,5 @@ class Player:
     age: int
     height: str
     weight: int
-    college: str
-    salary: Union[int, str]  # Can also be a string for the NaN values
+    college: Optional[str]  # None when the source cell is empty.
+    salary: Optional[int]  # None when the source cell is empty.

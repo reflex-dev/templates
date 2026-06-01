@@ -3,5 +3,15 @@ import reflex as rx
 config = rx.Config(
     app_name="sales",
     db_url="sqlite:///reflex.db",
-    plugins=[rx.plugins.SitemapPlugin()],
+    plugins=[
+        rx.plugins.SitemapPlugin(),
+        rx.plugins.RadixThemesPlugin(
+            theme=rx.theme(
+                appearance="light",
+                has_background=True,
+                radius="large",
+                accent_color="blue",
+            )
+        ),
+    ],
 )
