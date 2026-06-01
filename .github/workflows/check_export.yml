@@ -1,6 +1,10 @@
 name: check-export
 env:
-  REFLEX_DEP: "git+https://github.com/reflex-dev/reflex.git@main"
+  # Git ref of the reflex monorepo to test templates against. reflex is a uv
+  # workspace, so reflex and its split-out packages (reflex-base,
+  # reflex-components-*) have to be installed together from the same tree —
+  # a dev reflex paired with released sub-packages from PyPI does not work.
+  REFLEX_REF: "main"
   REFLEX_TELEMETRY_ENABLED: false
 on:
   push:
@@ -9,8 +13,9 @@ on:
     branches: [main]
   workflow_dispatch:
     inputs:
-      reflex_dep:
-        description: "Reflex dep (raw pip spec)"
+      reflex_ref:
+        description: "reflex monorepo git ref to test against"
+        default: "main"
 
 jobs:
   list-templates:
@@ -27,6 +32,12 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           submodules: recursive
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          repository: reflex-dev/reflex
+          ref: ${{ github.event.inputs.reflex_ref || env.REFLEX_REF }}
+          path: .reflex-src
+          fetch-depth: 0 # full history so uv-dynamic-versioning derives a real version
       - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
           python-version: 3.10.16
@@ -53,7 +64,14 @@ jobs:
           python -m venv venv
           source venv/bin/activate
 
-          pip install '${{ github.event.inputs.reflex_dep || env.REFLEX_DEP }}' -r requirements.txt
+          # Install the whole reflex workspace from the checked-out monorepo, so
+          # reflex and every split-out package (reflex-base, reflex-components-*)
+          # are the same dev version. uv resolves the sibling workspace packages
+          # from the source tree; plain `pip install reflex@git` would instead
+          # pull released sub-packages from PyPI and break whenever main moves a
+          # module between packages (e.g. reflex_base.components.memo).
+          pip install uv
+          uv pip install "$GITHUB_WORKSPACE/.reflex-src" -r requirements.txt
 
           export OPENAI_API_KEY="dummy"
           reflex init
