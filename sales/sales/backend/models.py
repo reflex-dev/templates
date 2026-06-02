@@ -1,9 +1,10 @@
-import reflex as rx
+from sqlmodel import Field, SQLModel
 
 
-class Customer(rx.Model, table=True):  # type: ignore
+class Customer(SQLModel, table=True):  # type: ignore
     """The customer model."""
 
+    id: int | None = Field(default=None, primary_key=True)
     customer_name: str
     email: str
     age: int
