@@ -91,7 +91,7 @@ class State(rx.State):
                     or_(
                         *[
                             getattr(Customer, field).ilike(search_value)
-                            for field in Customer.get_fields()
+                            for field in Customer.model_fields
                         ],
                     )
                 )
@@ -147,7 +147,9 @@ class State(rx.State):
             customer = session.exec(
                 select(Customer).where(Customer.id == self.current_user.id)
             ).first()
-            customer.set(**form_data)
+            form_data.pop("id", None)
+            for field, value in form_data.items():
+                setattr(customer, field, value)
             session.commit()
             session.refresh(customer)
             self.current_user = customer

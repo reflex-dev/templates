@@ -1,6 +1,5 @@
 import reflex as rx
 
-from .backend.backend import State
 from .views.navbar import navbar
 from .views.stats import stats_ui
 from .views.table import main_table
@@ -59,13 +58,9 @@ base_style = {
 app = rx.App(
     style=base_style,
     stylesheets=base_stylesheets,
-    theme=rx.theme(
-        appearance="light", has_background=True, radius="large", accent_color="orange"
-    ),
 )
 app.add_page(
     index,
-    on_load=State.load_entries,
     title="NBA Data",
     description="NBA Data for the 2015-2016 season.",
 )

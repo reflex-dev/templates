@@ -26,7 +26,6 @@ def index() -> rx.Component:
 
 
 app = rx.App(
-    theme=rx.theme(appearance="light"),
     style={
         "font_family": "'Inter', sans-serif",
         "height": "100%",

@@ -1,23 +1,7 @@
 import reflex as rx
 
-from ..backend.backend import State
+from ..backend.backend import StatsState
 from ..components.stats_selector import stats_selector
-
-
-class StatsState(rx.State):
-    stats_view: str = "age_salary"
-    radar_toggle: bool = False
-    area_toggle: bool = False
-
-    def toggle_radarchart(self):
-        self.radar_toggle = not self.radar_toggle
-
-    def toggle_areachart(self):
-        self.area_toggle = not self.area_toggle
-
-    @rx.event
-    def set_stats_view(self, value: str):
-        self.stats_view = value
 
 
 def _age_salary_chart() -> rx.Component:
@@ -35,7 +19,7 @@ def _age_salary_chart() -> rx.Component:
             ),
             rx.recharts.x_axis(data_key="age"),
             rx.recharts.y_axis(type_="number", scale="auto", hide=True),
-            data=State.get_age_salary_chart_data,
+            data=StatsState.get_age_salary_chart_data,
             min_height=325,
         ),
         rx.recharts.bar_chart(
@@ -47,7 +31,7 @@ def _age_salary_chart() -> rx.Component:
             ),
             rx.recharts.x_axis(data_key="age"),
             rx.recharts.y_axis(type_="number", scale="auto", hide=True),
-            data=State.get_age_salary_chart_data,
+            data=StatsState.get_age_salary_chart_data,
             min_height=325,
         ),
     )
@@ -66,7 +50,7 @@ def _position_salary_chart() -> rx.Component:
             ),
             rx.recharts.polar_grid(),
             rx.recharts.polar_angle_axis(data_key="position"),
-            data=State.get_position_salary_chart_data,
+            data=StatsState.get_position_salary_chart_data,
             min_height=325,
         ),
         rx.recharts.bar_chart(
@@ -78,7 +62,7 @@ def _position_salary_chart() -> rx.Component:
             ),
             rx.recharts.x_axis(data_key="position"),
             rx.recharts.y_axis(type_="number", scale="auto", hide=True),
-            data=State.get_position_salary_chart_data,
+            data=StatsState.get_position_salary_chart_data,
             min_height=325,
         ),
     )
@@ -100,7 +84,7 @@ def _team_salary_chart() -> rx.Component:
             rx.recharts.brush(data_key="name", height=30, stroke="#8E4EC6"),
             rx.recharts.x_axis(data_key="team"),
             rx.recharts.y_axis(type_="number", scale="auto", hide=True),
-            data=State.get_team_salary_chart_data,
+            data=StatsState.get_team_salary_chart_data,
             min_height=325,
         ),
         rx.recharts.bar_chart(
@@ -115,7 +99,7 @@ def _team_salary_chart() -> rx.Component:
             rx.recharts.brush(data_key="name", height=30, stroke="#8E4EC6"),
             rx.recharts.x_axis(data_key="team"),
             rx.recharts.y_axis(type_="number", scale="auto", hide=True),
-            data=State.get_team_salary_chart_data,
+            data=StatsState.get_team_salary_chart_data,
             min_height=325,
         ),
     )
@@ -137,7 +121,7 @@ def _college_salary_chart() -> rx.Component:
             rx.recharts.brush(data_key="name", height=30, stroke="#fdc313"),
             rx.recharts.x_axis(data_key="college"),
             rx.recharts.y_axis(type_="number", scale="auto", hide=True),
-            data=State.get_college_salary_chart_data,
+            data=StatsState.get_college_salary_chart_data,
             min_height=325,
         ),
         rx.recharts.bar_chart(
@@ -150,7 +134,7 @@ def _college_salary_chart() -> rx.Component:
             rx.recharts.brush(data_key="name", height=30, stroke="#fdc313"),
             rx.recharts.x_axis(data_key="college"),
             rx.recharts.y_axis(type_="number", scale="auto", hide=True),
-            data=State.get_college_salary_chart_data,
+            data=StatsState.get_college_salary_chart_data,
             min_height=325,
         ),
     )
@@ -172,7 +156,7 @@ def _age_team_chart() -> rx.Component:
             rx.recharts.brush(data_key="team", height=30, stroke="#FFA500"),
             rx.recharts.x_axis(data_key="team"),
             rx.recharts.y_axis(type_="number", scale="auto", hide=True),
-            data=State.get_team_age_average_data,
+            data=StatsState.get_team_age_average_data,
             min_height=325,
         ),
         rx.recharts.bar_chart(
@@ -183,7 +167,7 @@ def _age_team_chart() -> rx.Component:
             rx.recharts.brush(data_key="team", height=30, stroke="#FFA500"),
             rx.recharts.x_axis(data_key="team"),
             rx.recharts.y_axis(type_="number", scale="auto", hide=True),
-            data=State.get_team_age_average_data,
+            data=StatsState.get_team_age_average_data,
             min_height=325,
         ),
     )
@@ -202,7 +186,7 @@ def _age_position_chart() -> rx.Component:
             ),
             rx.recharts.polar_grid(),
             rx.recharts.polar_angle_axis(data_key="position"),
-            data=State.get_position_age_average_data,
+            data=StatsState.get_position_age_average_data,
             min_height=325,
         ),
         rx.recharts.bar_chart(
@@ -213,7 +197,7 @@ def _age_position_chart() -> rx.Component:
             rx.recharts.brush(data_key="position", height=30, stroke="#E54666"),
             rx.recharts.x_axis(data_key="position"),
             rx.recharts.y_axis(type_="number", scale="auto", hide=True),
-            data=State.get_position_age_average_data,
+            data=StatsState.get_position_age_average_data,
             min_height=325,
         ),
     )

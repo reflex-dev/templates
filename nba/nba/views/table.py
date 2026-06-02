@@ -35,8 +35,8 @@ def _show_player(player: Player, index: int) -> rx.Component:
         rx.table.cell(player.age),
         rx.table.cell(player.height),
         rx.table.cell(player.weight),
-        rx.table.cell(player.college),
-        rx.table.cell(player.salary),
+        rx.table.cell(rx.cond(player.college, player.college, "—")),
+        rx.table.cell(rx.cond(player.salary, player.salary, "—")),
         style={"_hover": {"bg": hover_color}, "bg": bg_color},
         align="center",
     )

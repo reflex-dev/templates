@@ -5,7 +5,7 @@ from reflex.components.radix.themes.base import (
     LiteralAccentColor,
 )
 
-from ..backend.backend import State
+from ..backend.backend import StatsState
 
 
 def _get_item_color(
@@ -32,7 +32,7 @@ def _selected_item_badge(
         rx.icon("x", size=18),
         color_scheme=_get_item_color(item, items_dict),
         **badge_props,
-        on_click=lambda: State.remove_selected(item_name, item),
+        on_click=lambda: StatsState.remove_selected(item_name, item),
     )
 
 
@@ -40,14 +40,14 @@ def _unselected_item_badge(
     item_name: str, items_dict: Dict[str, LiteralAccentColor], items: List
 ) -> rx.Component:
     return rx.cond(
-        State.selected_items[item_name].contains(items[0]),
+        StatsState.selected_items[item_name].contains(items[0]),
         rx.box(),
         rx.badge(
             items[0],
             rx.icon("plus", size=18),
             color_scheme=_get_item_color(items[0], items_dict),
             **badge_props,
-            on_click=lambda: State.add_selected(item_name, items[0]),
+            on_click=lambda: StatsState.add_selected(item_name, items[0]),
         ),
     )
 

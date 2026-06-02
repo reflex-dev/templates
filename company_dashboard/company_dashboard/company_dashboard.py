@@ -32,7 +32,6 @@ def index() -> rx.Component:
 
 
 app = rx.App(
-    theme=rx.theme(appearance="light"),
     stylesheets=["https://cdn.tailwindcss.com"],
     style={
         rx.el.label: {"font_family": "JetBrains Mono,ui-monospace,monospace"},

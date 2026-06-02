@@ -33,7 +33,6 @@ def index() -> rx.Component:
 
 
 app = rx.App(
-    theme=rx.theme(appearance="light"),
     stylesheets=[
         "https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"
     ],

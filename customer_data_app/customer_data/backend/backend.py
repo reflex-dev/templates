@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from typing import Union
 
 import reflex as rx
-from sqlmodel import String, asc, cast, desc, func, or_, select
+from sqlmodel import Field, SQLModel, String, asc, cast, desc, func, or_, select
 
 
 def _get_percentage_change(
@@ -19,9 +19,10 @@ def _get_percentage_change(
     return percentage_change
 
 
-class Customer(rx.Model, table=True):
+class Customer(SQLModel, table=True):
     """The customer model."""
 
+    id: int | None = Field(default=None, primary_key=True)
     name: str
     email: str
     phone: str
@@ -62,7 +63,7 @@ class State(rx.State):
                     or_(
                         *[
                             getattr(Customer, field).ilike(search_value)
-                            for field in Customer.get_fields()
+                            for field in Customer.model_fields
                             if field not in ["id", "payments"]
                         ],
                         # ensures that payments is cast to a string before applying the ilike operator
@@ -176,7 +177,8 @@ class State(rx.State):
                 select(Customer).where(Customer.id == self.current_user.id)
             ).first()
             form_data.pop("id", None)
-            customer.set(**form_data)
+            for field, value in form_data.items():
+                setattr(customer, field, value)
             session.add(customer)
             session.commit()
         self.load_entries()

@@ -2,5 +2,8 @@ import reflex as rx
 
 config = rx.Config(
     app_name="api_admin_panel",
-    plugins=[rx.plugins.SitemapPlugin()],
+    plugins=[
+        rx.plugins.SitemapPlugin(),
+        rx.plugins.RadixThemesPlugin(),
+    ],
 )
