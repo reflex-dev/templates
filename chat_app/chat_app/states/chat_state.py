@@ -71,7 +71,8 @@ class ChatState(rx.State):
                 api_messages.append({"role": role, "content": msg["text"]})
             try:
                 stream = client.chat.completions.create(
-                    model="gpt-4o-mini",
+                    model="gpt-6-luna",
+                    reasoning_effort="none",
                     messages=api_messages,
                     stream=True,
                 )
